@@ -1,0 +1,23 @@
+Package: arcgis.rest
+Type: Package
+Title: Query an ArcGIS Rest API
+Version: 0.0.0.9999
+Authors@R: c(person("Paul", "Frater", 
+          email = "paul.frater@wisconsin.gov",
+          role = c("aut", "cre")),
+             person("Zac", "Driscoll",
+          email = "zachery.driscoll@wisconsin.gov", 
+          role = c("aut", "ctb")))
+Maintainer: Paul Frater <paul.frater@wisconsin.gov>
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Description: This package contains functions used to query an ArcGIS REST API
+Imports:
+  httr (>= 1.4.1),
+  jsonlite (>= 1.6.1),
+  sf (>= 0.9.5),
+  dplyr (>= 1.0.2)
+Suggest:
+  ggplot2 (>= 3.3.0)
+RoxygenNote: 7.0.2
