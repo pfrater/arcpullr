@@ -1,0 +1,31 @@
+   
+bugs
+****
+-bug in the get_fmdb_site_layer, something with suppressWarnigns 
+
+tasks
+******
+-test all of the format_*_coords functions to make sure they work appropriately with the various get_layer_by_*shape functions
+
+dev
+***
+-add envelope and multipoint to get_layer_by_spatial
+    -add get_layer_by_envelope - ZD
+    -add get_layer_by_multipoint -ZD
+
+-add format_envelope_coords - PNF
+
+documentation
+*************
+-write up basic vignette for how to use functions
+
+testing
+*******
+-create formal tests for all functions using testthat
+    -get_spatial_layer - PNF
+    -get_layer_by_*
+    -utilities.R functions
+
+fun tasks
+*********
+create hexSticker
