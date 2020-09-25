@@ -5,7 +5,8 @@
 \alias{format_polygon_coords}
 \alias{format_line_coords}
 \alias{format_multipoint_coords}
-\alias{format_point}
+\alias{format_point_coords}
+\alias{format_envelope_coords}
 \title{Convert coordinates from an 'sf' object to formatted well-known text}
 \usage{
 format_polygon_coords(sf_obj, crs = 4326)
@@ -14,7 +15,9 @@ format_line_coords(sf_obj, crs = 4326)
 
 format_multipoint_coords(sf_obj, crs = 4326)
 
-format_point(sf_obj, crs = 4326)
+format_point_coords(sf_obj, crs = 4326)
+
+format_envelope_coords(sf_obj, crs = 4326)
 
 format_coords(sf_obj, geom_type, crs = 4326)
 }

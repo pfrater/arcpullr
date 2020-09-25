@@ -5,26 +5,27 @@ bugs
 
 tasks
 ******
--test all of the format_*_coords functions to make sure they work appropriately with the various get_layer_by_*shape functions
 
 dev
 ***
 -add envelope and multipoint to get_layer_by_spatial
-    -add get_layer_by_envelope - ZD
-    -add get_layer_by_multipoint -ZD
+    x-add get_layer_by_envelope - ZD
+    x-add get_layer_by_multipoint -ZD
 
--add format_envelope_coords - PNF
+x-add format_envelope_coords - PNF
 
 documentation
 *************
 -write up basic vignette for how to use functions
+    -start writing up intro vignette - PNF
 
 testing
 *******
 -create formal tests for all functions using testthat
-    -get_spatial_layer - PNF
-    -get_layer_by_*
-    -utilities.R functions
+    x-get_spatial_layer - PNF
+    -get_layer_by_* - ZD
+    -utilities.R functions - PNF
+    -format_*_coords functions - ZD
 
 fun tasks
 *********

@@ -1,0 +1,53 @@
+context("Retrieving layers")
+library(arcgis.rest)
+
+stream_hydro_url <- paste0(
+  "https://dnrmaps.wi.gov/arcgis2/rest/services/",
+  "TS_AGOL_STAGING_SERVICES/EN_AGOL_STAGING_SurfaceWater_WTM/MapServer/2"
+)
+
+stream_query_url <- paste(stream_hydro_url, "query", sep = "/")
+
+oak_creek_where <- "RIVER_SYS_NAME = 'Oak Creek'"
+
+oak_creek_ids <- c(
+  612159, 632390, 606125, 634619, 638509, 645773, 650273, 652265,
+  652148, 668115, 670316, 671903, 673345, 860945, 870333
+)
+
+test_that("get_object_ids returns proper IDs", {
+  test_ids <- get_object_ids(
+      query_url = stream_query_url,
+      where = oak_creek_where
+    )
+  expect_equal(sort(test_ids), sort(oak_creek_ids))
+})
+
+test_that("get_esri_features_by_id returns proper feature", {
+  test_feature <- get_esri_features_by_id(
+    ids = oak_creek_ids[1],
+    query_url = stream_query_url,
+    fields = "*"
+  )
+  expect_equal(test_feature[[1]]$attributes$RIVER_SYS_NAME, "Oak Creek")
+  expect_equal(test_feature[[1]]$attributes$RIVER_SYS_WBIC, 14500)
+})
+
+test_that("get_esri_features returns proper feature", {
+  test_feature <- get_esri_features(
+    query_url = stream_query_url,
+    fields = "*",
+    where = oak_creek_where
+  )
+  expect_equal(test_feature[[1]]$attributes$RIVER_SYS_NAME, "Oak Creek")
+  expect_equal(test_feature[[1]]$attributes$RIVER_SYS_WBIC, 14500)
+})
+
+test_that("get_spatial_layer pulls layer properly", {
+  oak_creek <- get_spatial_layer(
+      stream_hydro_url,
+      where = oak_creek_where
+    )
+  expect_equal(unique(oak_creek$RIVER_SYS_NAME), "Oak Creek")
+  expect_equal(unique(oak_creek$RIVER_SYS_WBIC), 14500)
+})

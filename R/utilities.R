@@ -37,13 +37,21 @@ format_multipoint_coords <- function(sf_obj, crs = 4326) {
 
 #' @rdname format_coords
 #' @export
-format_point <- function(sf_obj, crs = 4326) {
+format_point_coords <- function(sf_obj, crs = 4326) {
   out <-
     sf_obj %>%
     sf::st_transform(crs = crs) %>%
     sf::st_coordinates() %>%
     data.frame() %>%
     dplyr::select(X,Y)
+}
+
+#' @rdname format_coords
+#' @export
+format_envelope_coords <- function(sf_obj, crs = 4326) {
+  bbox <- sf::st_bbox(sf_obj)
+  coord_string <- paste(names(bbox), bbox, sep = " : ", collapse = ", ")
+  return(coord_string)
 }
 
 #' @rdname format_coords
