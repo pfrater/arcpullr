@@ -50,6 +50,14 @@ get_layer_by_point <- function(url, geometry, ...) {
 
 #' @name get_layers_by_spatial
 #' @export
+get_layer_by_multipoint <- function(url, geometry, ...) {
+  return(get_layer_by_spatial(url = url, geometry = geometry,
+                              geom_type = "esriGeometryMultipoint",
+                              sp_rel = "esriSpatialRelWithin", ...))
+}
+
+#' @name get_layers_by_spatial
+#' @export
 get_layer_by_envelope <- function(url, geometry, ...) {
   return(get_layer_by_spatial(url = url, geometry = geometry,
                               geom_type = "esriGeometryEnvelope",
