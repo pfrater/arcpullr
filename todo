@@ -16,8 +16,8 @@ x-add format_envelope_coords - PNF
 
 documentation
 *************
--write up basic vignette for how to use functions
-    -start writing up intro vignette - PNF
+x-write up basic vignette for how to use functions
+    x-start writing up intro vignette - PNF
 
 testing
 *******
