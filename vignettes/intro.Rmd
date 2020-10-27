@@ -1,0 +1,96 @@
+---
+title: "Introduction to `arcgis.rest`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{intro}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+library(arcgis.rest)
+```
+
+The `arcgis.rest` package provides functions for pulling spatial data from 
+an ArcGIS REST API and formatting those layers into `sf` objects. These 
+functions provide the basis for querying data housed in a spatial REST API in both a spatial and relational manner.
+
+# The `get_spatial_layer()` function
+
+This function is the core of the package, and allows users to pull data from an 
+ArcGIS REST API
+
+```{r, eval = FALSE}
+# url <- some url from an ArcGIS REST API layer
+layer <- get_spatial_layer(url)
+```
+
+The URL should be a specific layer from an ArcGIS REST API, such as the 
+[Wisconsin Dep't. of Natural Resources Hi-cap well layer](https://dnrmaps.wi.gov/arcgis/rest/services/DG_HiCap/DG_HICAP_REVIEW_WTM_INT/MapServer/0), for example.
+
+The `get_spatial_layer()` function will retrieve data from this layer, and format
+it to an object of class sf (*i.e.* of the R package sf: Simple Features for R).
+
+This function is also query-able both using both SQL code and ArcGIS's 
+[Query (Feature Service)](
+https://developers.arcgis.com/rest/services-reference/query-feature-service-.htm
+) functionality. To query via SQL within the function the field name for the 
+query of interest must be known. For example,
+
+### Querying via SQL
+
+```{r, warning = FALSE}
+wdnr_base_url <- "https://dnrmaps.wi.gov/arcgis/rest/services"
+service_url <- "WT_SWDV"
+open_water_layer_url <- "WT_Inland_Water_Resources_WTM_Ext_v2/MapServer/3"
+hydro_url <- paste(wdnr_base_url, service_url, open_water_layer_url, sep = "/")
+wi_river <- get_spatial_layer(hydro_url, 
+  where = "WATERBODY_ROW_NAME = 'Wisconsin River'"
+)
+```
+
+For multiple WHERE clauses there is a helper function to string them together
+properly. This can be called to the where argument above in place of a text 
+string.
+
+```{r}
+sql_where(ROW_WATERBODY_NAME = 'Wisconsin River', HYDROCODE = 7011)
+```
+
+### Querying Spatially via ArcGIS Feature Service
+
+Along with SQL, layers from an ArcGIS REST API may be queried spatially. This
+is accomplished with the `get_layer_by_*` family of functions. These functions
+are essentially a wrapper around `get_spatial_layer` that removes the 
+abstraction of the spatial query syntax query by ArcGIS. These functions 
+require a spatial object of class `sf` to be passed to the `geometry` argument.
+However, the geometry object must be formatted to meet these query syntax 
+specifications. This can be accomplished with the `format_*_coords` family of 
+functions. In addition, you can also quickly create simple `sf` objects using
+`sf_lines()`, `sf_points()`, or `sf_polygons()` to test out the service feature.
+
+```{r}
+mke_format_poly <- format_polygon_coords(mke_county)
+streams_layer_url <- "WT_Inland_Water_Resources_WTM_Ext_v2/MapServer/2"
+streams_url <- paste(wdnr_base_url, service_url, streams_layer_url, sep = "/")
+mke_waters <- get_layer_by_poly(url = streams_url, mke_format_poly)
+```
+
+Spatial queries can be done with polygons, lines, or points...just use the 
+respective `get_layer_by_*` function.
+
+### Plotting Layers
+
+The retrieved layers may be plotted in whatever way you like to plot `sf` 
+objects. For quick plots to check if your query worked we've included the 
+`plot_layer` function, which uses either `ggplot2` (default) to plot the layer
+or can be switched to base graphics.
+
+```{r}
+plot_layer(mke_waters)
+plot_layer(wi_river, outline = wi_poly)
+```
