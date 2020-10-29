@@ -45,7 +45,7 @@ get_layer_by_line <- function(url, geometry, ...) {
 get_layer_by_point <- function(url, geometry, ...) {
   return(get_layer_by_spatial(url = url, geometry = geometry,
                               geom_type = "esriGeometryPoint",
-                              sp_rel = "esriSpatialRelWithin", ...))
+                              sp_rel = "esriSpatialRelIntersects", ...))
 }
 
 #' @name get_layers_by_spatial

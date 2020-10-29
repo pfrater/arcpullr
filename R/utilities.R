@@ -44,6 +44,9 @@ format_point_coords <- function(sf_obj, crs = 4326) {
     sf::st_coordinates() %>%
     data.frame() %>%
     dplyr::select(X,Y)
+  pt_str <- paste(paste0("'", tolower(names(out)), "':"), out, collapse = ",")
+  coord_string <- paste("{", pt_str, ", {'spatialReference': ", crs, "}}")
+  return(coord_string)
 }
 
 #' @rdname format_coords
