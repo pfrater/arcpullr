@@ -68,16 +68,13 @@ is accomplished with the `get_layer_by_*` family of functions. These functions
 are essentially a wrapper around `get_spatial_layer` that removes the 
 abstraction of the spatial query syntax query by ArcGIS. These functions 
 require a spatial object of class `sf` to be passed to the `geometry` argument.
-However, the geometry object must be formatted to meet these query syntax 
-specifications. This can be accomplished with the `format_*_coords` family of 
-functions. In addition, you can also quickly create simple `sf` objects using
+To test this out you can also quickly create simple `sf` objects using
 `sf_lines()`, `sf_points()`, or `sf_polygons()` to test out the service feature.
 
 ```{r}
-mke_format_poly <- format_polygon_coords(mke_county)
 streams_layer_url <- "WT_Inland_Water_Resources_WTM_Ext_v2/MapServer/2"
 streams_url <- paste(wdnr_base_url, service_url, streams_layer_url, sep = "/")
-mke_waters <- get_layer_by_poly(url = streams_url, mke_format_poly)
+mke_waters <- get_layer_by_poly(url = streams_url, mke_county)
 ```
 
 Spatial queries can be done with polygons, lines, or points...just use the 
