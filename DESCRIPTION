@@ -22,4 +22,7 @@ Suggest:
   ggplot2 (>= 3.3.0)
 RoxygenNote: 7.0.2
 Suggests: 
-    testthat
+    testthat,
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

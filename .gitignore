@@ -1,2 +1,6 @@
 .Rproj.user/
 *.pdf
+inst/doc
+*.ppt
+*.png
+*.pptx

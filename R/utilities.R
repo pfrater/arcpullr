@@ -44,6 +44,9 @@ format_point_coords <- function(sf_obj, crs = 4326) {
     sf::st_coordinates() %>%
     data.frame() %>%
     dplyr::select(X,Y)
+  pt_str <- paste(paste0("'", tolower(names(out)), "':"), out, collapse = ",")
+  coord_string <- paste("{", pt_str, ", {'spatialReference': ", crs, "}}")
+  return(coord_string)
 }
 
 #' @rdname format_coords
@@ -120,10 +123,26 @@ sf_lines <- function(..., crs = 4326) {
 
 #' @rdname sf_objects
 #' @export
+sf_point <- function(..., crs = 4326) {
+  args <- list(...)
+  if (length(args) > 1) {
+    return(sf_points(..., crs = crs))
+  } else if (length(args[[1]]) > 2) {
+    return(sf_points(..., crs = crs))
+  } else {
+    sf_pt <- sf::st_point(...)
+    sfc <- sf::st_sfc(sf_pt, crs = crs)
+    sf <- sf::st_sf(geom = sfc)
+    return(sf)
+  }
+}
+
+#' @rdname sf_objects
+#' @export
 sf_points <- function(..., crs = 4326) {
   coords <- do.call("rbind", list(...))
-  ls <- sf::st_multipoint(coords)
-  sfc <- sf::st_sfc(ls, crs = crs)
+  sf_pts <- sf::st_multipoint(coords)
+  sfc <- sf::st_sfc(sf_pts, crs = crs)
   sf <- sf::st_sf(geom = sfc)
   return(sf)
 }

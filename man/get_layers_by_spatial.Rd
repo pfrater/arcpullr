@@ -5,14 +5,17 @@
 \alias{get_layer_by_poly}
 \alias{get_layer_by_line}
 \alias{get_layer_by_point}
+\alias{get_layer_by_envelope}
 \alias{get_layer_by_spatial}
 \title{Retrieve ArcGIS REST API spatial layer by spatial query}
 \usage{
-get_layer_by_poly(url, geometry, ...)
+get_layer_by_poly(url, geometry, sp_rel = "esriSpatialRelContains", ...)
 
-get_layer_by_line(url, geometry, ...)
+get_layer_by_line(url, geometry, sp_rel = "esriSpatialRelIntersects", ...)
 
-get_layer_by_point(url, geometry, ...)
+get_layer_by_point(url, geometry, sp_rel = "esriSpatialRelIntersects", ...)
+
+get_layer_by_envelope(url, geometry, sp_rel = "esriSpatialRelContains", ...)
 
 get_layer_by_spatial(
   url,
@@ -26,8 +29,9 @@ get_layer_by_spatial(
 \arguments{
 \item{url}{A character string of the url for the layer to pull}
 
-\item{geometry}{A string of well-known text (WKT) of the geometry to be
-queried by}
+\item{geometry}{An \code{sf} object used for the spatial query}
+
+\item{sp_rel}{Character. The type of relationship to query by.}
 
 \item{...}{Additional arguements to pass to \code{\link{get_spatial_layer}}}
 
@@ -36,8 +40,6 @@ automatically specified in \code{get_layer_by_ --poly, --line,} and
 \code{point}}
 
 \item{sp_ref}{The spatial reference value}
-
-\item{sp_rel}{Character. The type of relationship to query by.}
 }
 \value{
 An object of class "sf" of the appropriate layer
@@ -49,9 +51,8 @@ to the query URL which returns data (if available) based on the appropriate
 spatial feature (\code{geometry}) and relationship (\code{sp_rel}).
 }
 \examples{
-mke_format_poly <- format_polygon_coords(mke_county)
 base_wdnr_url <- "https://dnrmaps.wi.gov/arcgis/rest/services/"
 hydro_path <- "WT_SWDV/WT_Inland_Water_Resources_WTM_Ext_v2/MapServer/2"
 hydro_url <- paste0(base_wdnr_url, hydro_path)
-mke_waters <- get_layer_by_poly(url = hydro_url, mke_format_poly)
+mke_waters <- get_layer_by_poly(url = hydro_url, mke_county)
 }
