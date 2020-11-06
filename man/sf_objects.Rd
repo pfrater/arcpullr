@@ -3,11 +3,14 @@
 \name{sf_objects}
 \alias{sf_objects}
 \alias{sf_lines}
+\alias{sf_point}
 \alias{sf_points}
 \alias{sf_polygon}
 \title{Create sf objects from coordinates}
 \usage{
 sf_lines(..., crs = 4326)
+
+sf_point(..., crs = 4326)
 
 sf_points(..., crs = 4326)
 
