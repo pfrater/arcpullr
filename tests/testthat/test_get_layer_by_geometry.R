@@ -43,8 +43,7 @@ hydro_lakes <- paste("https://dnrmaps.wi.gov/arcgis2/rest/services/",
 test_that("get_layer_by_point returns the correct WATERBODY_WBIC",
           {
             otter_lake_point <- get_layer_by_point(url = hydro_lakes,
-                                                 geometry =
-                                                   format_point_coords(point))
+                                                 geometry = point)
             expect_equal(otter_lake_point$WATERBODY_WBIC,549400)
           })
 
@@ -53,17 +52,15 @@ test_that("get_layer_by_point returns the correct WATERBODY_WBIC",
           {
             otter_lake_multipoint <-
               get_layer_by_multipoint(url = hydro_lakes,
-                                 geometry =
-                                   format_multipoint_coords(multipoint))
-            expect_equal(otter_lake_multipoint$WATERBODY_WBIC,549400)
+                                 geometry = multipoint)
+            expect_equal(otter_lake_multipoint$WATERBODY_WBIC[1],549400)
           })
 
 #test get_layer_by_line
 test_that("get_layer_by_line returns the correct WATERBODY_WBIC",
           {
             otter_lake_line <- get_layer_by_line(url = hydro_lakes,
-                                                 geometry =
-                                                   format_line_coords(line))
+                                                 geometry =line)
             expect_equal(otter_lake_line$WATERBODY_WBIC,549400)
           })
 
@@ -71,8 +68,7 @@ test_that("get_layer_by_line returns the correct WATERBODY_WBIC",
 test_that("get_layer_by_poly returns the correct WATERBODY_WBIC",
           {
             otter_lake_poly <- get_layer_by_poly(url = hydro_lakes,
-                                            geometry =
-                                              format_polygon_coords(poly))
+                                            geometry = poly)
             expect_equal(otter_lake_poly$WATERBODY_WBIC,549400)
           })
 
@@ -80,7 +76,6 @@ test_that("get_layer_by_poly returns the correct WATERBODY_WBIC",
 test_that("get_layer_by_envelope returns the correct WATERBODY_WBIC",
           {
             otter_lake_env <- get_layer_by_envelope(url = hydro_lakes,
-                                            geometry =
-                                              format_envelope_coords(poly))
+                                            geometry = poly)
             expect_equal(otter_lake_env$WATERBODY_WBIC,549400)
           })
