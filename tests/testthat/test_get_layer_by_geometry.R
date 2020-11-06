@@ -40,13 +40,13 @@ hydro_lakes <- paste("https://dnrmaps.wi.gov/arcgis2/rest/services/",
                      sep = "")
 
 #test get_layer_by_point
-# test_that("get_layer_by_point returns the correct WATERBODY_WBIC",
-#           {
-#             otter_lake_point <- get_layer_by_point(url = hydro_lakes,
-#                                                  geometry =
-#                                                    format_point_coords(point))
-#             expect_equal(otter_lake_point$WATERBODY_WBIC,549400)
-#           })
+test_that("get_layer_by_point returns the correct WATERBODY_WBIC",
+          {
+            otter_lake_point <- get_layer_by_point(url = hydro_lakes,
+                                                 geometry =
+                                                   format_point_coords(point))
+            expect_equal(otter_lake_point$WATERBODY_WBIC,549400)
+          })
 
 #test get_layer_by_multipoint
 test_that("get_layer_by_point returns the correct WATERBODY_WBIC",
@@ -55,11 +55,8 @@ test_that("get_layer_by_point returns the correct WATERBODY_WBIC",
               get_layer_by_multipoint(url = hydro_lakes,
                                  geometry =
                                    format_multipoint_coords(multipoint))
-            expect_equal(otter_lake_point$WATERBODY_WBIC,549400)
+            expect_equal(otter_lake_multipoint$WATERBODY_WBIC,549400)
           })
-
-
-
 
 #test get_layer_by_line
 test_that("get_layer_by_line returns the correct WATERBODY_WBIC",
@@ -87,18 +84,3 @@ test_that("get_layer_by_envelope returns the correct WATERBODY_WBIC",
                                               format_envelope_coords(poly))
             expect_equal(otter_lake_env$WATERBODY_WBIC,549400)
           })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

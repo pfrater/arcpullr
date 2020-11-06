@@ -63,6 +63,17 @@ format_coords <- function(sf_obj, geom_type, crs = 4326) {
     polyline = "paths",
     polygon = "rings"
   )
+  left_bracket <- switch(
+    geom_type,
+    multipoint = "[",
+    polyline = "[[",
+    polygon = "[[")
+  right_bracket <- switch(
+    geom_type,
+    multipoint = "]",
+    polyline = "]]",
+    polygon = "]]")
+
   geometry_type <- sprintf("'%s'", geometry_type)
   out <-
     sf_obj %>%
@@ -73,9 +84,10 @@ format_coords <- function(sf_obj, geom_type, crs = 4326) {
     tidyr::unite(col= "coordinates",sep = ",") %>%
     dplyr::mutate(coordinates = paste("[",coordinates,"]",sep="")) %>%
     dplyr::summarise(coordinates =  paste(coordinates,collapse = ",")) %>%
-    dplyr::mutate(coordinates = paste("{", geometry_type, ":[[",
+    dplyr::mutate(coordinates = paste("{", geometry_type, ":",left_bracket,
                                       coordinates,
-                                      "]],'spatialReference':{'wkid':", crs,
+                                      right_bracket,
+                                      ",'spatialReference':{'wkid':", crs,
                                       "}}", sep = "")) %>%
     dplyr::pull()
   return(out)
