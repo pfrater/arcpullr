@@ -43,7 +43,7 @@ format_point_coords <- function(sf_obj, crs = 4326) {
     sf::st_transform(crs = crs) %>%
     sf::st_coordinates() %>%
     data.frame() %>%
-    dplyr::select(X,Y)
+    dplyr::select(.data$X, .data$Y)
   pt_str <- paste(paste0("'", tolower(names(out)), "':"), out, collapse = ",")
   coord_string <- paste("{", pt_str, ", {'spatialReference': ", crs, "}}")
   return(coord_string)
@@ -58,6 +58,7 @@ format_envelope_coords <- function(sf_obj, crs = 4326) {
 }
 
 #' @rdname format_coords
+#' @param geom_type Either "points", "paths", or "rings". Choose wisely
 #' @export
 format_coords <- function(sf_obj, geom_type, crs = 4326) {
   geometry_type <- switch(
@@ -83,12 +84,12 @@ format_coords <- function(sf_obj, geom_type, crs = 4326) {
     sf::st_transform(crs = crs) %>%
     sf::st_coordinates() %>%
     data.frame() %>%
-    dplyr::select(X,Y) %>%
+    dplyr::select(.data$X, .data$Y) %>%
     tidyr::unite(col= "coordinates",sep = ",") %>%
-    dplyr::mutate(coordinates = paste("[",coordinates,"]",sep="")) %>%
-    dplyr::summarise(coordinates =  paste(coordinates,collapse = ",")) %>%
+    dplyr::mutate(coordinates = paste("[", .data$coordinates, "]",sep="")) %>%
+    dplyr::summarise(coordinates =  paste(.data$coordinates,collapse = ",")) %>%
     dplyr::mutate(coordinates = paste("{", geometry_type, ":",left_bracket,
-                                      coordinates,
+                                      .data$coordinates,
                                       right_bracket,
                                       ",'spatialReference':{'wkid':", crs,
                                       "}}", sep = "")) %>%
@@ -104,7 +105,7 @@ format_coords <- function(sf_obj, geom_type, crs = 4326) {
 #' @param ... The coordinates of the object
 #' @param crs The coordinate reference system. Defaults to 4326
 #'
-#' @return
+#' @return An sf object of the appropriate type
 #' @export
 #' @name sf_objects
 #'
@@ -161,9 +162,8 @@ sf_polygon <- function(..., crs = 4326) {
 #' Format a SQL where clause from arguments
 #'
 #' This function will create a where statement that is compatible with
-#' \code{\link{get_spatial_layer}} and other associated functions
-#' (i.e. \code{\link{get_hydro_layer}}, etc.). This statement can then be passed
-#' to the \code{where} argument in any of these functions.
+#' \code{\link{get_spatial_layer}}). This statement can then be passed
+#' to the \code{where} argument in this function.
 #'
 #' @param ... Named objects to be queried by
 #' @param rel_op Character. The relational operator in the SQL clause (i.e. "=",
@@ -201,14 +201,15 @@ sql_where <- function(..., rel_op = "=") {
       } else {
         x_vals <- paste0("(", paste(args[[x]], collapse = ", "), ")")
       }
+      return(paste(names(args)[x], "IN", x_vals))
     } else {
       if (is.character(args[[x]])) {
         x_vals <- paste0("'", args[[x]], "'")
       } else {
         x_vals <- args[[x]]
       }
+      return(paste(names(args)[x], rel_op[x], x_vals))
     }
-    return(paste(names(args)[x], rel_op[x], x_vals))
   })
   if (length(out_list) > 1) {
     out <- paste(out_list, collapse = " AND ")

@@ -5,28 +5,19 @@ bugs
 
 tasks
 ******
--finish format_point_coords function and make sure it works - PNF
+x-flesh out Description field in DESCRIPTION file
+-run pkg check on R-hub - PF
+x-include email for zac
+x-add ORCID to author in description file
 
 dev
 ***
--add envelope and multipoint to get_layer_by_spatial
-    x-add get_layer_by_envelope - ZD
-    x-add get_layer_by_multipoint -ZD
-
-x-add format_envelope_coords - PNF
 
 documentation
 *************
-x-write up basic vignette for how to use functions
-    x-start writing up intro vignette - PNF
 
 testing
 *******
--create formal tests for all functions using testthat
-    x-get_spatial_layer - PNF
-    -get_layer_by_* - ZD
-    -utilities.R functions - PNF
-    -format_*_coords functions - ZD
 
 fun tasks
 *********

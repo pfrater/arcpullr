@@ -24,8 +24,8 @@ poly <-
 
 #run tests
 #test format_multipoint_coords
-expected_mulitpoint_output <-
-  paste("{'points':[[[0,0],[1,1],[2,1]]],",
+expected_multipoint_output <-
+  paste("{'points':[[0,0],[1,1],[2,1]],",
         "'spatialReference':{'wkid':4326}}",
         sep = "")
 
@@ -33,7 +33,7 @@ test_that("format_multipoint_coords returns a properly formatted character objec
           {
             actual_multipoint_output <-
               format_multipoint_coords(multipoint)
-            expect_equal(expected_mulitpoint_output, actual_multipoint_output)
+            expect_equal(expected_multipoint_output, actual_multipoint_output)
           })
 
 #test format_line_coords

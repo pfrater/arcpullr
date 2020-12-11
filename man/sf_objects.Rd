@@ -22,7 +22,7 @@ sf_polygon(..., crs = 4326)
 \item{crs}{The coordinate reference system. Defaults to 4326}
 }
 \value{
-
+An sf object of the appropriate type
 }
 \description{
 These are simple wrapper functions for creating sf objects from points

@@ -25,6 +25,8 @@ format_coords(sf_obj, geom_type, crs = 4326)
 \item{sf_obj}{An sf object}
 
 \item{crs}{The coordinate reference system. Defaults to 4326}
+
+\item{geom_type}{Either "points", "paths", or "rings". Choose wisely}
 }
 \value{
 String of well known text

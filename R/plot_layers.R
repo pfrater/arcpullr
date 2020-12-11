@@ -13,7 +13,7 @@
 #' @export
 #'
 #' @examples
-#' plot_layer(iceland_poly)
+#' plot_layer(iceland)
 #' plot_layer(mke_county, outline_poly = wi_poly)
 #' \dontrun{
 #'   g <-
@@ -26,10 +26,10 @@
 plot_layer <- function(sf_data, outline_poly = NULL, plot_pkg = "ggplot") {
   if (plot_pkg == "base") {
     if (is.null(outline_poly)) {
-      plot(sf_data$geom)
+      graphics::plot(sf_data$geom)
     } else {
-      plot(outline_poly$geom)
-      plot(sf_data$geom, add = TRUE)
+      graphics::plot(outline_poly$geom)
+      graphics::plot(sf_data$geom, add = TRUE)
     }
   } else if (plot_pkg %in% c("ggplot", "ggplot2")) {
     g <- ggplot2::ggplot(data = NULL)
