@@ -1,4 +1,4 @@
-Package: arcgis.rest
+Package: gis.rest
 Type: Package
 Title: Query an ArcGIS Rest API
 Version: 0.0.0.9999
@@ -6,13 +6,18 @@ Authors@R: c(person("Paul", "Frater",
           email = "paul.frater@wisconsin.gov",
           role = c("aut", "cre")),
              person("Zac", "Driscoll",
-          email = "zachery.driscoll@wisconsin.gov", 
+          email = "zdriscoll@mmsd.com", 
           role = c("aut", "ctb")))
 Maintainer: Paul Frater <paul.frater@wisconsin.gov>
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-Description: This package contains functions used to query an ArcGIS REST API
+Description:  
+  Functions to efficiently query ArcGIS Rest APIs. Both spatial and SQL queries
+  can be used to retrieve data. Simple Feature (sf) objects are utilized to
+  perform spatial queries. This pacakge was not produced and is not 
+  maintained by ESRI. 
+
 Imports:
   httr (>= 1.4.1),
   jsonlite (>= 1.6.1),
