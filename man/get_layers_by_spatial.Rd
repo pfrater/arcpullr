@@ -5,6 +5,7 @@
 \alias{get_layer_by_poly}
 \alias{get_layer_by_line}
 \alias{get_layer_by_point}
+\alias{get_layer_by_multipoint}
 \alias{get_layer_by_envelope}
 \alias{get_layer_by_spatial}
 \title{Retrieve ArcGIS REST API spatial layer by spatial query}
@@ -14,6 +15,8 @@ get_layer_by_poly(url, geometry, sp_rel = "esriSpatialRelContains", ...)
 get_layer_by_line(url, geometry, sp_rel = "esriSpatialRelIntersects", ...)
 
 get_layer_by_point(url, geometry, sp_rel = "esriSpatialRelIntersects", ...)
+
+get_layer_by_multipoint(url, geometry, ...)
 
 get_layer_by_envelope(url, geometry, sp_rel = "esriSpatialRelContains", ...)
 

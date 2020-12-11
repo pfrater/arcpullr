@@ -1,14 +1,13 @@
 Package: gis.rest
 Type: Package
 Title: Query an ArcGIS Rest API
-Version: 0.0.0.9999
+Version: 0.1
 Authors@R: c(person("Paul", "Frater", 
           email = "paul.frater@wisconsin.gov",
           role = c("aut", "cre")),
              person("Zac", "Driscoll",
           email = "zdriscoll@mmsd.com", 
           role = c("aut", "ctb")))
-Maintainer: Paul Frater <paul.frater@wisconsin.gov>
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
@@ -17,14 +16,15 @@ Description:
   can be used to retrieve data. Simple Feature (sf) objects are utilized to
   perform spatial queries. This pacakge was not produced and is not 
   maintained by ESRI. 
-
+Depends: R (>= 3.6.0)
 Imports:
   httr (>= 1.4.1),
   jsonlite (>= 1.6.1),
   sf (>= 0.9.5),
-  dplyr (>= 1.0.2)
-Suggest:
-  ggplot2 (>= 3.3.0)
+  dplyr (>= 1.0.2),
+  ggplot2 (>= 3.3.0),
+  tidyr (>= 1.0.2),
+  rlang (>= 0.4.7)
 RoxygenNote: 7.0.2
 Suggests: 
     testthat,

@@ -23,7 +23,7 @@ This function plots a spatial layer as returned from
 \code{\link{get_spatial_layer}}.
 }
 \examples{
-plot_layer(iceland_poly)
+plot_layer(iceland)
 plot_layer(mke_county, outline_poly = wi_poly)
 \dontrun{
   g <-

@@ -19,9 +19,8 @@ A character string that can be passed to the where argument of
 }
 \description{
 This function will create a where statement that is compatible with
-\code{\link{get_spatial_layer}} and other associated functions
-(i.e. \code{\link{get_hydro_layer}}, etc.). This statement can then be passed
-to the \code{where} argument in any of these functions.
+\code{\link{get_spatial_layer}}). This statement can then be passed
+to the \code{where} argument in this function.
 }
 \examples{
 wbics <- sql_where(WATERBODY_WBIC = c(805400, 804600), rel_op = "IN")

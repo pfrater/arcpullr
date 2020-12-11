@@ -7,6 +7,9 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+
+<img src='../man/figures/arcgis.rest_hex.png' width="160" height="180" style="border: none" align="right"/>
+
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
