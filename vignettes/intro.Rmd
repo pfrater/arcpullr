@@ -8,8 +8,6 @@ vignette: >
 ---
 
 
-<img src='../man/figures/arcgis.rest_hex.png' width="160" height="180" style="border: none" align="right"/>
-
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
@@ -18,9 +16,19 @@ knitr::opts_chunk$set(
 library(arcgis.rest)
 ```
 
+<img src='../man/figures/gis.rest.png' width="160" height="180" style="border: none" align="right"/>
+
+\
+\
+
 The `arcgis.rest` package provides functions for pulling spatial data from 
 an ArcGIS REST API and formatting those layers into `sf` objects. These 
 functions provide the basis for querying data housed in a spatial REST API in both a spatial and relational manner.
+
+\
+\
+\
+\
 
 # The `get_spatial_layer()` function
 

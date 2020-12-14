@@ -60,17 +60,17 @@ get_layer_by_point <- function(url, geometry,
 
 #' @name get_layers_by_spatial
 #' @export
-get_layer_by_multipoint <- function(url, geometry, ...) {
+get_layer_by_multipoint <- function(url, geometry,
+                                    sp_rel = "esriSpatialRelIntersects", ...) {
   return(get_layer_by_spatial(url = url,
                               geometry = format_multipoint_coords(geometry),
-                              geom_type = "esriGeometryMultipoint",
-                              sp_rel = "esriSpatialRelIntersects", ...))
+                              geom_type = "esriGeometryMultipoint", ...))
 }
 
 #' @name get_layers_by_spatial
 #' @export
 get_layer_by_envelope <- function(url, geometry,
-                                  sp_rel = "esriSpatialRelContains", ...) {
+                                  sp_rel = "esriSpatialRelIntersects", ...) {
   return(get_layer_by_spatial(url = url,
                               geometry = format_envelope_coords(geometry),
                               geom_type = "esriGeometryEnvelope",

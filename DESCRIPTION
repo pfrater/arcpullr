@@ -1,4 +1,4 @@
-Package: gis.rest
+Package: arcgis.rest
 Type: Package
 Title: Query an ArcGIS Rest API
 Version: 0.1
