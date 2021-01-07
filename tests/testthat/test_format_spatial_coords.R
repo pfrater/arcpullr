@@ -1,5 +1,4 @@
 context("Formatting Coordinates")
-library(arcgis.rest)
 
 #create spatial and character objects to run tests on
 #create multipoint object to test

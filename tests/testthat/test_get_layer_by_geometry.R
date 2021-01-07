@@ -1,5 +1,4 @@
 context("Retrieve Layers by Geometry")
-library(arcgis.rest)
 
 #create a point object
 point <- c(-88.526848,45.435216)%>%

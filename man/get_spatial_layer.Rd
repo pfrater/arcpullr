@@ -9,7 +9,7 @@ get_spatial_layer(
   out_fields = c("*"),
   where = "1=1",
   token = "",
-  geom_type = NULL,
+  sf_type = NULL,
   ...
 )
 }
@@ -22,8 +22,8 @@ get_spatial_layer(
 
 \item{token}{A character string of the token (if needed)}
 
-\item{geom_type}{A character string specifying the layer geometry
-("esriGeometryPolygon", "esriGeometryPoint", "esriGeometryPolyline"),
+\item{sf_type}{A character string specifying the layer geometry to convert to
+sf ("esriGeometryPolygon", "esriGeometryPoint", "esriGeometryPolyline"),
 if NULL (default) the server will take its best guess}
 
 \item{...}{Additional arguements to pass to the ArcGIS REST POST request}

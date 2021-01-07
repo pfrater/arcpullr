@@ -19,8 +19,8 @@
 #' @param out_fields A character string of the fields to pull for each layer
 #' @param where A character string of the where condition. Default is 1=1
 #' @param token A character string of the token (if needed)
-#' @param geom_type A character string specifying the layer geometry
-#' ("esriGeometryPolygon", "esriGeometryPoint", "esriGeometryPolyline"),
+#' @param sf_type A character string specifying the layer geometry to convert to
+#' sf ("esriGeometryPolygon", "esriGeometryPoint", "esriGeometryPolyline"),
 #' if NULL (default) the server will take its best guess
 #' @param ... Additional arguements to pass to the ArcGIS REST POST request
 #'
@@ -45,7 +45,7 @@ get_spatial_layer <- function(url,
                               out_fields = c("*"),
                               where = "1=1",
                               token = "",
-                              geom_type = NULL,
+                              sf_type = NULL,
                               ...) {
   layer_info <- jsonlite::fromJSON(
     httr::content(
@@ -62,19 +62,19 @@ get_spatial_layer <- function(url,
     stop("You are trying to access a group layer. Please select one of the ",
          "sub-layers instead.")
   }
-  if (is.null(geom_type)) {
+  if (is.null(sf_type)) {
     if (is.null(layer_info$geometryType))
-      stop("geomType is NULL and layer geometry type \n(e.g. ",
+      stop("return_geometry is NULL and layer geometry type \n(e.g. ",
            "'esriGeometryPolygon' or ",
            "'esriGeometryPoint' or ",
            "'esriGeometryPolyline' ",
            ")\ncould not be infered from server.")
-    geom_type <- layer_info$geometryType
+    sf_type <- layer_info$geometryType
   }
   # print(geomType)
   query_url <- paste(url, "query", sep="/")
   esri_features <- get_esri_features(query_url, out_fields, where, token, ...)
-  simple_features <- esri2sfGeom(esri_features, geom_type)
+  simple_features <- esri2sfGeom(esri_features, sf_type)
   return(simple_features)
 }
 
@@ -144,15 +144,15 @@ get_esri_features_by_id <- function(ids, query_url, fields, token='', ...){
   return(esri_json_features)
 }
 
-esri2sfGeom <- function(jsonFeats, geom_type) {
+esri2sfGeom <- function(jsonFeats, sf_type) {
   # convert esri json to simple feature
-  if (geom_type == 'esriGeometryPolygon') {
+  if (sf_type == 'esriGeometryPolygon') {
     geoms <- esri2sfPolygon(jsonFeats)
   }
-  if (geom_type == 'esriGeometryPoint') {
+  if (sf_type == 'esriGeometryPoint') {
     geoms <- esri2sfPoint(jsonFeats)
   }
-  if (geom_type == 'esriGeometryPolyline') {
+  if (sf_type == 'esriGeometryPolyline') {
     geoms <- esri2sfPolyline(jsonFeats)
   }
   # attributes

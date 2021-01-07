@@ -1,5 +1,4 @@
 context("Utilities functions")
-library(arcgis.rest)
 
 pt_a <- c(-90, 45)
 pt_b <- c(-89, 44)

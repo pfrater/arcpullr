@@ -1,5 +1,4 @@
 context("Retrieving layers")
-library(arcgis.rest)
 
 stream_hydro_url <- paste0(
   "https://dnrmaps.wi.gov/arcgis2/rest/services/",

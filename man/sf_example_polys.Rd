@@ -10,7 +10,19 @@
 \alias{wi_counties}
 \alias{wi_poly}
 \title{Various example sf polygons}
-\format{An object of class sf and data.frame:}
+\format{
+An object of class sf and data.frame:
+
+An object of class \code{sf} (inherits from \code{data.frame}) with 1 rows and 3 columns.
+
+An object of class \code{sf} (inherits from \code{data.frame}) with 1 rows and 3 columns.
+
+An object of class \code{sf} (inherits from \code{data.frame}) with 1 rows and 2 columns.
+
+An object of class \code{sf} (inherits from \code{data.frame}) with 72 rows and 3 columns.
+
+An object of class \code{sf} (inherits from \code{data.frame}) with 1 rows and 2 columns.
+}
 \source{
 \code{\link[ggplot2]{map_data}}
 }

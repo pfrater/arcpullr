@@ -1,9 +1,9 @@
-#' arcgis.rest
+#' arcpullr
 #'
 #' A package for pulling spatial data from an ArcGIS REST API
 #'
-#' \if{html}{\figure{arcgis.rest_hex.png}{options: align='right' alt='logo' width='120'}}
-#' The role of the arcgis.rest package is simple...to pull spatial data from an
+#' \if{html}{\figure{arcpullr_hex.png}{options: align='right' alt='logo' width='120'}}
+#' The role of the arcpullr package is simple...to pull spatial data from an
 #' ArcGIS REST API. These APIs are housed by various different agencies,
 #' organizations, entitites, etc., but allow a consistent format for storing and
 #' retrieving spatial data
@@ -37,9 +37,9 @@
 #' more complex SQL WHERE clauses used to query by the where argument in the
 #' retrieval functions above.
 #'
-#' @aliases arcgis.rest
+#' @aliases arcpullr
 #'
 #' @docType package
-#' @name arcgis.rest-package
+#' @name arcpullr-package
 NULL
 #' NULL

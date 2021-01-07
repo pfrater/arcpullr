@@ -1,4 +1,4 @@
 library(testthat)
-library(arcgis.rest)
+library(arcpullr)
 
-test_check("arcgis.rest")
+test_check("arcpullr")
