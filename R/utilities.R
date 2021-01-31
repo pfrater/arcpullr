@@ -241,7 +241,8 @@ get_geometry_type <- function(url) {
     "esriGeometryPolygon",
     "esriGeometryMultipoint"
   )
-  geom_type <- read_html(url) %>%
+  geom_type <-
+    xml2::read_html(url) %>%
     rvest::html_nodes("body") %>%
     rvest::html_text() %>%
     purrr::map2_chr(
