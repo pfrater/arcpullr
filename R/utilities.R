@@ -221,35 +221,31 @@ sql_where <- function(..., rel_op = "=") {
 
 #' Get Geometry Type
 #'
-#' This function will get the geometry of a feature service when provided with
-#' it's URL.
+#' This function will return the geometry type of layer housed on an ArcGIS REST
+#' API server.
 #'
 #' @param url A character string of a feature services URL
 #'
-#' @return A character string containing the feature services geometry type
+#' @return A character string of the layers geometry type
 #' @export
 #'
 #' @examples
 #' base_wdnr_url <- "https://dnrmaps.wi.gov/arcgis/rest/services/"
 #' hydro_path <- "WT_SWDV/WT_Inland_Water_Resources_WTM_Ext_v2/MapServer/3"
 #' hydro_url <- paste0(base_wdnr_url, hydro_path)
-#' get_geometry_type(url = hydro_url)
+#' get_layer_details(url = hydro_url)
 get_geometry_type <- function(url) {
-  geometries <- c(
-    "esriGeometryPoint",
-    "esriGeometryPolyline",
-    "esriGeometryPolygon",
-    "esriGeometryMultipoint"
-  )
-  geom_type <-
+  if (httr::http_error(url) == TRUE) {
+    "url_error"
+  }
+  else
+  {
     xml2::read_html(url) %>%
-    rvest::html_nodes("body") %>%
-    rvest::html_text() %>%
-    purrr::map2_chr(
-      .x = geometries,
-      .y = .,
-      .f =  ~ stringr::str_extract(pattern = .x, string = .y)
-    ) %>%
-    purrr::discard(is.na)
-  return(geom_type)
+      rvest::html_nodes("body")%>%
+      rvest::html_text()%>%
+      base::gsub(pattern = "\\s+",replacement = " ",x=.) %>%
+      stringr::str_match(
+        base::paste0("Geometry Type: ","(.*?) ")) %>%
+      magrittr::extract2(2)
+  }
 }

@@ -30,19 +30,19 @@ test_that("sql_where returns correct SQL WHERE clauses", {
   )
 })
 
-test_that("get_geometry_type returns the correct geometry types", {
+test_that("get_geometry_type returns the correct geometry type", {
   server <- "https://dnrmaps.wi.gov/arcgis/rest/services/WT_SWDV/"
   points_service <- "WT_Monitoring_Sites_and_Data_WTM_Ext_v2/MapServer/2"
   line_service <- "WT_Inland_Water_Resources_WTM_Ext_v2/MapServer/2"
   polygon_service <- "WT_Inland_Water_Resources_WTM_Ext_v2/MapServer/3"
 
-  expect_equal(get_geometry_type(paste0(server,points_service)),
+  expect_equal(get_geometry_type(url = paste0(server,points_service)),
                "esriGeometryPoint"
   )
-  expect_equal(get_geometry_type(paste0(server,line_service)),
+  expect_equal(get_geometry_type(url = paste0(server,line_service)),
                "esriGeometryPolyline"
                )
-  expect_equal(get_geometry_type(paste0(server,polygon_service)),
+  expect_equal(get_geometry_type(url = paste0(server,polygon_service)),
                "esriGeometryPolygon"
   )
 })
