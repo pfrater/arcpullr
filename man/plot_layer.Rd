@@ -24,7 +24,7 @@ This function plots a spatial layer as returned from
 }
 \examples{
 plot_layer(iceland)
-plot_layer(mke_county, outline_poly = wi_poly)
+plot_layer(mke_county, outline_poly = wis_poly)
 \dontrun{
   g <-
      plot_layer(wi_counties) +

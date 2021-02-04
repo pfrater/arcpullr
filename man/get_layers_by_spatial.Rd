@@ -29,7 +29,7 @@ get_layer_by_spatial(
   url,
   geometry,
   geom_type,
-  sp_ref = "4326",
+  sp_ref = NULL,
   sp_rel = "esriSpatialRelIntersects",
   ...
 )

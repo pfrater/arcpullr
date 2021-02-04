@@ -7,8 +7,8 @@
 \alias{mke_county}
 \alias{portage_county}
 \alias{reykjanes}
-\alias{wi_counties}
-\alias{wi_poly}
+\alias{wis_counties}
+\alias{wis_poly}
 \title{Various example sf polygons}
 \format{
 An object of class sf and data.frame:
@@ -35,9 +35,9 @@ portage_county
 
 reykjanes
 
-wi_counties
+wis_counties
 
-wi_poly
+wis_poly
 }
 \description{
 These are sf polygons that are used for examples throughout the package

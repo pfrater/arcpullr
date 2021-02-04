@@ -11,7 +11,6 @@
 #' API
 #'
 #' @param sf_obj An sf object
-#' @param crs The coordinate reference system. Defaults to 4326
 #'
 #' @return String of well known text
 #' @export
@@ -19,28 +18,28 @@
 #'
 #' @examples
 #' mke_polygon_coords <- format_polygon_coords(mke_county)
-format_polygon_coords <- function(sf_obj, crs = 4326) {
-  return(format_coords(sf_obj, geom_type = "polygon", crs = crs))
+format_polygon_coords <- function(sf_obj) {
+  return(format_coords(sf_obj, geom_type = "polygon"))
 }
 
 #' @rdname format_coords
 #' @export
-format_line_coords <- function(sf_obj, crs = 4326) {
-  return(format_coords(sf_obj, geom_type = "polyline", crs = crs))
+format_line_coords <- function(sf_obj) {
+  return(format_coords(sf_obj, geom_type = "polyline"))
 }
 
 #' @rdname format_coords
 #' @export
-format_multipoint_coords <- function(sf_obj, crs = 4326) {
-  return(format_coords(sf_obj, geom_type = "multipoint", crs = crs))
+format_multipoint_coords <- function(sf_obj) {
+  return(format_coords(sf_obj, geom_type = "multipoint"))
 }
 
 #' @rdname format_coords
 #' @export
-format_point_coords <- function(sf_obj, crs = 4326) {
+format_point_coords <- function(sf_obj) {
+  crs <- get_sf_crs(sf_obj)
   out <-
     sf_obj %>%
-    sf::st_transform(crs = crs) %>%
     sf::st_coordinates() %>%
     data.frame() %>%
     dplyr::select(.data$X, .data$Y)
@@ -51,7 +50,7 @@ format_point_coords <- function(sf_obj, crs = 4326) {
 
 #' @rdname format_coords
 #' @export
-format_envelope_coords <- function(sf_obj, crs = 4326) {
+format_envelope_coords <- function(sf_obj) {
   bbox <- sf::st_bbox(sf_obj)
   coord_string <- paste(names(bbox), bbox, sep = " : ", collapse = ", ")
   return(coord_string)
@@ -60,7 +59,7 @@ format_envelope_coords <- function(sf_obj, crs = 4326) {
 #' @rdname format_coords
 #' @param geom_type Either "points", "paths", or "rings". Choose wisely
 #' @export
-format_coords <- function(sf_obj, geom_type, crs = 4326) {
+format_coords <- function(sf_obj, geom_type) {
   geometry_type <- switch(
     geom_type,
     multipoint = "points",
@@ -79,9 +78,9 @@ format_coords <- function(sf_obj, geom_type, crs = 4326) {
     polygon = "]]")
 
   geometry_type <- sprintf("'%s'", geometry_type)
+  crs <- get_sf_crs(sf_obj)
   out <-
     sf_obj %>%
-    sf::st_transform(crs = crs) %>%
     sf::st_coordinates() %>%
     data.frame() %>%
     dplyr::select(.data$X, .data$Y) %>%
@@ -97,6 +96,21 @@ format_coords <- function(sf_obj, geom_type, crs = 4326) {
   return(out)
 }
 
+
+#' Return CRS value of an sf object
+#'
+#' @param sf_obj An object of class sf
+#'
+#' @return A numeric value referring to the coordinate reference system
+#' @export
+#'
+#' @examples
+#' get_sf_crs(iceland)
+get_sf_crs <- function(sf_obj) {
+  stopifnot("sf" %in% class(sf_obj))
+  out_crs <- as.numeric(gsub(".*([0-9]{4})$", "\\1",sf::st_crs(sf_obj)[[1]]))
+  return(out_crs)
+}
 
 #' Create sf objects from coordinates
 #'

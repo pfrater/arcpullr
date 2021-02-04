@@ -100,5 +100,5 @@ or can be switched to base graphics.
 
 ```{r}
 plot_layer(mke_waters)
-plot_layer(wi_river, outline = wi_poly)
+plot_layer(wi_river, outline = wis_poly)
 ```
