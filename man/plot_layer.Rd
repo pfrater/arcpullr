@@ -23,14 +23,14 @@ This function plots a spatial layer as returned from
 \code{\link{get_spatial_layer}}.
 }
 \examples{
+\dontrun{
 plot_layer(iceland)
 plot_layer(mke_county, outline_poly = wis_poly)
-\dontrun{
-  g <-
-     plot_layer(wi_counties) +
-     ggplot2::geom_sf(data = portage_county, fill = "red") +
-     ggplot2::geom_sf(data = mke_county, fill = "red")
-  g
+g <-
+   plot_layer(wi_counties) +
+   ggplot2::geom_sf(data = portage_county, fill = "red") +
+   ggplot2::geom_sf(data = mke_county, fill = "red")
+g
 }
 
 }

@@ -1,5 +1,7 @@
 context("Retrieving layers")
 
+skip_on_cran()
+
 stream_hydro_url <- paste0(
   "https://dnrmaps.wi.gov/arcgis2/rest/services/",
   "TS_AGOL_STAGING_SERVICES/EN_AGOL_STAGING_SurfaceWater_WTM/MapServer/2"
