@@ -8,8 +8,8 @@
 #' @param url A character string of the url for the layer to pull
 #' @param geometry An \code{sf} object used for the spatial query
 #' @param geom_type A character of the geometry type to be used. This param is
-#' automatically specified in \code{get_layer_by_ --poly, --line,} and
-#' \code{point}
+#' automatically specified in all \code{get_layer_by_*} functions except
+#' \code{get_spatial_layer}
 #' @param sp_ref The spatial reference value
 #' @param sp_rel Character. The type of relationship to query by.
 #' @param ... Additional arguements to pass to \code{\link{get_spatial_layer}}
@@ -52,12 +52,14 @@ get_layer_by_point <- function(url, geometry,
   npts <- nrow(sf::st_coordinates(geometry))
   if (npts == 1) {
     format_geom <- format_point_coords(geometry)
+    geom_type <- "esriGeometryPoint"
   } else {
     format_geom <- format_multipoint_coords(geometry)
+    geom_type <- "esriGeometryMultipoint"
   }
   return(get_layer_by_spatial(url = url,
                               geometry = format_geom,
-                              geom_type = "esriGeometryPoint",
+                              geom_type = geom_type,
                               sp_ref = get_sf_crs(geometry),
                               sp_rel = sp_rel, ...))
 }
