@@ -63,8 +63,8 @@ To test this out you can also quickly create simple `sf` objects using
 
 ```{r, eval = FALSE}
 wdnr_base_url <- "https://dnrmaps.wi.gov/arcgis/rest/services"
-streams_layer_url <- "WT_Inland_Water_Resources_WTM_Ext_v2/MapServer/2"
-streams_url <- paste(wdnr_base_url, service_url, streams_layer_url, sep = "/")
+streams_layer_url <- "WT_SWDV/WT_Inland_Water_Resources_WTM_Ext_v2/MapServer/2"
+streams_url <- paste(wdnr_base_url, streams_layer_url, sep = "/")
 mke_waters <- get_layer_by_poly(url = streams_url, mke_county)
 ```
 
@@ -77,9 +77,8 @@ To query via SQL within the function the field name for the
 query of interest must be known. For example,
 
 ```{r, eval = FALSE}
-service_url <- "WT_SWDV"
-open_water_layer_url <- "WT_Inland_Water_Resources_WTM_Ext_v2/MapServer/3"
-hydro_url <- paste(wdnr_base_url, service_url, open_water_layer_url, sep = "/")
+open_water_layer_url <- "WT_SWDV/WT_Inland_Water_Resources_WTM_Ext_v2/MapServer/3"
+hydro_url <- paste(wdnr_base_url, open_water_layer_url, sep = "/")
 wi_river <- get_spatial_layer(hydro_url, 
   where = "WATERBODY_ROW_NAME = 'Wisconsin River'"
 )
