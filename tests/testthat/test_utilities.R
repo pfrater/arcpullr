@@ -4,7 +4,7 @@ pt_a <- c(-90, 45)
 pt_b <- c(-89, 44)
 sf_pt <- sf_points(pt_a)
 sf_multipt <- sf_points(pt_a, pt_b)
-sf_line <- sf_lines(pt_a, pt_b)
+sf_line <- sf_line(pt_a, pt_b)
 sf_poly <- sf_polygon(c(0, 0), c(0, 1), c(1, 1), c(1,0), c(0,0))
 
 test_that("sf_objects correctly return sf objects", {

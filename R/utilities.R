@@ -59,6 +59,44 @@ format_envelope_coords <- function(sf_obj) {
 #' @rdname format_coords
 #' @param geom_type Either "points", "paths", or "rings". Choose wisely
 #' @export
+# format_coords <- function(sf_obj, geom_type) {
+#   geometry_type <- switch(
+#     geom_type,
+#     multipoint = "points",
+#     polyline = "paths",
+#     polygon = "rings"
+#   )
+#   left_bracket <- switch(
+#     geom_type,
+#     multipoint = "[",
+#     polyline = "[[",
+#     polygon = "[[")
+#   right_bracket <- switch(
+#     geom_type,
+#     multipoint = "",
+#     polyline = "]]",
+#     polygon = "]]")
+#
+#   geometry_type <- sprintf("'%s'", geometry_type)
+#   crs <- get_sf_crs(sf_obj)
+#   out <-
+#     sf_obj %>%
+#     sf::st_coordinates() %>%
+#     data.frame() %>%
+#     dplyr::select(.data$X, .data$Y) %>%
+#     tidyr::unite(col= "coordinates",sep = ",") %>%
+#     dplyr::mutate(coordinates = paste("[", .data$coordinates, "]",sep="")) %>%
+#     dplyr::summarise(coordinates =  paste(.data$coordinates,collapse = ",")) %>%
+#     dplyr::mutate(coordinates = paste("{", geometry_type, ":",left_bracket,
+#                                       .data$coordinates,
+#                                       right_bracket,
+#                                       ",'spatialReference':{'wkid':", crs,
+#                                       "}}", sep = "")) %>%
+#     dplyr::pull()
+#   return(out)
+# }
+
+
 format_coords <- function(sf_obj, geom_type) {
   geometry_type <- switch(
     geom_type,
@@ -68,31 +106,37 @@ format_coords <- function(sf_obj, geom_type) {
   )
   left_bracket <- switch(
     geom_type,
-    multipoint = "[",
-    polyline = "[[",
-    polygon = "[[")
+    multipoint = "",
+    polyline = "[",
+    polygon = "[")
   right_bracket <- switch(
     geom_type,
-    multipoint = "]",
-    polyline = "]]",
-    polygon = "]]")
+    multipoint = "",
+    polyline = "]",
+    polygon = "]")
 
   geometry_type <- sprintf("'%s'", geometry_type)
   crs <- get_sf_crs(sf_obj)
+  out <- lapply(1:nrow(sf_obj), function(x) {
+    out <-
+      sf_obj[x, ] %>%
+      sf::st_coordinates() %>%
+      data.frame() %>%
+      dplyr::select(.data$X, .data$Y) %>%
+      tidyr::unite(col= "coordinates",sep = ",") %>%
+      dplyr::mutate(coordinates = paste0("[", .data$coordinates, "]")) %>%
+      dplyr::summarise(coordinates =  paste(.data$coordinates, collapse = ","))
+  }
+  )
   out <-
-    sf_obj %>%
-    sf::st_coordinates() %>%
-    data.frame() %>%
-    dplyr::select(.data$X, .data$Y) %>%
-    tidyr::unite(col= "coordinates",sep = ",") %>%
-    dplyr::mutate(coordinates = paste("[", .data$coordinates, "]",sep="")) %>%
-    dplyr::summarise(coordinates =  paste(.data$coordinates,collapse = ",")) %>%
-    dplyr::mutate(coordinates = paste("{", geometry_type, ":",left_bracket,
-                                      .data$coordinates,
-                                      right_bracket,
-                                      ",'spatialReference':{'wkid':", crs,
-                                      "}}", sep = "")) %>%
-    dplyr::pull()
+    do.call("rbind", out) %>%
+    dplyr::mutate(coordinates = paste0("[", .data$coordinates, "]")) %>%
+    dplyr::pull() %>%
+    paste(collapse = ", ") %>%
+    paste("{", geometry_type, ":",
+          left_bracket, ., right_bracket,
+          ", 'spatialReference':{'wkid':", crs,
+          "}}", sep = "")
   return(out)
 }
 
@@ -126,9 +170,9 @@ get_sf_crs <- function(sf_obj) {
 #' @examples
 #' pt_a <- c(-90, 45)
 #' pt_b <- c(-89, 44)
-#' sf_pt <- sf_points(pt_a)
-#' sf_lines <- sf_lines(pt_a, pt_b)
-sf_lines <- function(..., crs = 4326) {
+#' pt <- sf_points(pt_a)
+#' line <- sf_line(pt_a, pt_b)
+sf_line <- function(..., crs = 4326) {
   coords <- do.call("rbind", list(...))
   ls <- sf::st_linestring(coords)
   sfc <- sf::st_sfc(ls, crs = crs)

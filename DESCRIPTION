@@ -1,7 +1,7 @@
 Package: arcpullr
 Type: Package
 Title: Pull Data from an 'ArcGIS REST' API
-Version: 0.1.2
+Version: 0.1.3
 Authors@R: c(person(given = "Paul",
            family = "Frater",
            role = c("aut", "cre"),
