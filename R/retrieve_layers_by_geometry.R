@@ -8,8 +8,8 @@
 #' @param url A character string of the url for the layer to pull
 #' @param geometry An \code{sf} object used for the spatial query
 #' @param geom_type A character of the geometry type to be used. This param is
-#' automatically specified in \code{get_layer_by_ --poly, --line,} and
-#' \code{point}
+#' automatically specified in all \code{get_layer_by_*} functions except
+#' \code{get_spatial_layer}
 #' @param sp_ref The spatial reference value
 #' @param sp_rel Character. The type of relationship to query by.
 #' @param ... Additional arguements to pass to \code{\link{get_spatial_layer}}
@@ -24,11 +24,13 @@
 #' hydro_path <- "WT_SWDV/WT_Inland_Water_Resources_WTM_Ext_v2/MapServer/2"
 #' hydro_url <- paste0(base_wdnr_url, hydro_path)
 #' mke_waters <- get_layer_by_poly(url = hydro_url, mke_county)
-get_layer_by_poly <- function(url, geometry, sp_rel = "esriSpatialRelContains",
+get_layer_by_poly <- function(url, geometry,
+                              sp_rel = "esriSpatialRelContains",
                               ...) {
   return(get_layer_by_spatial(url = url,
                               geometry = format_polygon_coords(geometry),
                               geom_type = "esriGeometryPolygon",
+                              sp_ref = get_sf_crs(geometry),
                               sp_rel = sp_rel, ...))
 }
 
@@ -39,6 +41,7 @@ get_layer_by_line <- function(url, geometry,
   return(get_layer_by_spatial(url = url,
                               geometry = format_line_coords(geometry),
                               geom_type = "esriGeometryPolyline",
+                              sp_ref = get_sf_crs(geometry),
                               sp_rel = sp_rel, ...))
 }
 
@@ -49,12 +52,15 @@ get_layer_by_point <- function(url, geometry,
   npts <- nrow(sf::st_coordinates(geometry))
   if (npts == 1) {
     format_geom <- format_point_coords(geometry)
+    geom_type <- "esriGeometryPoint"
   } else {
     format_geom <- format_multipoint_coords(geometry)
+    geom_type <- "esriGeometryMultipoint"
   }
   return(get_layer_by_spatial(url = url,
                               geometry = format_geom,
-                              geom_type = "esriGeometryPoint",
+                              geom_type = geom_type,
+                              sp_ref = get_sf_crs(geometry),
                               sp_rel = sp_rel, ...))
 }
 
@@ -64,7 +70,10 @@ get_layer_by_multipoint <- function(url, geometry,
                                     sp_rel = "esriSpatialRelIntersects", ...) {
   return(get_layer_by_spatial(url = url,
                               geometry = format_multipoint_coords(geometry),
-                              geom_type = "esriGeometryMultipoint", ...))
+                              geom_type = "esriGeometryMultipoint",
+                              sp_ref = get_sf_crs(geometry),
+                              sp_rel = sp_rel,
+                              ...))
 }
 
 #' @name get_layers_by_spatial
@@ -74,13 +83,22 @@ get_layer_by_envelope <- function(url, geometry,
   return(get_layer_by_spatial(url = url,
                               geometry = format_envelope_coords(geometry),
                               geom_type = "esriGeometryEnvelope",
+                              sp_ref = get_sf_crs(geometry),
                               sp_rel = sp_rel, ...))
 }
 
 #' @name get_layers_by_spatial
 #' @export
-get_layer_by_spatial <- function(url, geometry, geom_type, sp_ref = "4326",
+get_layer_by_spatial <- function(url, geometry, geom_type, sp_ref = NULL,
                                  sp_rel = "esriSpatialRelIntersects", ...) {
+  if (is.null(sp_ref)) {
+    if ("sf" %in% class(geometry)) {
+      sp_ref <- get_sf_crs(geometry)
+    } else {
+      stop("You must specify a CRS number in sp_ref ",
+           "or pass an sf object for a geometry.")
+    }
+  }
   return(get_spatial_layer(url = url, geometry = geometry,
                            geometryType = geom_type, inSR = sp_ref,
                            spatialRel = sp_rel, ...))

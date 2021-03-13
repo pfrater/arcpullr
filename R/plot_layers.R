@@ -13,14 +13,14 @@
 #' @export
 #'
 #' @examples
-#' plot_layer(iceland)
-#' plot_layer(mke_county, outline_poly = wi_poly)
 #' \dontrun{
-#'   g <-
-#'      plot_layer(wi_counties) +
-#'      ggplot2::geom_sf(data = portage_county, fill = "red") +
-#'      ggplot2::geom_sf(data = mke_county, fill = "red")
-#'   g
+#' plot_layer(iceland)
+#' plot_layer(mke_county, outline_poly = wis_poly)
+#' g <-
+#'    plot_layer(wi_counties) +
+#'    ggplot2::geom_sf(data = portage_county, fill = "red") +
+#'    ggplot2::geom_sf(data = mke_county, fill = "red")
+#' g
 #' }
 #'
 plot_layer <- function(sf_data, outline_poly = NULL, plot_pkg = "ggplot") {

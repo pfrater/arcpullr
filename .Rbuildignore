@@ -4,3 +4,5 @@
 ^\.travis\.yml$
 ^icons$
 ^todo$
+^tests/testthat/test_get_spatial_layer.R$
+^tests/testthat/test_get_layer_by_geometry.R

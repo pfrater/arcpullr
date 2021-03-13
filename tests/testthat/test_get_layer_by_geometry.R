@@ -1,5 +1,7 @@
 context("Retrieve Layers by Geometry")
 
+skip_on_cran()
+
 #create a point object
 point <- c(-88.526848,45.435216)%>%
   sf::st_point()%>%

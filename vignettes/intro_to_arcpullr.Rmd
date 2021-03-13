@@ -49,16 +49,36 @@ it to an object of class sf (*i.e.* of the R package sf: Simple Features for R).
 This function is also query-able both using both SQL code and ArcGIS's 
 [Query (Feature Service)](
 https://developers.arcgis.com/rest/services-reference/query-feature-service-.htm
-) functionality. To query via SQL within the function the field name for the 
-query of interest must be known. For example,
+) functionality. 
+
+### Querying Spatially via ArcGIS Feature Service
+
+Along with SQL, layers from an ArcGIS REST API may be queried spatially. This
+is accomplished with the `get_layer_by_*` family of functions. These functions
+are essentially a wrapper around `get_spatial_layer` that removes the 
+abstraction of the spatial query syntax query by ArcGIS. These functions 
+require a spatial object of class `sf` to be passed to the `geometry` argument.
+To test this out you can also quickly create simple `sf` objects using
+`sf_lines()`, `sf_points()`, or `sf_polygons()` to test out the service feature.
+
+```{r, eval = FALSE}
+wdnr_base_url <- "https://dnrmaps.wi.gov/arcgis/rest/services"
+streams_layer_url <- "WT_SWDV/WT_Inland_Water_Resources_WTM_Ext_v2/MapServer/2"
+streams_url <- paste(wdnr_base_url, streams_layer_url, sep = "/")
+mke_waters <- get_layer_by_poly(url = streams_url, mke_county)
+```
+
+Spatial queries can be done with polygons, lines, or points...just use the 
+respective `get_layer_by_*` function.
 
 ### Querying via SQL
 
-```{r, warning = FALSE}
-wdnr_base_url <- "https://dnrmaps.wi.gov/arcgis/rest/services"
-service_url <- "WT_SWDV"
-open_water_layer_url <- "WT_Inland_Water_Resources_WTM_Ext_v2/MapServer/3"
-hydro_url <- paste(wdnr_base_url, service_url, open_water_layer_url, sep = "/")
+To query via SQL within the function the field name for the 
+query of interest must be known. For example,
+
+```{r, eval = FALSE}
+open_water_layer_url <- "WT_SWDV/WT_Inland_Water_Resources_WTM_Ext_v2/MapServer/3"
+hydro_url <- paste(wdnr_base_url, open_water_layer_url, sep = "/")
 wi_river <- get_spatial_layer(hydro_url, 
   where = "WATERBODY_ROW_NAME = 'Wisconsin River'"
 )
@@ -72,25 +92,6 @@ string.
 sql_where(ROW_WATERBODY_NAME = 'Wisconsin River', HYDROCODE = 7011)
 ```
 
-### Querying Spatially via ArcGIS Feature Service
-
-Along with SQL, layers from an ArcGIS REST API may be queried spatially. This
-is accomplished with the `get_layer_by_*` family of functions. These functions
-are essentially a wrapper around `get_spatial_layer` that removes the 
-abstraction of the spatial query syntax query by ArcGIS. These functions 
-require a spatial object of class `sf` to be passed to the `geometry` argument.
-To test this out you can also quickly create simple `sf` objects using
-`sf_lines()`, `sf_points()`, or `sf_polygons()` to test out the service feature.
-
-```{r}
-streams_layer_url <- "WT_Inland_Water_Resources_WTM_Ext_v2/MapServer/2"
-streams_url <- paste(wdnr_base_url, service_url, streams_layer_url, sep = "/")
-mke_waters <- get_layer_by_poly(url = streams_url, mke_county)
-```
-
-Spatial queries can be done with polygons, lines, or points...just use the 
-respective `get_layer_by_*` function.
-
 ### Plotting Layers
 
 The retrieved layers may be plotted in whatever way you like to plot `sf` 
@@ -98,7 +99,4 @@ objects. For quick plots to check if your query worked we've included the
 `plot_layer` function, which uses either `ggplot2` (default) to plot the layer
 or can be switched to base graphics.
 
-```{r}
-plot_layer(mke_waters)
-plot_layer(wi_river, outline = wi_poly)
-```
+

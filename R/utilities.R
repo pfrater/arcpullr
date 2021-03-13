@@ -11,7 +11,6 @@
 #' API
 #'
 #' @param sf_obj An sf object
-#' @param crs The coordinate reference system. Defaults to 4326
 #'
 #' @return String of well known text
 #' @export
@@ -19,28 +18,28 @@
 #'
 #' @examples
 #' mke_polygon_coords <- format_polygon_coords(mke_county)
-format_polygon_coords <- function(sf_obj, crs = 4326) {
-  return(format_coords(sf_obj, geom_type = "polygon", crs = crs))
+format_polygon_coords <- function(sf_obj) {
+  return(format_coords(sf_obj, geom_type = "polygon"))
 }
 
 #' @rdname format_coords
 #' @export
-format_line_coords <- function(sf_obj, crs = 4326) {
-  return(format_coords(sf_obj, geom_type = "polyline", crs = crs))
+format_line_coords <- function(sf_obj) {
+  return(format_coords(sf_obj, geom_type = "polyline"))
 }
 
 #' @rdname format_coords
 #' @export
-format_multipoint_coords <- function(sf_obj, crs = 4326) {
-  return(format_coords(sf_obj, geom_type = "multipoint", crs = crs))
+format_multipoint_coords <- function(sf_obj) {
+  return(format_coords(sf_obj, geom_type = "multipoint"))
 }
 
 #' @rdname format_coords
 #' @export
-format_point_coords <- function(sf_obj, crs = 4326) {
+format_point_coords <- function(sf_obj) {
+  crs <- get_sf_crs(sf_obj)
   out <-
     sf_obj %>%
-    sf::st_transform(crs = crs) %>%
     sf::st_coordinates() %>%
     data.frame() %>%
     dplyr::select(.data$X, .data$Y)
@@ -51,7 +50,7 @@ format_point_coords <- function(sf_obj, crs = 4326) {
 
 #' @rdname format_coords
 #' @export
-format_envelope_coords <- function(sf_obj, crs = 4326) {
+format_envelope_coords <- function(sf_obj) {
   bbox <- sf::st_bbox(sf_obj)
   coord_string <- paste(names(bbox), bbox, sep = " : ", collapse = ", ")
   return(coord_string)
@@ -60,7 +59,45 @@ format_envelope_coords <- function(sf_obj, crs = 4326) {
 #' @rdname format_coords
 #' @param geom_type Either "points", "paths", or "rings". Choose wisely
 #' @export
-format_coords <- function(sf_obj, geom_type, crs = 4326) {
+# format_coords <- function(sf_obj, geom_type) {
+#   geometry_type <- switch(
+#     geom_type,
+#     multipoint = "points",
+#     polyline = "paths",
+#     polygon = "rings"
+#   )
+#   left_bracket <- switch(
+#     geom_type,
+#     multipoint = "[",
+#     polyline = "[[",
+#     polygon = "[[")
+#   right_bracket <- switch(
+#     geom_type,
+#     multipoint = "",
+#     polyline = "]]",
+#     polygon = "]]")
+#
+#   geometry_type <- sprintf("'%s'", geometry_type)
+#   crs <- get_sf_crs(sf_obj)
+#   out <-
+#     sf_obj %>%
+#     sf::st_coordinates() %>%
+#     data.frame() %>%
+#     dplyr::select(.data$X, .data$Y) %>%
+#     tidyr::unite(col= "coordinates",sep = ",") %>%
+#     dplyr::mutate(coordinates = paste("[", .data$coordinates, "]",sep="")) %>%
+#     dplyr::summarise(coordinates =  paste(.data$coordinates,collapse = ",")) %>%
+#     dplyr::mutate(coordinates = paste("{", geometry_type, ":",left_bracket,
+#                                       .data$coordinates,
+#                                       right_bracket,
+#                                       ",'spatialReference':{'wkid':", crs,
+#                                       "}}", sep = "")) %>%
+#     dplyr::pull()
+#   return(out)
+# }
+
+
+format_coords <- function(sf_obj, geom_type) {
   geometry_type <- switch(
     geom_type,
     multipoint = "points",
@@ -69,34 +106,55 @@ format_coords <- function(sf_obj, geom_type, crs = 4326) {
   )
   left_bracket <- switch(
     geom_type,
-    multipoint = "[",
-    polyline = "[[",
-    polygon = "[[")
+    multipoint = "",
+    polyline = "[",
+    polygon = "[")
   right_bracket <- switch(
     geom_type,
-    multipoint = "]",
-    polyline = "]]",
-    polygon = "]]")
+    multipoint = "",
+    polyline = "]",
+    polygon = "]")
 
   geometry_type <- sprintf("'%s'", geometry_type)
+  crs <- get_sf_crs(sf_obj)
+  out <- lapply(1:nrow(sf_obj), function(x) {
+    out <-
+      sf_obj[x, ] %>%
+      sf::st_coordinates() %>%
+      data.frame() %>%
+      dplyr::select(.data$X, .data$Y) %>%
+      tidyr::unite(col= "coordinates",sep = ",") %>%
+      dplyr::mutate(coordinates = paste0("[", .data$coordinates, "]")) %>%
+      dplyr::summarise(coordinates =  paste(.data$coordinates, collapse = ","))
+  }
+  )
   out <-
-    sf_obj %>%
-    sf::st_transform(crs = crs) %>%
-    sf::st_coordinates() %>%
-    data.frame() %>%
-    dplyr::select(.data$X, .data$Y) %>%
-    tidyr::unite(col= "coordinates",sep = ",") %>%
-    dplyr::mutate(coordinates = paste("[", .data$coordinates, "]",sep="")) %>%
-    dplyr::summarise(coordinates =  paste(.data$coordinates,collapse = ",")) %>%
-    dplyr::mutate(coordinates = paste("{", geometry_type, ":",left_bracket,
-                                      .data$coordinates,
-                                      right_bracket,
-                                      ",'spatialReference':{'wkid':", crs,
-                                      "}}", sep = "")) %>%
-    dplyr::pull()
+    do.call("rbind", out) %>%
+    dplyr::mutate(coordinates = paste0("[", .data$coordinates, "]")) %>%
+    dplyr::pull() %>%
+    paste(collapse = ", ") %>%
+    paste("{", geometry_type, ":",
+          left_bracket, ., right_bracket,
+          ", 'spatialReference':{'wkid':", crs,
+          "}}", sep = "")
   return(out)
 }
 
+
+#' Return CRS value of an sf object
+#'
+#' @param sf_obj An object of class sf
+#'
+#' @return A numeric value referring to the coordinate reference system
+#' @export
+#'
+#' @examples
+#' get_sf_crs(iceland)
+get_sf_crs <- function(sf_obj) {
+  stopifnot("sf" %in% class(sf_obj))
+  out_crs <- as.numeric(gsub(".*([0-9]{4})$", "\\1",sf::st_crs(sf_obj)[[1]]))
+  return(out_crs)
+}
 
 #' Create sf objects from coordinates
 #'
@@ -112,9 +170,9 @@ format_coords <- function(sf_obj, geom_type, crs = 4326) {
 #' @examples
 #' pt_a <- c(-90, 45)
 #' pt_b <- c(-89, 44)
-#' sf_pt <- sf_points(pt_a)
-#' sf_lines <- sf_lines(pt_a, pt_b)
-sf_lines <- function(..., crs = 4326) {
+#' pt <- sf_points(pt_a)
+#' line <- sf_line(pt_a, pt_b)
+sf_line <- function(..., crs = 4326) {
   coords <- do.call("rbind", list(...))
   ls <- sf::st_linestring(coords)
   sfc <- sf::st_sfc(ls, crs = crs)
@@ -175,12 +233,14 @@ sf_polygon <- function(..., crs = 4326) {
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' wbics <- sql_where(WATERBODY_WBIC = c(805400, 804600), rel_op = "IN")
 #' base_wdnr_url <- "https://dnrmaps.wi.gov/arcgis/rest/services/"
 #' hydro_path <- "WT_SWDV/WT_Inland_Water_Resources_WTM_Ext_v2/MapServer/3"
 #' hydro_url <- paste0(base_wdnr_url, hydro_path)
 #' lakes <- get_spatial_layer(url = hydro_url, where = wbics)
 #' plot_layer(lakes)
+#' }
 sql_where <- function(..., rel_op = "=") {
   args <- list(...)
   if (is.null(names(args)) | any(names(args) == "")) {

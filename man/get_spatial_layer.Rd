@@ -49,14 +49,14 @@ first determine how they fit into the POST request and make adjustments as
 needed. This syntax can be tricky if you're not used to it.
 }
 \examples{
+\dontrun{
 # lava flows on Reykjanes (pr. 'rake-yah-ness') peninsula in Iceland
 base_url <- "https://arcgisserver.isor.is:6443/arcgis/rest/services"
 reykjanes_path <- "vi/uttekt_eldstodva_allt_2/MapServer/5"
 reykjanes_url <- paste(base_url, reykjanes_path, sep = "/")
 lava_flows <- get_spatial_layer(reykjanes_url)
 plot_layer(lava_flows, outline_poly = reykjanes)
-\dontrun{
-  plot_layer(lava_flows, outline_poly = reykjanes) +
+plot_layer(lava_flows, outline_poly = reykjanes) +
   ggplot2::geom_sf(data = iceland_poly, fill = NA)
 }
 

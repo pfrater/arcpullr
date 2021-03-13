@@ -4,7 +4,7 @@ pt_a <- c(-90, 45)
 pt_b <- c(-89, 44)
 sf_pt <- sf_points(pt_a)
 sf_multipt <- sf_points(pt_a, pt_b)
-sf_line <- sf_lines(pt_a, pt_b)
+sf_line <- sf_line(pt_a, pt_b)
 sf_poly <- sf_polygon(c(0, 0), c(0, 1), c(1, 1), c(1,0), c(0,0))
 
 test_that("sf_objects correctly return sf objects", {
@@ -30,19 +30,7 @@ test_that("sql_where returns correct SQL WHERE clauses", {
   )
 })
 
-test_that("get_geometry_type returns the correct geometry type", {
-  server <- "https://dnrmaps.wi.gov/arcgis/rest/services/WT_SWDV/"
-  points_service <- "WT_Monitoring_Sites_and_Data_WTM_Ext_v2/MapServer/2"
-  line_service <- "WT_Inland_Water_Resources_WTM_Ext_v2/MapServer/2"
-  polygon_service <- "WT_Inland_Water_Resources_WTM_Ext_v2/MapServer/3"
-
-  expect_equal(get_geometry_type(url = paste0(server,points_service)),
-               "esriGeometryPoint"
-  )
-  expect_equal(get_geometry_type(url = paste0(server,line_service)),
-               "esriGeometryPolyline"
-               )
-  expect_equal(get_geometry_type(url = paste0(server,polygon_service)),
-               "esriGeometryPolygon"
-  )
+test_that("get_sf_crs returns the correct CRS values for polygons", {
+  expect_equal(get_sf_crs(iceland), 4326)
+  expect_equal(get_sf_crs(mke_county), 4326)
 })

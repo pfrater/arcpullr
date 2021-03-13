@@ -29,7 +29,7 @@ get_layer_by_spatial(
   url,
   geometry,
   geom_type,
-  sp_ref = "4326",
+  sp_ref = NULL,
   sp_rel = "esriSpatialRelIntersects",
   ...
 )
@@ -44,8 +44,8 @@ get_layer_by_spatial(
 \item{...}{Additional arguements to pass to \code{\link{get_spatial_layer}}}
 
 \item{geom_type}{A character of the geometry type to be used. This param is
-automatically specified in \code{get_layer_by_ --poly, --line,} and
-\code{point}}
+automatically specified in all \code{get_layer_by_*} functions except
+\code{get_spatial_layer}}
 
 \item{sp_ref}{The spatial reference value}
 }

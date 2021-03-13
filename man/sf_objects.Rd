@@ -2,13 +2,13 @@
 % Please edit documentation in R/utilities.R
 \name{sf_objects}
 \alias{sf_objects}
-\alias{sf_lines}
+\alias{sf_line}
 \alias{sf_point}
 \alias{sf_points}
 \alias{sf_polygon}
 \title{Create sf objects from coordinates}
 \usage{
-sf_lines(..., crs = 4326)
+sf_line(..., crs = 4326)
 
 sf_point(..., crs = 4326)
 
@@ -30,6 +30,6 @@ These are simple wrapper functions for creating sf objects from points
 \examples{
 pt_a <- c(-90, 45)
 pt_b <- c(-89, 44)
-sf_pt <- sf_points(pt_a)
-sf_lines <- sf_lines(pt_a, pt_b)
+pt <- sf_points(pt_a)
+line <- sf_line(pt_a, pt_b)
 }

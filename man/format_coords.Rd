@@ -9,22 +9,20 @@
 \alias{format_envelope_coords}
 \title{Convert coordinates from an 'sf' object to formatted well-known text}
 \usage{
-format_polygon_coords(sf_obj, crs = 4326)
+format_polygon_coords(sf_obj)
 
-format_line_coords(sf_obj, crs = 4326)
+format_line_coords(sf_obj)
 
-format_multipoint_coords(sf_obj, crs = 4326)
+format_multipoint_coords(sf_obj)
 
-format_point_coords(sf_obj, crs = 4326)
+format_point_coords(sf_obj)
 
-format_envelope_coords(sf_obj, crs = 4326)
+format_envelope_coords(sf_obj)
 
-format_coords(sf_obj, geom_type, crs = 4326)
+format_coords(sf_obj, geom_type)
 }
 \arguments{
 \item{sf_obj}{An sf object}
-
-\item{crs}{The coordinate reference system. Defaults to 4326}
 
 \item{geom_type}{Either "points", "paths", or "rings". Choose wisely}
 }

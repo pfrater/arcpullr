@@ -18,7 +18,7 @@
 "reykjanes"
 
 #' @rdname sf_example_polys
-"wi_counties"
+"wis_counties"
 
 #' @rdname sf_example_polys
-"wi_poly"
+"wis_poly"
