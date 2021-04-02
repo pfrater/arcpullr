@@ -293,8 +293,14 @@ sql_where <- function(..., rel_op = "=") {
 #' base_wdnr_url <- "https://dnrmaps.wi.gov/arcgis/rest/services/"
 #' hydro_path <- "WT_SWDV/WT_Inland_Water_Resources_WTM_Ext_v2/MapServer/3"
 #' hydro_url <- paste0(base_wdnr_url, hydro_path)
-#' get_layer_details(url = hydro_url)
+#' get_geometry_type(url = hydro_url)
 get_geometry_type <- function(url) {
+  if (!(requireNamespace("xml", quietly = TRUE) ||
+        requireNamespace("rvest", quietly = TRUE))) {
+    stop(
+      "You must have xml, rvest, and stringr installed to use get_geometry_type"
+    )
+  }
   if (httr::http_error(url) == TRUE) {
     "url_error"
   }
@@ -303,9 +309,41 @@ get_geometry_type <- function(url) {
     xml2::read_html(url) %>%
       rvest::html_nodes("body")%>%
       rvest::html_text()%>%
-      base::gsub(pattern = "\\s+",replacement = " ",x=.) %>%
-      stringr::str_match(
-        base::paste0("Geometry Type: ","(.*?) ")) %>%
-      magrittr::extract2(2)
+      base::gsub(pattern = "\\s+", replacement = " ", x = .) %>%
+      stringr::str_match(base::paste0("Geometry Type: ","(.*?) ")) %>%
+      stringr::str_replace("Description:", "") %>%
+      .[2] %>%
+      stringr::str_trim()
   }
+}
+
+#' Check to see which spatial relation types are applicable to the feature
+#' classes being queried and the sf objects use do to a spatial query
+#'
+#' @param fc1 Character. The feature class type being queried. Available options
+#' are "point", "multipoint", "line", or "area".
+#' @param fc2 Character. The geometry type of the sf object used to do a spatial
+#' query. Available options are "point", "multipoint", "line", or "area".
+#' @param pull Logical. Pull the available options (TRUE) or print all columns
+#' of the sp_rel_valid data.frame for the appropriate fc1 and fc2
+#'
+#' @return Either a vector or filtered data.frame showing the appropriate
+#' sp_rels for the given feature classes
+#' @export
+#'
+#' @examples
+#' valid_sp_rel("line", "line")
+valid_sp_rel <- function(fc1, fc2, pull = TRUE) {
+  fc1 <- tolower(fc1)
+  fc2 <- tolower(fc2)
+  out <-
+    sp_rel_valid %>%
+    dplyr::filter(.data$feature_class_1 == fc1, .data$feature_class_2 == fc2)
+  if (nrow(out) == 0) {
+    stop("One of the supplied feature classes cannot be found.")
+  }
+  if (pull) {
+    out <- dplyr::pull(out, sp_rel)
+  }
+  return(out)
 }

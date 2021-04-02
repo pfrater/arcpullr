@@ -22,7 +22,8 @@ sp_rel_valid <-
   dplyr::select(-sp_rel) %>%
   dplyr::rename(sp_rel = value) %>%
   dplyr::arrange(feature_class_1, feature_class_2) %>%
-  dplyr::filter(sp_rel != "" & !is.na(sp_rel))
+  dplyr::filter(sp_rel != "" & !is.na(sp_rel)) %>%
+  dplyr::mutate_all(tolower)
 
 url <- paste(
   "https://help.arcgis.com/en/webapi/wpf/apiref/",
@@ -33,6 +34,7 @@ sp_rel_lookup <-
   xml2::read_html(url) %>%
   rvest::html_nodes("table")%>%
   magrittr::extract2(6)%>%
-  rvest::html_table()
+  rvest::html_table() %>%
+  dplyr::rename(sp_rel = Member, description = Description)
 
 usethis::use_data(sp_rel_lookup, sp_rel_valid, overwrite = TRUE)
