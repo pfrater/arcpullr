@@ -104,16 +104,18 @@ format_coords <- function(sf_obj, geom_type) {
     polyline = "paths",
     polygon = "rings"
   )
-  left_bracket <- switch(
-    geom_type,
-    multipoint = "",
-    polyline = "[",
-    polygon = "[")
-  right_bracket <- switch(
-    geom_type,
-    multipoint = "",
-    polyline = "]",
-    polygon = "]")
+  left_bracket <- "["
+  right_bracket <- "]"
+  # left_bracket <- switch(
+  #   geom_type,
+  #   multipoint = "",
+  #   polyline = "[",
+  #   polygon = "[")
+  # right_bracket <- switch(
+  #   geom_type,
+  #   multipoint = "",
+  #   polyline = "]",
+  #   polygon = "]")
 
   geometry_type <- sprintf("'%s'", geometry_type)
   crs <- get_sf_crs(sf_obj)
@@ -130,7 +132,10 @@ format_coords <- function(sf_obj, geom_type) {
   )
   out <-
     do.call("rbind", out) %>%
-    dplyr::mutate(coordinates = paste0("[", .data$coordinates, "]")) %>%
+    dplyr::mutate(coordinates = dplyr::case_when(
+      geom_type == "multipoint" ~ .data$coordinates,
+      TRUE ~ paste0("[", .data$coordinates, "]")
+    )) %>%
     dplyr::pull() %>%
     paste(collapse = ", ") %>%
     paste("{", geometry_type, ":",
