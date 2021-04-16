@@ -12,67 +12,66 @@ dnr_url <- function(x, base = NULL) {
   return(paste0("https://dnrmaps.wi.gov/arcgis", base, "/rest/services/", x))
 }
 
+
 # feature classes to query------------------------------------------------------
 
-# points - trout habitat sites
-trout_hab_url <- dnr_url(
-  "FM_Trout/FM_TROUT_HAB_SITES_WTM_Ext/MapServer/0"
+# lines - outstanding_streams
+outstanding_streams_url <- dnr_url(
+  "WT_Condition_Viewer/WT_Water_Quality_Standards_WTM_Ext/MapServer/14"
 )
 
-# lines - hydro flowlines
-hydro_lines_url <- dnr_url(
-  "TS_AGOL_STAGING_SERVICES/EN_AGOL_STAGING_SurfaceWater_WTM/MapServer/2",
+# points - goodyear distributor sites
+goodyear_url <- dnr_url(
+  "FN_FLEET/FN_FLEET_TIRE_VENDORS_WTM/MapServer/1",
   base = 2
 )
 
-# polygons - hydro poly
-hydro_poly_url <- dnr_url(
-  "WT_SWDV/WT_Inland_Water_Resources_WTM_Ext_v2/MapServer/3"
+# polygons - vertical seawalls
+vertical_seawall_url <- dnr_url(
+  "WY_Lakes_AIS/WY_Shoreland_Habitat_WTM_Ext/MapServer/20"
 )
 
 query_urls <- tribble(
   ~fc_type, ~url,
-  "line", hydro_lines_url,
-  "point", trout_hab_url,
-  "area", hydro_poly_url
+  "line", outstanding_streams_url,
+  "point", goodyear_url,
+  "area", vertical_seawall_url
 )
 
 # feature classes used for spatial query----------------------------------------
 
-# feature classes used to query points------------------------------------------
-trout_hab_sites <-
-  get_spatial_layer(trout_hab_url) %>%
-  st_transform(crs = 3071) %>%
-  select(OBJECTID)
 
-pt_query <-
-  trout_hab_sites %>%
-  slice(3L) %>%
-  mutate(query_fc_type = "point")
+# feature classes used to query points------------------------------------------
+
+# point spatial query layer
+goodyear_sites <- get_spatial_layer(goodyear_url)
 
 multipt_query <-
-  trout_hab_sites %>%
+  goodyear_sites %>%
   slice(1L:10L) %>%
   mutate(query_fc_type = "multipoint",
          geoms = st_combine(.)) %>%
   slice(1L)
 
+pt_query <-
+  goodyear_sites %>%
+  slice(2L) %>%
+  mutate(query_fc_type = "point")
+
 # line query layer
 line_query <-
-  sf_line(
-    c(590000, 521107.5554860905),
-    c(500000, 521107.5554860905),
-    crs = 3071
-  ) %>%
+  sf_line(c(730000, 462033.9869159721),
+          c(720000, 462033.9869159721),
+          crs = 3071) %>%
   mutate(query_fc_type = "line")
 
 # poly and envelope query layers
 poly_query <- sf_polygon(
-    c(-92.05, 44.65),
-    c(-91.85, 44.65),
-    c(-91.85, 44.6),
-    c(-92.05, 44.6),
-    c(-92.05, 44.65)
+    c(-90, 43.25),
+    c(-89, 43.25),
+    c(-89, 43),
+    c(-90, 43),
+    c(-90, 43.25)
   ) %>%
   mutate(query_fc_type = "area")
 
@@ -80,42 +79,44 @@ env_query <- mutate(poly_query, query_fc_type = "envelope")
 
 # join point querying layers together
 pt_query_layers <- tribble(
-  ~query_fc_type, ~query_fc_object,
-  "line", line_query,
-  "point", pt_query,
-  "multipoint", multipt_query,
-  "area", poly_query,
-  "envelope", env_query
-) %>% mutate(fc_type = "point")
+    ~query_fc_type, ~query_fc_object,
+    "line", line_query,
+    "point", pt_query,
+    "multipoint", multipt_query,
+    "area", poly_query,
+    "envelope", env_query
+  ) %>%
+  mutate(fc_type = "point")
+
 
 # feature classes used to query lines-------------------------------------------
 
 pt_query <-
   sf_point(
-    c(563537.9561000001, 332694.98699999973),
+    c(665229.0853000004, 340270.02380000055),
     crs = 3071
   ) %>%
   mutate(query_fc_type = "point")
 
 multipt_query <-
   sf_point(
-    c(563537.9561000001, 332694.98699999973),
-    c(424116.58779999986, 272244.6537999995),
-    c(565157.0016999999, 332375.94370000064),
+    c(665229.0853000004, 340270.02380000055),
+    c(707709.9249, 443849.74870000035),
+    c(707972.0363999996, 453743.5901999995),
     crs = 3071
   ) %>%
   mutate(query_fc_type = "multipoint")
 
 line_query <-
-  sf_line(c(-90, 45), c(-89.7, 45)) %>%
+  sf_line(c(-90, 45), c(-89, 45)) %>%
   mutate(query_fc_type = "line")
 
 poly_query <-
   sf_polygon(
     c(-90, 45),
-    c(-89.9, 45),
-    c(-89.9, 44.9),
-    c(-90, 44.9),
+    c(-89, 45),
+    c(-89, 44.8),
+    c(-90, 44.8),
     c(-90, 45)
   ) %>%
   mutate(query_fc_type = "area")
@@ -124,51 +125,53 @@ env_query <- mutate(poly_query, query_fc_type = "envelope")
 
 # join line querying layers together
 line_query_layers <- tribble(
-  ~query_fc_type, ~query_fc_object,
-  "line", line_query,
-  "point", pt_query,
-  "multipoint", multipt_query,
-  "area", poly_query,
-  "envelope", env_query
-) %>% mutate(fc_type = "line")
+    ~query_fc_type, ~query_fc_object,
+    "line", line_query,
+    "point", pt_query,
+    "multipoint", multipt_query,
+    "area", poly_query,
+    "envelope", env_query
+  ) %>%
+  mutate(fc_type = "line")
+
 
 # feature classes used to query polygons----------------------------------------
 
-# I think just do lake mendota here
-pt_query <-
-  sf_point(c(-89.4, 43.1)) %>%
-  mutate(query_fc_type = "point")
+pt_query <- sf_point(c(-89.7067, 45.71230)) %>% mutate(query_fc_type = "point")
 
 multipt_query <-
-  sf_points(c(-89.4, 43.1), c(-89.42650, 43.14465), c(-89.4895, 43.1382)) %>%
+  sf_points(
+    c(-89.7067, 45.71230),
+    c(-89.7064, 45.71135),
+    c(-89.7064, 45.71015)
+  ) %>%
   mutate(query_fc_type = "multipoint")
 
 line_query <-
-  sf_line(c(-89.5, 43.1), c(-89.35, 43.1)) %>%
+  sf_line(c(-89.7066, 45.71230), c(-89.7063, 45.71015)) %>%
   mutate(query_fc_type = "line")
 
-poly_query <-
-  sf_polygon(
-    c(-89.5, 43.15),
-    c(-89.35, 43.15),
-    c(-89.35, 43.05),
-    c(-89.5, 43.05),
-    c(-89.5, 43.15)
+poly_query <- sf_polygon(
+    c(-89.72, 45.72),
+    c(-89.7, 45.72),
+    c(-89.7, 45.7),
+    c(-89.72, 45.7),
+    c(-89.72, 45.72)
   ) %>%
   mutate(query_fc_type = "area")
 
 env_query <- mutate(poly_query, query_fc_type = "envelope")
 
-# join query layers together
+# join polygon querying layers together
 poly_query_layers <- tribble(
-  ~query_fc_type, ~query_fc_object,
-  "line", line_query,
-  "point", pt_query,
-  "multipoint", multipt_query,
-  "area", poly_query,
-  "envelope", env_query
-) %>% mutate(fc_type = "area")
-
+    ~query_fc_type, ~query_fc_object,
+    "line", line_query,
+    "point", pt_query,
+    "multipoint", multipt_query,
+    "area", poly_query,
+    "envelope", env_query
+  ) %>%
+  mutate(fc_type = "area")
 
 # put everything together in tibbles and run tests------------------------------
 query_layers <- list(
@@ -180,10 +183,10 @@ query_layers <- list(
 
 
 fc_sp_rel_test <- expand_grid(
-  fc_type = c("line", "point", "area"),
-  query_fc_type = c("line", "point", "multipoint", "area", "envelope"),
-  sp_rel = sp_rels_to_test
-) %>%
+    fc_type = c("line", "point", "area"),
+    query_fc_type = c("line", "point", "multipoint", "area", "envelope"),
+    sp_rel = sp_rels_to_test
+  ) %>%
   left_join(query_urls, by = "fc_type") %>%
   left_join(query_layers, by = c("fc_type", "query_fc_type")) %>%
   mutate(query_function = case_when(
@@ -208,5 +211,10 @@ test_results <-
 
 save(
   test_results,
-   file = "other_tests/sp_rel_tests/hydro_trout_hab_test_results.RData"
+   file = paste(
+     "other_tests",
+     "sp_rel_tests",
+     "goodyear_seawall_outstanding_streams_test_results.RData",
+     sep = "/"
+   )
 )
