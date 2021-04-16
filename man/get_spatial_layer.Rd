@@ -33,7 +33,7 @@ An object of class "sf" of the appropriate layer
 }
 \description{
 This function retrieves spatial layers present an ArcGIS
-REST services API located at.
+REST services API.
 }
 \details{
 This is the core function of this package. It retrieves spatial layers from
@@ -59,5 +59,4 @@ plot_layer(lava_flows, outline_poly = reykjanes)
 plot_layer(lava_flows, outline_poly = reykjanes) +
   ggplot2::geom_sf(data = iceland_poly, fill = NA)
 }
-
 }

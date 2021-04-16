@@ -1,7 +1,7 @@
 #' Retrieve a spatial layer from an ArcGIS REST API
 #'
 #' This function retrieves spatial layers present an ArcGIS
-#' REST services API located at.
+#' REST services API.
 #'
 #' This is the core function of this package. It retrieves spatial layers from
 #' an ArcGIS REST API designated by the URL. Additional querying features can
@@ -40,7 +40,6 @@
 #' plot_layer(lava_flows, outline_poly = reykjanes) +
 #'   ggplot2::geom_sf(data = iceland_poly, fill = NA)
 #' }
-#'
 get_spatial_layer <- function(url,
                               out_fields = c("*"),
                               where = "1=1",
@@ -71,7 +70,6 @@ get_spatial_layer <- function(url,
            ")\ncould not be infered from server.")
     sf_type <- layer_info$geometryType
   }
-  # print(geomType)
   query_url <- paste(url, "query", sep="/")
   esri_features <- get_esri_features(query_url, out_fields, where, token, ...)
   simple_features <- esri2sfGeom(esri_features, sf_type)
@@ -214,4 +212,76 @@ esri2sfPolyline <- function(features) {
   }
   geoms <- sf::st_sfc(lapply(features, getGeometry))
   return(geoms)
+}
+
+wi_landcover_url <- paste0(
+  "https://dnrmaps.wi.gov/arcgis_image/rest/services/",
+  "DW_Land_Cover/EN_Land_Cover2_Lev2/MapServer"
+)
+
+#' Retrieve an image layer from an ArcGIS REST API
+#'
+#' This function retrieves image layers present an ArcGIS
+#' REST services API
+#'
+#' This is a core function of the package. It retrieves image layers from
+#' an ArcGIS REST API designated by the URL. These layers require a bounding
+#' box to be queried, which is either taken from the \code{sf_object} argument
+#' or directly from the \code{bbox} argument.
+#'
+#' All of the querying parameters are sent via a POST request to the URL, so
+#' if there are issues with passing additional parameters via \code{...}
+#' first determine how they fit into the POST request and make adjustments as
+#' needed. This syntax can be tricky if you're not used to it.
+#'
+#' @param url A character string of the url for the layer to pull
+#' @param sf_object An \code{sf} object used for the bounding box
+#' @param bbox Character string of the bounding box
+#' @param token A character string of the token (if needed)
+#' @param output_type Character. Should the returned layer be "raster" or "png"
+#' @param ... Additional arguments to pass to the ArcGIS REST API
+#'
+#' @return Either a "RasterLayer" object or a tibble of class "magick-image"
+#' @export
+#'
+#' @examples
+#' mke_landuse <- get_image_layer(wi_landcover_url, mke_county)
+get_image_layer <- function(url,
+                            sf_object = NULL,
+                            bbox = NULL,
+                            token = "",
+                            output_type = "png",
+                            ...) {
+  if (is.null(sf_object) && is.null(bbox)) {
+    stop(
+      "You must specify either an sf_object to spatially query image by ",
+      "or a bbox as a character string"
+    )
+  } else if (!is.null(sf_object) && !is.null(bbox)) {
+    stop(
+      "You must specify either an sf_object or a bbox, but may not specify both"
+    )
+  } else if (!is.null(sf_object)) {
+    bbox <- paste(sf::st_bbox(sf_object), collapse = ", ")
+    bbox_sr <- get_sf_crs(sf_object)
+  }
+  export_url <- paste(url, "export", sep = "/")
+  response_raw <- httr::POST(
+    url = export_url,
+    body = list(
+      f = "json",
+      token = token,
+      bbox = bbox,
+      bboxSR = bbox_sr,
+      ...
+    )
+  )
+  image_url <- jsonlite::fromJSON(rawToChar(response_raw$content))$href
+
+  if (output_type == "raster") {
+    out <- raster::raster(image_url)
+  } else if (output_type == "png") {
+    out <- magick::image_read(image_url)
+  }
+  return(out)
 }

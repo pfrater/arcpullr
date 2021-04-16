@@ -22,6 +22,3 @@ check_results <-
   all_results %>%
   filter(hydro_trout_hab_valid != goodyear_seawall_outstanding_streams_valid)
 
-does_not_work <-
-  all_results %>%
-  filter(!hydro_trout_hab_valid, !goodyear_seawall_outstanding_streams_valid)

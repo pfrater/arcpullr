@@ -26,7 +26,11 @@
 plot_layer <- function(sf_data, outline_poly = NULL, plot_pkg = "ggplot") {
   if (plot_pkg == "base") {
     if (is.null(outline_poly)) {
-      graphics::plot(sf_data$geom)
+      if (class(sf_data) == "RasterLayer") {
+        raster::plot(sf_data)
+      } else if ("sf" %in% class(sf_data)) {
+        graphics::plot(sf_data$geom)
+      }
     } else {
       graphics::plot(outline_poly$geom)
       graphics::plot(sf_data$geom, add = TRUE)
