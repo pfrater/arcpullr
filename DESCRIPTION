@@ -1,7 +1,7 @@
 Package: arcpullr
 Type: Package
 Title: Pull Data from an 'ArcGIS REST' API
-Version: 0.1.3
+Version: 0.1.5
 Authors@R: c(person(given = "Paul",
            family = "Frater",
            role = c("aut", "cre"),
@@ -20,15 +20,17 @@ Description:
   Both spatial and SQL queries can be used to retrieve data. 
   Simple Feature (sf) objects are utilized to perform spatial queries. 
   This package was neither produced nor is maintained by Esri.
-Depends: R (>= 3.6.0)
+Depends: 
+  R (>= 3.6.0),
+  sf (>= 0.9.7),
 Imports:
   httr (>= 1.4.1),
   jsonlite (>= 1.6.1),
   dplyr (>= 1.0.2),
   ggplot2 (>= 3.3.0),
-  sf (>= 0.9.7),
   tidyr (>= 1.0.2),
-  rlang (>= 0.4.7)
+  rlang (>= 0.4.7),
+  raster (>= 3.4.5)
 RoxygenNote: 7.1.1
 Suggests: 
   testthat (>= 3.0.1),
@@ -36,5 +38,6 @@ Suggests:
   rmarkdown (>= 2.6),
   rvest (>= 0.3.6),
   xml2 (>= 1.3.2),
-  stringr (>= 1.4.0)
+  stringr (>= 1.4.0),
+  cowplot(>= 1.1.1)
 VignetteBuilder: knitr

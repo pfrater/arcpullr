@@ -4,19 +4,26 @@
 \alias{plot_layer}
 \title{Plot a spatial layer}
 \usage{
-plot_layer(sf_data, outline_poly = NULL, plot_pkg = "ggplot")
+plot_layer(x, ...)
 }
 \arguments{
-\item{sf_data}{An sf object as returned from \code{\link{get_spatial_layer}}}
+\item{x}{An sf or Raster* object as returned from a
+\code{get_*_layer} function}
 
-\item{outline_poly}{An sf polygon to outline \code{sf_data} for context, or
-\code{NULL}}
+\item{...}{Additional arguments to \code{plot_layer}}
+
+\item{outline_poly}{Optional. An sf polygon to outline \code{sf_data} for
+context}
 
 \item{plot_pkg}{Character. The plotting environment to use. Either "ggplot"
 (default) or "base"}
+
+\item{legend}{Logical. Include legend (TRUE, default) or not (FALSE).
+Only applicable when plotting a Raster* object}
 }
 \value{
-Either a \code{ggplot} object or a plot
+Either a \code{ggplot} object, or simply plots \code{x} if
+\code{plot_pkg = "base"}
 }
 \description{
 This function plots a spatial layer as returned from
@@ -24,13 +31,7 @@ This function plots a spatial layer as returned from
 }
 \examples{
 \dontrun{
-plot_layer(iceland)
-plot_layer(mke_county, outline_poly = wis_poly)
-g <-
-   plot_layer(wi_counties) +
-   ggplot2::geom_sf(data = portage_county, fill = "red") +
-   ggplot2::geom_sf(data = mke_county, fill = "red")
-g
+plot_layer(iceland_poly)
+plot_layer(portage_county, outline_poly = wis_poly)
 }
-
 }

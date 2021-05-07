@@ -2,7 +2,7 @@
 % Please edit documentation in R/retrieve_layers.R
 \name{get_spatial_layer}
 \alias{get_spatial_layer}
-\title{Retrieve a spatial layer from an ArcGIS REST API}
+\title{Retrieve a feature service layer from an ArcGIS REST API}
 \usage{
 get_spatial_layer(
   url,
@@ -32,16 +32,16 @@ if NULL (default) the server will take its best guess}
 An object of class "sf" of the appropriate layer
 }
 \description{
-This function retrieves spatial layers present an ArcGIS
-REST services API.
+This function retrieves spatial layers present in Feature Service layers of
+an ArcGIS REST services API and returns them as an \code{sf} object
 }
 \details{
-This is the core function of this package. It retrieves spatial layers from
-an ArcGIS REST API designated by the URL. Additional querying features can
-be passed such as a SQL WHERE statement (\code{where} argument) as well as
-spatial queries or any other types of queries that the ArcGIS REST API
-accepts using \code{...}. However, for easier spatial querying see
-\code{\link{get_layers_by_spatial}}.
+This is one of the core functions of this package. It retrieves spatial
+layers from feature services of an ArcGIS REST API designated by the URL.
+Additional querying features can be passed such as a SQL WHERE statement
+(\code{where} argument) or spatial queries as well as any other types of
+queries that the ArcGIS REST API accepts (using \code{...}). However, for
+easier spatial querying see \code{\link{get_layers_by_spatial}}.
 
 All of the querying parameters are sent via a POST request to the URL, so
 if there are issues with passing additional parameters via \code{...}
@@ -51,12 +51,8 @@ needed. This syntax can be tricky if you're not used to it.
 \examples{
 \dontrun{
 # lava flows on Reykjanes (pr. 'rake-yah-ness') peninsula in Iceland
-base_url <- "https://arcgisserver.isor.is:6443/arcgis/rest/services"
-reykjanes_path <- "vi/uttekt_eldstodva_allt_2/MapServer/5"
-reykjanes_url <- paste(base_url, reykjanes_path, sep = "/")
-lava_flows <- get_spatial_layer(reykjanes_url)
-plot_layer(lava_flows, outline_poly = reykjanes)
-plot_layer(lava_flows, outline_poly = reykjanes) +
-  ggplot2::geom_sf(data = iceland_poly, fill = NA)
+lava_flows <- get_spatial_layer(reykjanes_lava_flow_url)
+plot_layer(lava_flows, outline_poly = reykjanes_poly)
+plot_layer(lava_flows, outline_poly = iceland_poly)
 }
 }
