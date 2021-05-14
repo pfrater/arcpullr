@@ -53,7 +53,9 @@ setMethod("raster_data", "RasterLayer", function(x) {
 #' Convert RasterStack into data.frame that can be used for plotting
 #'
 #' This function is used internally by \code{\link{plot_layer}} to convert a
-#' RasterLayer object to a data.frame that can be used for plotting with ggplot2
+#' RasterStack object to a data.frame that can be used for plotting with
+#' ggplot2. Note that this function assumes that the first three bands in the
+#' RasterStack objects are the RGB values and all additional bands are ignored.
 #'
 #' @param x A RasterStack object
 #'
@@ -68,10 +70,55 @@ setMethod("raster_data", "RasterLayer", function(x) {
 setMethod("raster_data", "RasterStack", function(x) {
   raster_coords <- raster::xyFromCell(x, seq_len(raster::ncell(x)))
   raster_values <- raster::getValues(x)
+  raster_nbands <- length(names(x))
+  raster_names <- c(
+    "red", "green", "blue",
+    paste0("extra", 1:(raster_nbands - 3))
+  )
   raster_values <-
     raster_values %>%
     as.data.frame() %>%
-    setNames(c("red", "green", "blue", "extra")) %>%
+    setNames(raster_names) %>%
+    dplyr::mutate_all(tidyr::replace_na, 0L) %>%
+    dplyr::mutate(color = grDevices::rgb(red, green, blue, maxColorValue = 255))
+  out <-
+    raster_coords %>%
+    as.data.frame() %>%
+    cbind(raster_values) %>%
+    dplyr::select(x, y, color)
+  return(out)
+})
+
+#' Convert RasterBrick into data.frame that can be used for plotting
+#'
+#' This function is used internally by \code{\link{plot_layer}} to convert a
+#' RasterBrick object to a data.frame that can be used for plotting with
+#' ggplot2. Note that this function assumes that the first three bands in the
+#' RasterBrick objects are the RGB values and all additional bands are ignored.
+#'
+#' @param x A RasterBrick object
+#'
+#' @return A data.frame with 3 columns and \code{length(raster_object)} rows
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' wi_leaf_off_layer <- get_image_layer(wi_leaf_off_url, wis_poly)
+#' wi_leaf_off_data <- raster_data(wi_leaf_off_layer)
+#' }
+setMethod("raster_data", "RasterBrick", function(x) {
+  raster_coords <- raster::xyFromCell(x, seq_len(raster::ncell(x)))
+  raster_values <- raster::getValues(x)
+  raster_nbands <- length(names(x))
+  raster_names <- c(
+    "red", "green", "blue",
+    paste0("extra", 1:(raster_nbands - 3))
+  )
+  raster_values <-
+    raster_values %>%
+    as.data.frame() %>%
+    setNames(raster_names) %>%
+    dplyr::mutate_all(tidyr::replace_na, 0L) %>%
     dplyr::mutate(color = grDevices::rgb(red, green, blue, maxColorValue = 255))
   out <-
     raster_coords %>%

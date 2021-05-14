@@ -10,6 +10,7 @@ get_raster_layer(
   sf_object = NULL,
   bbox = NULL,
   token = "",
+  clip_raster = TRUE,
   export_type = "map",
   ...
 )
@@ -22,6 +23,12 @@ get_raster_layer(
 \item{bbox}{Character string of the bounding box}
 
 \item{token}{A character string of the token (if needed)}
+
+\item{clip_raster}{Logical. Should the raster be clipped to contain only
+the pixels that reside in the \code{sf_object}? By default, ArcGIS returns
+some overlapping edge pixels. Setting \code{clip_raster} to TRUE (default)
+will remove these using \code{\link[raster]{mask}} from the \code{raster}
+package}
 
 \item{export_type}{Character. Either "map" or "image" for the respective
 service layer desired}

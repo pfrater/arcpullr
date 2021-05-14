@@ -227,11 +227,7 @@ esri2sfPolyline <- function(features) {
 #' first determine how they fit into the POST request and make adjustments as
 #' needed. This syntax can be tricky if you're not used to it.
 #'
-#' @param url A character string of the url for the layer to pull
-#' @param sf_object An \code{sf} object used for the bounding box
-#' @param bbox Character string of the bounding box
-#' @param token A character string of the token (if needed)
-#' @param ... Additional arguments to pass to the ArcGIS REST API
+#' @inheritParams get_raster_layer
 #'
 #' @return A "RasterLayer" object
 #' @export
@@ -242,15 +238,17 @@ esri2sfPolyline <- function(features) {
 #' plot_layer(wi_landcover, outline_poly = wis_poly)
 #' }
 get_map_layer <- function(url,
-                           sf_object = NULL,
-                           bbox = NULL,
-                           token = "",
-                           ...) {
+                          sf_object = NULL,
+                          bbox = NULL,
+                          token = "",
+                          clip_raster = TRUE,
+                          ...) {
   out <- get_raster_layer(
     url = url,
     sf_object = sf_object,
     bbox = bbox,
     token = token,
+    clip_raster = clip_raster,
     export_type = "map",
     ...
   )
@@ -275,11 +273,7 @@ get_map_layer <- function(url,
 #' first determine how they fit into the POST request and make adjustments as
 #' needed. This syntax can be tricky if you're not used to it.
 #'
-#' @param url A character string of the url for the layer to pull
-#' @param sf_object An \code{sf} object used for the bounding box
-#' @param bbox Character string of the bounding box
-#' @param token A character string of the token (if needed)
-#' @param ... Additional arguments to pass to the ArcGIS REST API
+#' @inheritParams get_raster_layer
 #'
 #' @return A "RasterStack" object
 #' @export
@@ -290,15 +284,17 @@ get_map_layer <- function(url,
 #' plot_layer(wi_leaf_off_layer, outline_poly = wis_poly)
 #' }
 get_image_layer <- function(url,
-                           sf_object = NULL,
-                           bbox = NULL,
-                           token = "",
-                           ...) {
+                            sf_object = NULL,
+                            bbox = NULL,
+                            token = "",
+                            clip_raster = TRUE,
+                            ...) {
   out <- get_raster_layer(
     url = url,
     sf_object = sf_object,
     bbox = bbox,
     token = token,
+    clip_raster = clip_raster,
     export_type = "image",
     ...
   )
@@ -317,6 +313,11 @@ get_image_layer <- function(url,
 #' @param sf_object An \code{sf} object used for the bounding box
 #' @param bbox Character string of the bounding box
 #' @param token A character string of the token (if needed)
+#' @param clip_raster Logical. Should the raster be clipped to contain only
+#' the pixels that reside in the \code{sf_object}? By default, ArcGIS returns
+#' some overlapping edge pixels. Setting \code{clip_raster} to TRUE (default)
+#' will remove these using \code{\link[raster]{mask}} from the \code{raster}
+#' package
 #' @param export_type Character. Either "map" or "image" for the respective
 #' service layer desired
 #' @param ... Additional arguments to pass to the ArcGIS REST API
@@ -327,8 +328,9 @@ get_raster_layer <- function(url,
                              sf_object = NULL,
                              bbox = NULL,
                              token = "",
+                             clip_raster = TRUE,
                              export_type = "map",
-                            ...) {
+                             ...) {
   if (is.null(sf_object) && is.null(bbox)) {
     stop(
       "You must specify either an sf_object to spatially query by ",
@@ -360,21 +362,27 @@ get_raster_layer <- function(url,
     )
   )
   response <- jsonlite::fromJSON(rawToChar(response_raw$content))
-  image_url <- response$href
-  image_extent <- raster::extent(unlist(response$extent[c(1, 3, 2, 4)]))
-  image_crs <- raster::crs(sf_object)
+  raster_url <- response$href
+  raster_extent <- raster::extent(unlist(response$extent[c(1, 3, 2, 4)]))
+  raster_crs <- raster::crs(sf_object)
 
   # set the extent and projection of the raster layer
   if (export_type == "map") {
-    out <- raster::raster(image_url)
+    out <- raster::raster(raster_url)
+    if (raster::nbands(out) > 1) {
+      out <- raster::stack(raster_url)
+    }
   } else if (export_type == "image") {
-    out <- raster::stack(image_url)
+    out <- raster::stack(raster_url)
   }
-  raster::extent(out) <- image_extent
-  raster::projection(out) <- image_crs
+  raster::extent(out) <- raster_extent
+  raster::projection(out) <- raster_crs
 
   # read the raster into memory (as opposed to a connection)
   out <- raster::readAll(out)
 
+  if (clip_raster) {
+    out <- raster::mask(out, sf_object)
+  }
   return(out)
 }

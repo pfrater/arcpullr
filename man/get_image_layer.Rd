@@ -4,7 +4,14 @@
 \alias{get_image_layer}
 \title{Retrieve an image service layer from an ArcGIS REST API}
 \usage{
-get_image_layer(url, sf_object = NULL, bbox = NULL, token = "", ...)
+get_image_layer(
+  url,
+  sf_object = NULL,
+  bbox = NULL,
+  token = "",
+  clip_raster = TRUE,
+  ...
+)
 }
 \arguments{
 \item{url}{A character string of the url for the layer to pull}
@@ -14,6 +21,12 @@ get_image_layer(url, sf_object = NULL, bbox = NULL, token = "", ...)
 \item{bbox}{Character string of the bounding box}
 
 \item{token}{A character string of the token (if needed)}
+
+\item{clip_raster}{Logical. Should the raster be clipped to contain only
+the pixels that reside in the \code{sf_object}? By default, ArcGIS returns
+some overlapping edge pixels. Setting \code{clip_raster} to TRUE (default)
+will remove these using \code{\link[raster]{mask}} from the \code{raster}
+package}
 
 \item{...}{Additional arguments to pass to the ArcGIS REST API}
 }

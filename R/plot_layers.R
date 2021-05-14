@@ -37,22 +37,33 @@ plot_layer <- function(x, ...) {
 plot_layer.sf <- function(x,
                          outline_poly = NULL,
                          outline_size = 1.2,
+                         outline_color = "gray30",
                          plot_pkg = "ggplot",
                          legend = FALSE,
                          ...) {
   if (plot_pkg == "base") {
     if (is.null(outline_poly)) {
-      graphics::plot(x$geom)
+      graphics::plot(x$geom, ...)
     } else {
-      graphics::plot(outline_poly$geom)
-      graphics::plot(x$geom, add = TRUE)
+      graphics::plot(
+        outline_poly$geom,
+        col = "transparent",
+        lwd = outline_size,
+        border = outline_color,
+        ...)
+      graphics::plot(
+        x$geom, add = TRUE,
+        ...) %>% suppressWarnings()
     }
   } else if (plot_pkg %in% c("ggplot", "ggplot2")) {
     g <- ggplot2::ggplot(data = NULL)
     if (!is.null(outline_poly)) {
       g <-
         g +
-        ggplot2::geom_sf(data = outline_poly, fill = ggplot2::alpha(0.01))
+        ggplot2::geom_sf(data = outline_poly,
+                         fill = ggplot2::alpha(0.01),
+                         size = outline_size,
+                         color = outline_color)
     }
     g <-
       g +
@@ -79,20 +90,22 @@ plot_layer.sf <- function(x,
 setMethod("plot_layer", "RasterLayer", function(x,
                                                outline_poly = NULL,
                                                outline_size = 1.2,
+                                               outline_color = "gray30",
                                                plot_pkg = "ggplot",
-                                               legend = FALSE,
                                                ...) {
   if (plot_pkg == "base") {
     if (is.null(outline_poly)) {
-      raster::plot(sf_data)
+      raster::plot(x, ...)
     } else {
-      raster::plot(sf_data)
+      raster::plot(x, ...)
       graphics::plot(
         outline_poly,
         add = TRUE,
         col = "transparent",
-        lwd = outline_size
-      )
+        lwd = outline_size,
+        border = outline_color,
+        ...
+      ) %>% suppressWarnings()
     }
   } else if (plot_pkg %in% c("ggplot", "ggplot2")) {
     plot_data <- raster_data(x)
@@ -106,25 +119,19 @@ setMethod("plot_layer", "RasterLayer", function(x,
         g +
         ggplot2::geom_sf(data = outline_poly,
                          fill = ggplot2::alpha(0.01),
-                         size = outline_size)
+                         size = outline_size,
+                         color = outline_color)
     }
-    g <- g + ggplot2::scale_fill_identity()
+    x_crs <- raster::crs(x)
+    g <- g + ggplot2::scale_fill_identity() + ggplot2::coord_sf(crs = x_crs)
     if (requireNamespace("cowplot", quietly = TRUE)) {
       g <- g + cowplot::theme_map()
     } else {
       g <- g + ggplot2::theme_minimal()
     }
-    if (!is.null(outline_poly)) {
-      g <-
-        g +
-        ggplot2::geom_sf(data = outline_poly,
-                         fill = ggplot2::alpha(0.01),
-                         size = outline_size)
-    }
-    if (!legend) {
-      g <- g + ggplot2::theme(legend.position = "none")
-    }
     return(g)
+  } else {
+    stop("This function only set up to work with base plotting or ggplot")
   }
 })
 
@@ -143,20 +150,22 @@ setMethod("plot_layer", "RasterLayer", function(x,
 setMethod("plot_layer", "RasterStack", function(x,
                                                outline_poly = NULL,
                                                outline_size = 1.2,
+                                               outline_color = "gray30",
                                                plot_pkg = "ggplot",
-                                               legend = FALSE,
                                                ...) {
   if (plot_pkg == "base") {
     if (is.null(outline_poly)) {
-      raster::plotRGB(x, colNA = NA)
+      raster::plotRGB(x, colNA = NA, ...)
     } else {
-      raster::plotRGB(x)
+      raster::plotRGB(x, ...)
       graphics::plot(
         outline_poly,
         add = TRUE,
         col = "transparent",
-        lwd = outline_size
-      )
+        lwd = outline_size,
+        border = outline_color,
+        ...
+      ) %>% suppressWarnings()
     }
   } else if (plot_pkg %in% c("ggplot", "ggplot2")) {
     plot_data <- raster_data(x)
@@ -170,17 +179,84 @@ setMethod("plot_layer", "RasterStack", function(x,
         g +
         ggplot2::geom_sf(data = outline_poly,
                          fill = ggplot2::alpha(0.01),
-                         size = outline_size)
+                         size = outline_size,
+                         color = outline_color)
     }
-    g <- g + ggplot2::scale_fill_identity()
+    x_crs <- raster::crs(x)
+    g <- g + ggplot2::scale_fill_identity() + ggplot2::coord_sf(crs = x_crs)
     if (requireNamespace("cowplot", quietly = TRUE)) {
       g <- g + cowplot::theme_map()
     } else {
       g <- g + ggplot2::theme_minimal()
     }
     return(g)
+  } else {
+    stop("This function only set up to work with base plotting or ggplot")
   }
 })
+
+
+#' Plot a RasterBrick object
+#'
+#' @param RasterBrick
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' wi_aerial <- get_map_layer(wi_leaf_off_url, wis_poly)
+#' plot_layer(wi_aerial, outline_poly = wis_poly)
+#' }
+setMethod("plot_layer", "RasterBrick", function(x,
+                                                outline_poly = NULL,
+                                                outline_size = 1.2,
+                                                outline_color = "gray30",
+                                                plot_pkg = "ggplot",
+                                                ...) {
+  if (plot_pkg == "base") {
+    if (is.null(outline_poly)) {
+      raster::plotRGB(x, colNA = NA, ...)
+    } else {
+      raster::plotRGB(x, ...)
+      graphics::plot(
+        outline_poly,
+        add = TRUE,
+        col = "transparent",
+        lwd = outline_size,
+        border = outline_color,
+        ...
+      ) %>% suppressWarnings()
+    }
+  } else if (plot_pkg %in% c("ggplot", "ggplot2")) {
+    plot_data <- raster_data(x)
+    plot_data <- dplyr::filter(plot_data, color != "#000000")
+    g <-
+      ggplot2::ggplot(data = NULL) +
+      ggplot2::geom_tile(data = plot_data,
+                         ggplot2::aes(x, y, fill = as.character(color)))
+    if (!is.null(outline_poly)) {
+      g <-
+        g +
+        ggplot2::geom_sf(data = outline_poly,
+                         fill = ggplot2::alpha(0.01),
+                         size = outline_size,
+                         color = outline_color)
+    }
+    x_crs <- raster::crs(x)
+    g <- g + ggplot2::scale_fill_identity() + ggplot2::coord_sf(crs = x_crs)
+    if (requireNamespace("cowplot", quietly = TRUE)) {
+      g <- g + cowplot::theme_map()
+    } else {
+      g <- g + ggplot2::theme_minimal()
+    }
+    return(g)
+  } else {
+    stop("This function only set up to work with base plotting or ggplot")
+  }
+})
+
+
 
 #' Plot an sf object
 #'
