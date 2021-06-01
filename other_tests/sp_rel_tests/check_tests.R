@@ -2,7 +2,8 @@ library(tidyverse)
 
 test_result_names <- c(
   "hydro_trout_hab",
-  "goodyear_seawall_outstanding_streams"
+  "goodyear_seawall_outstanding_streams",
+  "brown_cty_hydrants_biketrails_parks"
 )
 
 test_results <- lapply(test_result_names, function(x) {
@@ -15,10 +16,16 @@ test_results <- lapply(test_result_names, function(x) {
 })
 
 all_results <-
-  test_results[[1]] %>%
-  left_join(test_results[[2]], by = c("fc_type", "query_fc_type", "sp_rel"))
+  Reduce(function(...) {
+    left_join(..., by = c("fc_type", "query_fc_type", "sp_rel"))
+  }, test_results)
 
 check_results <-
   all_results %>%
-  filter(hydro_trout_hab_valid != goodyear_seawall_outstanding_streams_valid)
+  mutate(test_sum = select(., ends_with("valid")) %>% rowSums()) %>%
+  filter(test_sum %in% c(0, 3))
 
+sp_rel_valid <-
+  check_results %>%
+  filter(test_sum == 3) %>%
+  select(fc_type, query_fc_type, sp_rel)

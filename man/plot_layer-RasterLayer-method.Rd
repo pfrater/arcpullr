@@ -9,6 +9,7 @@
   outline_poly = NULL,
   outline_size = 1.2,
   outline_color = "gray30",
+  legend = TRUE,
   plot_pkg = "ggplot",
   ...
 )

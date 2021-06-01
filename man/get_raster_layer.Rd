@@ -11,7 +11,10 @@ get_raster_layer(
   bbox = NULL,
   token = "",
   clip_raster = TRUE,
+  format = "png",
+  transparent = TRUE,
   export_type = "map",
+  add_legend = FALSE,
   ...
 )
 }
@@ -30,8 +33,16 @@ some overlapping edge pixels. Setting \code{clip_raster} to TRUE (default)
 will remove these using \code{\link[raster]{mask}} from the \code{raster}
 package}
 
+\item{format}{The raster format desired. Default is "png"}
+
+\item{transparent}{Logical. Retrieve a raster with a transparent background
+(TRUE, default) or not (FALSE)}
+
 \item{export_type}{Character. Either "map" or "image" for the respective
 service layer desired}
+
+\item{add_legend}{Logical. Pull legend and match to color values
+(TRUE, default) or not (FALSE)}
 
 \item{...}{Additional arguments to pass to the ArcGIS REST API}
 }

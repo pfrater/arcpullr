@@ -242,6 +242,9 @@ get_map_layer <- function(url,
                           bbox = NULL,
                           token = "",
                           clip_raster = TRUE,
+                          format = "png",
+                          transparent = TRUE,
+                          add_legend = TRUE,
                           ...) {
   out <- get_raster_layer(
     url = url,
@@ -249,7 +252,10 @@ get_map_layer <- function(url,
     bbox = bbox,
     token = token,
     clip_raster = clip_raster,
+    format = format,
+    transparent = transparent,
     export_type = "map",
+    add_legend = add_legend,
     ...
   )
   return(out)
@@ -288,6 +294,8 @@ get_image_layer <- function(url,
                             bbox = NULL,
                             token = "",
                             clip_raster = TRUE,
+                            format = "png",
+                            transparent = TRUE,
                             ...) {
   out <- get_raster_layer(
     url = url,
@@ -295,6 +303,8 @@ get_image_layer <- function(url,
     bbox = bbox,
     token = token,
     clip_raster = clip_raster,
+    format = format,
+    transparent = transparent,
     export_type = "image",
     ...
   )
@@ -318,8 +328,13 @@ get_image_layer <- function(url,
 #' some overlapping edge pixels. Setting \code{clip_raster} to TRUE (default)
 #' will remove these using \code{\link[raster]{mask}} from the \code{raster}
 #' package
+#' @param format The raster format desired. Default is "png"
+#' @param transparent Logical. Retrieve a raster with a transparent background
+#' (TRUE, default) or not (FALSE)
 #' @param export_type Character. Either "map" or "image" for the respective
 #' service layer desired
+#' @param add_legend Logical. Pull legend and match to color values
+#' (TRUE, default) or not (FALSE)
 #' @param ... Additional arguments to pass to the ArcGIS REST API
 #'
 #' @return An object of type \code{RasterLayer} if \code{export_type = "map"} or
@@ -329,7 +344,10 @@ get_raster_layer <- function(url,
                              bbox = NULL,
                              token = "",
                              clip_raster = TRUE,
+                             format = "png",
+                             transparent = TRUE,
                              export_type = "map",
+                             add_legend = FALSE,
                              ...) {
   if (is.null(sf_object) && is.null(bbox)) {
     stop(
@@ -348,7 +366,18 @@ get_raster_layer <- function(url,
   if (export_type == "map") {
     export_url <- paste(url, "export", sep = "/")
   } else if (export_type == "image") {
+    if (add_legend) {
+      warning("You can only use add_legend with get_map_layer(). ",
+              "Setting add_legend to FALSE")
+    }
+    add_legend <- FALSE
     export_url <- paste(url, "exportImage", sep = "/")
+  }
+  if (transparent) {
+    if (!(grepl("png|gif", format))) {
+      transparent <- FALSE
+      warning("Transparent background only available for png and gif formats")
+    }
   }
   response_raw <- httr::POST(
     url = export_url,
@@ -358,6 +387,8 @@ get_raster_layer <- function(url,
       bbox = bbox_coords,
       bboxSR = bbox_sr,
       imageSR = bbox_sr,
+      transparent = transparent,
+      format = format,
       ...
     )
   )
@@ -384,5 +415,15 @@ get_raster_layer <- function(url,
   if (clip_raster) {
     out <- raster::mask(out, sf_object)
   }
+
+  if (add_legend) {
+    raster_cols <- raster::colortable(out)
+    legend <-
+      get_layer_legend(url) %>%
+      match_raster_colors(out) %>%
+      dplyr::arrange(color = match(color, raster_cols[-1]))
+    out@legend@names <- c(NA, legend$value)
+  }
+
   return(out)
 }

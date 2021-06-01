@@ -7,10 +7,12 @@
 #' \code{get_*_layer} function
 #' @param outline_poly Optional. An sf polygon to outline \code{sf_data} for
 #' context
+#' @param outline_size Numeric argument that controls width of parameter
+#' @param outline_color A character vector of a valid color
+#' @param legend Logical. Only valid when plotting RasterLayers
+#' retrieved from \code{\link{get_map_layer}} where legend was also retrieved
 #' @param plot_pkg Character. The plotting environment to use. Either "ggplot"
 #' (default) or "base"
-#' @param legend Logical. Include legend (TRUE, default) or not (FALSE).
-#' Only applicable when plotting a Raster* object
 #' @param ... Additional arguments to \code{plot_layer}
 #'
 #' @return Either a \code{ggplot} object, or simply plots \code{x} if
@@ -39,7 +41,6 @@ plot_layer.sf <- function(x,
                          outline_size = 1.2,
                          outline_color = "gray30",
                          plot_pkg = "ggplot",
-                         legend = FALSE,
                          ...) {
   if (plot_pkg == "base") {
     if (is.null(outline_poly)) {
@@ -91,6 +92,7 @@ setMethod("plot_layer", "RasterLayer", function(x,
                                                outline_poly = NULL,
                                                outline_size = 1.2,
                                                outline_color = "gray30",
+                                               legend = TRUE,
                                                plot_pkg = "ggplot",
                                                ...) {
   if (plot_pkg == "base") {
@@ -108,12 +110,12 @@ setMethod("plot_layer", "RasterLayer", function(x,
       ) %>% suppressWarnings()
     }
   } else if (plot_pkg %in% c("ggplot", "ggplot2")) {
-    plot_data <- raster_data(x)
-    plot_data <- dplyr::filter(plot_data, color != "#000000")
+    plot_data <- raster_colors(x)
+    plot_data <- dplyr::filter(plot_data, color != "#000000", !is.na(color))
     g <-
       ggplot2::ggplot(data = NULL) +
       ggplot2::geom_tile(data = plot_data,
-                         ggplot2::aes(x, y, fill = as.character(color)))
+                         ggplot2::aes(x, y, fill = color))
     if (!is.null(outline_poly)) {
       g <-
         g +
@@ -122,8 +124,21 @@ setMethod("plot_layer", "RasterLayer", function(x,
                          size = outline_size,
                          color = outline_color)
     }
+    # check to see if legend should be implemented
+    if (legend && ("name" %in% names(plot_data))) {
+      g <-
+        g +
+        ggplot2::scale_fill_identity(
+          "Legend",
+          guide = "legend",
+          labels = plot_data$name,
+          breaks = plot_data$color
+        )
+    } else {
+      g <- g + ggplot2::scale_fill_identity()
+    }
     x_crs <- raster::crs(x)
-    g <- g + ggplot2::scale_fill_identity() + ggplot2::coord_sf(crs = x_crs)
+    g <- g + ggplot2::coord_sf(crs = x_crs)
     if (requireNamespace("cowplot", quietly = TRUE)) {
       g <- g + cowplot::theme_map()
     } else {
@@ -168,7 +183,7 @@ setMethod("plot_layer", "RasterStack", function(x,
       ) %>% suppressWarnings()
     }
   } else if (plot_pkg %in% c("ggplot", "ggplot2")) {
-    plot_data <- raster_data(x)
+    plot_data <- raster_colors(x)
     plot_data <- dplyr::filter(plot_data, color != "#000000")
     g <-
       ggplot2::ggplot(data = NULL) +
@@ -229,7 +244,7 @@ setMethod("plot_layer", "RasterBrick", function(x,
       ) %>% suppressWarnings()
     }
   } else if (plot_pkg %in% c("ggplot", "ggplot2")) {
-    plot_data <- raster_data(x)
+    plot_data <- raster_colors(x)
     plot_data <- dplyr::filter(plot_data, color != "#000000")
     g <-
       ggplot2::ggplot(data = NULL) +

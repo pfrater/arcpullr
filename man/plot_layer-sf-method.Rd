@@ -10,7 +10,6 @@
   outline_size = 1.2,
   outline_color = "gray30",
   plot_pkg = "ggplot",
-  legend = FALSE,
   ...
 )
 }

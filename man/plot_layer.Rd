@@ -15,11 +15,15 @@ plot_layer(x, ...)
 \item{outline_poly}{Optional. An sf polygon to outline \code{sf_data} for
 context}
 
+\item{outline_size}{Numeric argument that controls width of parameter}
+
+\item{outline_color}{A character vector of a valid color}
+
+\item{legend}{Logical. Only valid when plotting RasterLayers
+retrieved from \code{\link{get_map_layer}} where legend was also retrieved}
+
 \item{plot_pkg}{Character. The plotting environment to use. Either "ggplot"
 (default) or "base"}
-
-\item{legend}{Logical. Include legend (TRUE, default) or not (FALSE).
-Only applicable when plotting a Raster* object}
 }
 \value{
 Either a \code{ggplot} object, or simply plots \code{x} if

@@ -1,30 +1,43 @@
+library(tidyverse)
 
-url <- paste(
-  "https://desktop.arcgis.com/en/arcmap/latest/extensions/",
-  "data-reviewer/types-of-spatial-relationships-that-can-be-validated.htm",
-  sep = "")
+
+# creating an sp_rel_valid table based on our tests of what works---------------
+test_result_names <- c(
+  "hydro_trout_hab",
+  "goodyear_seawall_outstanding_streams",
+  "brown_cty_hydrants_biketrails_parks"
+)
+
+test_results <- lapply(test_result_names, function(x) {
+  load(paste0("other_tests/sp_rel_tests/", x, "_test_results.RData"))
+  out <-
+    test_results %>%
+    select(fc_type, query_fc_type, sp_rel, valid)
+  names(out)[4] <- paste(x, "valid", sep = "_")
+  return(out)
+})
+
+all_results <-
+  Reduce(function(...) {
+    left_join(..., by = c("fc_type", "query_fc_type", "sp_rel"))
+  }, test_results)
+
+check_results <-
+  all_results %>%
+  mutate(test_sum = select(., ends_with("valid")) %>% rowSums()) %>%
+  filter(test_sum %in% c(0, 3))
 
 sp_rel_valid <-
- xml2::read_html(url) %>%
-  rvest::html_node("table") %>%
-  rvest::html_table() %>%
-  dplyr::rename(sp_rel = 3) %>%
-  dplyr::mutate(
-    sp_rel = base::sub('\\Note.*', '', sp_rel),
-    sp_rel = base::gsub('([[:upper:]])', ' \\1', sp_rel),
-    sp_rel = stringr::str_remove(sp_rel, "\r\n"),
-    sp_rel = stringr::str_remove(sp_rel, "Relation")
-  ) %>%
-  janitor::clean_names() %>%
-  tidyr::separate(sp_rel,
-                  into = c("a", "b", "c", "d", "e", "f", "g", "i")) %>%
-  tidyr::pivot_longer(!c(feature_class_1, feature_class_2), names_to = "sp_rel") %>%
-  dplyr::select(-sp_rel) %>%
-  dplyr::rename(sp_rel = value) %>%
-  dplyr::arrange(feature_class_1, feature_class_2) %>%
-  dplyr::filter(sp_rel != "" & !is.na(sp_rel)) %>%
-  dplyr::mutate_all(tolower)
+  check_results %>%
+  filter(test_sum == 3) %>%
+  rbind(filter(., fc_type == "point") %>% mutate(fc_type = "multipoint")) %>%
+  select(fc_type, query_fc_type, sp_rel) %>%
+  arrange(fc_type, query_fc_type, sp_rel) %>%
+  rename(feature_class = fc_type,
+         query_feature_class = query_fc_type)
 
+
+# create a lookup table of the descriptions of each sp_rel----------------------
 url <- paste(
   "https://help.arcgis.com/en/webapi/wpf/apiref/",
   "ESRI.ArcGIS.Client~ESRI.ArcGIS.Client.Tasks.SpatialRelationship.html",
