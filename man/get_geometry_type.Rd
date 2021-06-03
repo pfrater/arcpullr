@@ -13,12 +13,12 @@ get_geometry_type(url)
 A character string of the layers geometry type
 }
 \description{
-This function will return the geometry type of layer housed on an ArcGIS REST
-API server.
+This function will return the geometry type of feature service layers housed
+on an ArcGIS REST API server. If a URL is provided that points to a map or
+image layer the function will return an error.
 }
 \examples{
-base_wdnr_url <- "https://dnrmaps.wi.gov/arcgis/rest/services/"
-hydro_path <- "WT_SWDV/WT_Inland_Water_Resources_WTM_Ext_v2/MapServer/3"
-hydro_url <- paste0(base_wdnr_url, hydro_path)
-get_geometry_type(url = hydro_url)
+\dontrun{
+get_geometry_type(reykjanes_lava_flow_url)
+}
 }

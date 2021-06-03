@@ -9,8 +9,6 @@
 #' context
 #' @param outline_size Numeric argument that controls width of parameter
 #' @param outline_color A character vector of a valid color
-#' @param legend Logical. Only valid when plotting RasterLayers
-#' retrieved from \code{\link{get_map_layer}} where legend was also retrieved
 #' @param plot_pkg Character. The plotting environment to use. Either "ggplot"
 #' (default) or "base"
 #' @param ... Additional arguments to \code{plot_layer}
@@ -35,6 +33,7 @@ plot_layer <- function(x, ...) {
   UseMethod("plot_layer", x)
 }
 
+#' @rdname plot_layer
 #' @export
 plot_layer.sf <- function(x,
                          outline_poly = NULL,
@@ -78,9 +77,10 @@ plot_layer.sf <- function(x,
 
 #' Plot a RasterLayer object
 #'
-#' @param RasterLayer
+#' @inheritParams plot_layer
+#' @param legend Logical. Only valid when plotting RasterLayers
+#' retrieved from \code{\link{get_map_layer}} where legend was also retrieved
 #'
-#' @return
 #' @export
 #'
 #' @examples
@@ -111,11 +111,13 @@ setMethod("plot_layer", "RasterLayer", function(x,
     }
   } else if (plot_pkg %in% c("ggplot", "ggplot2")) {
     plot_data <- raster_colors(x)
-    plot_data <- dplyr::filter(plot_data, color != "#000000", !is.na(color))
+    plot_data <-
+      plot_data %>%
+      dplyr::filter(.data$color != "#000000", !is.na(.data$color))
     g <-
       ggplot2::ggplot(data = NULL) +
       ggplot2::geom_tile(data = plot_data,
-                         ggplot2::aes(x, y, fill = color))
+                         ggplot2::aes_string("x", "y", fill = "color"))
     if (!is.null(outline_poly)) {
       g <-
         g +
@@ -152,9 +154,8 @@ setMethod("plot_layer", "RasterLayer", function(x,
 
 #' Plot a RasterStack object
 #'
-#' @param RasterStack
+#' @inheritParams plot_layer
 #'
-#' @return
 #' @export
 #'
 #' @examples
@@ -184,11 +185,12 @@ setMethod("plot_layer", "RasterStack", function(x,
     }
   } else if (plot_pkg %in% c("ggplot", "ggplot2")) {
     plot_data <- raster_colors(x)
-    plot_data <- dplyr::filter(plot_data, color != "#000000")
+    plot_data <- dplyr::filter(plot_data, .data$color != "#000000")
     g <-
       ggplot2::ggplot(data = NULL) +
       ggplot2::geom_tile(data = plot_data,
-                         ggplot2::aes(x, y, fill = as.character(color)))
+                         ggplot2::aes_string("x", "y",
+                                             fill = as.character("color")))
     if (!is.null(outline_poly)) {
       g <-
         g +
@@ -213,9 +215,8 @@ setMethod("plot_layer", "RasterStack", function(x,
 
 #' Plot a RasterBrick object
 #'
-#' @param RasterBrick
+#' @inheritParams plot_layer
 #'
-#' @return
 #' @export
 #'
 #' @examples
@@ -245,11 +246,12 @@ setMethod("plot_layer", "RasterBrick", function(x,
     }
   } else if (plot_pkg %in% c("ggplot", "ggplot2")) {
     plot_data <- raster_colors(x)
-    plot_data <- dplyr::filter(plot_data, color != "#000000")
+    plot_data <- dplyr::filter(plot_data, .data$color != "#000000")
     g <-
       ggplot2::ggplot(data = NULL) +
       ggplot2::geom_tile(data = plot_data,
-                         ggplot2::aes(x, y, fill = as.character(color)))
+                         ggplot2::aes_string("x", "y",
+                                             fill = as.character("color")))
     if (!is.null(outline_poly)) {
       g <-
         g +
@@ -275,9 +277,8 @@ setMethod("plot_layer", "RasterBrick", function(x,
 
 #' Plot an sf object
 #'
-#' @param sf
+#' @inheritParams plot_layer
 #'
-#' @return
 #' @export
 #'
 #' @examples

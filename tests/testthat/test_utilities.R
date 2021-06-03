@@ -31,6 +31,6 @@ test_that("sql_where returns correct SQL WHERE clauses", {
 })
 
 test_that("get_sf_crs returns the correct CRS values for polygons", {
-  expect_equal(get_sf_crs(iceland), 4326)
+  expect_equal(get_sf_crs(iceland_poly), 4326)
   expect_equal(get_sf_crs(mke_county), 4326)
 })

@@ -6,7 +6,7 @@
 #' @name sf_example_polys
 #'
 #' @source \code{\link[ggplot2]{map_data}}
-"iceland"
+"iceland_poly"
 
 #' @rdname sf_example_polys
 "mke_county"
@@ -15,7 +15,7 @@
 "portage_county"
 
 #' @rdname sf_example_polys
-"reykjanes"
+"reykjanes_poly"
 
 #' @rdname sf_example_polys
 "wis_counties"

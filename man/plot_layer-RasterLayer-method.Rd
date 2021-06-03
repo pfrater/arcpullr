@@ -15,10 +15,23 @@
 )
 }
 \arguments{
-\item{RasterLayer}{}
-}
-\value{
+\item{x}{An sf or Raster* object as returned from a
+\code{get_*_layer} function}
 
+\item{outline_poly}{Optional. An sf polygon to outline \code{sf_data} for
+context}
+
+\item{outline_size}{Numeric argument that controls width of parameter}
+
+\item{outline_color}{A character vector of a valid color}
+
+\item{legend}{Logical. Only valid when plotting RasterLayers
+retrieved from \code{\link{get_map_layer}} where legend was also retrieved}
+
+\item{plot_pkg}{Character. The plotting environment to use. Either "ggplot"
+(default) or "base"}
+
+\item{...}{Additional arguments to \code{plot_layer}}
 }
 \description{
 Plot a RasterLayer object

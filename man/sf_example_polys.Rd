@@ -3,10 +3,10 @@
 \docType{data}
 \name{sf_example_polys}
 \alias{sf_example_polys}
-\alias{iceland}
+\alias{iceland_poly}
 \alias{mke_county}
 \alias{portage_county}
-\alias{reykjanes}
+\alias{reykjanes_poly}
 \alias{wis_counties}
 \alias{wis_poly}
 \title{Various example sf polygons}
@@ -27,13 +27,13 @@ An object of class \code{sf} (inherits from \code{data.frame}) with 1 rows and 2
 \code{\link[ggplot2]{map_data}}
 }
 \usage{
-iceland
+iceland_poly
 
 mke_county
 
 portage_county
 
-reykjanes
+reykjanes_poly
 
 wis_counties
 

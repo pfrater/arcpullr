@@ -16,5 +16,5 @@ A numeric value referring to the coordinate reference system
 Return CRS value of an sf object
 }
 \examples{
-get_sf_crs(iceland)
+get_sf_crs(iceland_poly)
 }

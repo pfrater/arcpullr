@@ -20,5 +20,7 @@ with the associated RGB color values. This will likely be most useful for
 plotting and analysis of map layers.
 }
 \examples{
+\dontrun{
 get_layer_legend(wi_landcover_url)
+}
 }
