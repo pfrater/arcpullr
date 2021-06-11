@@ -18,25 +18,20 @@ knitr::opts_chunk$set(
 library(arcpullr)
 ```
 
-<!-- <img src='../man/figures/arcpullr_hex.png' width="160" height="180" style="border: none" align="right"/> -->
+<img src='../man/figures/arcpullr_hex.png' width="160" height="180" style="border: none" align="right"/>
 
 \
 \
 
 The `arcpullr` package provides functions for pulling spatial data from
-an ArcGIS REST API and formatting those layers into `sf` objects. These
-functions provide the basis for querying data housed in a spatial REST
-API in both a spatial and relational manner.
+an ArcGIS REST API and formatting those layers into either `sf` or `Raster*` objects (depending on the layer being requested). These functions provide the basis for retrieving spatial data housed in an ArcGIS REST API using either spatial or relational queries. The output from these querying functions is intended to work seamlessly with other spatial packages already implemented and established in R.
 
-\
-\
 \
 \
 
 # The `get_spatial_layer()` function
 
-This function is the core of the package, and allows users to pull data
-from an ArcGIS REST API
+This is one of the core functions of the package, and allows users to pull Feature Service data from an ArcGIS REST API.
 
 ```{r, eval = FALSE}
 # url <- some url from an ArcGIS REST API layer
@@ -49,8 +44,8 @@ layer](https://dnrmaps.wi.gov/arcgis/rest/services/WT_SWDV/WT_Designated_Waters_
 for example.
 
 The `get_spatial_layer()` function will retrieve data from this layer,
-and format it to an object of class sf (*i.e.* of the R package sf:
-Simple Features for R).
+and format it to an object of class \code{sf} (*i.e.* of the R package [sf:
+Simple Features for R](https://r-spatial.github.io/sf/)).
 
 This function is also query-able both using both SQL code and ArcGIS's
 [Query (Feature
@@ -62,7 +57,7 @@ functionality.
 Along with SQL, layers from an ArcGIS REST API may be queried spatially.
 This is accomplished with the `get_layer_by_*` family of functions.
 These functions are essentially a wrapper around `get_spatial_layer`
-that removes the abstraction of the spatial query syntax query by
+that removes the abstraction of the spatial query syntax used by
 ArcGIS. These functions require a spatial object of class `sf` to be
 passed to the `geometry` argument. To test this out you can also quickly
 create simple `sf` objects using `sf_lines()`, `sf_points()`, or
@@ -99,11 +94,14 @@ place of a text string.
 sql_where(ROW_WATERBODY_NAME = 'Wisconsin River', HYDROCODE = 7011)
 ```
 
+\
+\
+
 # The `get_map_layer()` function
 
 This function retrieves map service layers from an ArcGIS REST services
 API and returns them as a `RasterLayer` object (*i.e.* of the R package
-raster: Geographic Data Analysis and Modeling).
+[raster: Geographic Data Analysis and Modeling](https://cran.r-project.org/web/packages/raster/index.html)).
 
 These layers require a bounding box to query the map layer, which is
 either taken from the `sf_object` argument or optionally can be passed
@@ -118,6 +116,9 @@ raster_layer<- get_map_layer(url,sf_object)
 The URL should be a specific raster layer from an ArcGIS REST API, such
 as the [Wisconsin Dep't. of Natural Resources Wiscland
 Layer](https://dnrmaps.wi.gov/arcgis_image/rest/services/DW_Land_Cover/EN_Land_Cover2_Lev2/MapServer). <br> 
+
+\
+\
 
 # The `get_image_layer` function
 
@@ -139,6 +140,9 @@ The URL should be a specific image layer from an ArcGIS REST API, such
 as the [Wisconsin Dep't. of Natural Resources Leaf Off
 Basemap](https://dnrmaps.wi.gov/arcgis_image/rest/services/DW_Image/EN_Image_Basemap_Leaf_Off/ImageServer).
 
+\
+\
+
 # Plotting Layers
 
 Layers retrieved via any of the `get_*_layer` functions may be plotted using an 
@@ -147,7 +151,7 @@ also included the `plot_layer` function. This function will plot layers using
 `ggplot2` by default or can be switched to base graphics using the `plot_pkg` 
 argument. 
 
-```{r,warning = FALSE}
+```{r,warning = FALSE, echo = TRUE, eval = FALSE}
 wdnr_base_url <- "https://dnrmaps.wi.gov/arcgis/rest/services/"
 wolf_zone_layer_url <- "DW_Map_Dynamic/EN_Hunting_Zones_WTM_Ext/MapServer/0"
 wolf_zone_url <- paste0(wdnr_base_url,wolf_zone_layer_url)
