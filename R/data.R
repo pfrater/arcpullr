@@ -58,7 +58,6 @@
 #'   \item{description}{A description of the sp_rel}
 #' }
 #' @source sp_rel_lookup -- \url{
-#'   https://help.arcgis.com/en/webapi/wpf/apiref/
-#'   ESRI.ArcGIS.Client~ESRI.ArcGIS.Client.Tasks.SpatialRelationship.html
+#' https://help.arcgis.com/en/webapi/wpf/apiref/ESRI.ArcGIS.Client~ESRI.ArcGIS.Client.Tasks.SpatialRelationship.html
 #' }
 "sp_rel_lookup"

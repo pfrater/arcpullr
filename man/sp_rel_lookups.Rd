@@ -29,8 +29,7 @@ follows:
 sp_rel_valid--Independent tests done specifically by and for arcpullr
 
 sp_rel_lookup -- \url{
-  https://help.arcgis.com/en/webapi/wpf/apiref/
-  ESRI.ArcGIS.Client~ESRI.ArcGIS.Client.Tasks.SpatialRelationship.html
+https://help.arcgis.com/en/webapi/wpf/apiref/ESRI.ArcGIS.Client~ESRI.ArcGIS.Client.Tasks.SpatialRelationship.html
 }
 }
 \usage{

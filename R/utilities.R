@@ -304,10 +304,28 @@ get_layer_html <- function(url) {
 }
 
 
-#' Get Service Type of a REST endpoint
+#' Get elements of a Service or Layer from an ArcGIS REST endpoint
+#'
+#' This family of functions is meant to pull attributes from a particular
+#' service or layer hosted on an ArcGIS REST API. If the service is an
+#' ImageServer or MapServer, then the behavior will be slightly different than
+#' for a Feature Layer (see details).
+#'
+#' \code{get_service_type} will return the type of service or layer for the
+#' respective URL (or html) that is passed to the function. For a feature layer
+#' the function should return "feature_layer", for a Image or Map Server the
+#' function will return "image" or "map", respectively.
+#'
+#' \code{get_geometry_type} will return the geometry type of feature service
+#' layers housed on an ArcGIS REST API server. If a URL is provided that points
+#' to a map or image layer the function will return an error (i.e. only
+#' feature layers have geometry types).
+#'
+#' \code{get_supported_operations} will simply return a character vector that
+#' lists the supported operations for \code{url}.
 #'
 #' @param url A character string of a valid layer URL
-#' @param ... Only used internally
+#' @param ... Only used internally, but html can be passed
 #'
 #' @return A character string defining the layer type
 #' @export
@@ -324,33 +342,42 @@ get_service_type <- function(url, ...) {
       "to use get_service_type"
     )
   }
+  find_layer_type <- function(html) {
+    so <- get_supported_operations(html = html)
+    if (any(grepl("Export Image", so))) {
+      out <- "image"
+    } else if (any(grepl("Export Map", so))) {
+      out <- "map"
+    } else {
+      out <-
+        html %>%
+        stringr::str_match(base::paste0("Type:\\s+","(.*?) ")) %>%
+        stringr::str_replace("Type:", "") %>%
+        stringr::str_trim()
+      out <- paste0(tolower(out[2]), "_layer")
+    }
+    return(out)
+  }
   # check to see if html is passed; used for checking raster layer type
   # in get_geometry_type
   args <- list(...)
   if ("html" %in% names(args)) {
     geom_type <-
       args$html %>%
-      stringr::str_match(base::paste0("Type:\\s+","(.*?) ")) %>%
-      stringr::str_replace("Type:", "") %>%
-      stringr::str_trim()
-    return(paste0(tolower(geom_type[2]), "_layer"))
+      find_layer_type()
   } else if (httr::http_error(url) == TRUE) {
     return("url_error")
   } else {
     geom_type <-
       get_layer_html(url) %>%
-      stringr::str_match(base::paste0("Type:\\s+","(.*?) ")) %>%
-      stringr::str_replace("Type:", "") %>%
-      stringr::str_trim()
-    return(paste0(tolower(geom_type[2]), "_layer"))
+      find_layer_type()
   }
+  return(geom_type)
 }
 
 #' Get Geometry Type
 #'
-#' This function will return the geometry type of feature service layers housed
-#' on an ArcGIS REST API server. If a URL is provided that points to a map or
-#' image layer the function will return an error.
+#'
 #'
 #' @param url A character string of a feature services URL
 #'
@@ -376,7 +403,8 @@ get_geometry_type <- function(url) {
     service_type <- get_service_type(html = layer_html)
     if (service_type != "feature_layer") {
       stop("This is not a Feature Service layer. Geometry Type is only\n",
-           "  defined for Feature Service Layers.")
+           "  defined for Feature Service Layers. Otherwise it's probably",
+           " a raster")
     } else {
       geom_type <-
         layer_html %>%
@@ -386,6 +414,37 @@ get_geometry_type <- function(url) {
       return(geom_type[2])
     }
   }
+}
+
+
+get_supported_operations <- function(url, ...) {
+  if (!(requireNamespace("xml2", quietly = TRUE) ||
+        requireNamespace("rvest", quietly = TRUE))) {
+    stop(
+      "You must have xml2, rvest, and stringr installed ",
+      "to use get_service_type"
+    )
+  }
+
+  extract_so <- function(html) {
+    out <-
+      html %>%
+      stringr::str_extract("Supported Operations:(\\s*.*)*$") %>%
+      stringr::str_trim() %>%
+      stringr::str_split("\r\n\\s+") %>%
+      unlist()
+    out <- grep("Supported Operations:", out, value = TRUE, invert = TRUE)
+    return(out)
+  }
+
+  # check to see if html is passed; used for checking in other functions
+  args <- list(...)
+  if ("html" %in% names(args)) {
+    supp_op <- extract_so(args$html)
+  } else {
+    supp_op <- extract_so(get_layer_html(url))
+  }
+  return(supp_op)
 }
 
 get_raster_layers <- function(url) {
