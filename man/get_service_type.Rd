@@ -2,20 +2,37 @@
 % Please edit documentation in R/utilities.R
 \name{get_service_type}
 \alias{get_service_type}
-\title{Get Service Type of a REST endpoint}
+\title{Get elements of a Service or Layer from an ArcGIS REST endpoint}
 \usage{
 get_service_type(url, ...)
 }
 \arguments{
 \item{url}{A character string of a valid layer URL}
 
-\item{...}{Only used internally}
+\item{...}{Only used internally, but html can be passed}
 }
 \value{
 A character string defining the layer type
 }
 \description{
-Get Service Type of a REST endpoint
+This family of functions is meant to pull attributes from a particular
+service or layer hosted on an ArcGIS REST API. If the service is an
+ImageServer or MapServer, then the behavior will be slightly different than
+for a Feature Layer (see details).
+}
+\details{
+\code{get_service_type} will return the type of service or layer for the
+respective URL (or html) that is passed to the function. For a feature layer
+the function should return "feature_layer", for a Image or Map Server the
+function will return "image" or "map", respectively.
+
+\code{get_geometry_type} will return the geometry type of feature service
+layers housed on an ArcGIS REST API server. If a URL is provided that points
+to a map or image layer the function will return an error (i.e. only
+feature layers have geometry types).
+
+\code{get_supported_operations} will simply return a character vector that
+lists the supported operations for \code{url}.
 }
 \examples{
 \dontrun{

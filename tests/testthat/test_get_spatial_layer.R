@@ -12,8 +12,8 @@ stream_query_url <- paste(stream_hydro_url, "query", sep = "/")
 oak_creek_where <- "RIVER_SYS_NAME = 'Oak Creek'"
 
 oak_creek_ids <- c(
-  612159, 632390, 606125, 634619, 638509, 645773, 650273, 652265,
-  652148, 668115, 670316, 671903, 673345, 860945, 870333
+  909165,  915195, 935421, 937647, 941536, 948799, 953299, 955174,
+  955291, 971135, 973336,  974923,  976365, 1163949, 1173335
 )
 
 test_that("get_object_ids returns proper IDs", {

@@ -13,9 +13,7 @@ get_geometry_type(url)
 A character string of the layers geometry type
 }
 \description{
-This function will return the geometry type of feature service layers housed
-on an ArcGIS REST API server. If a URL is provided that points to a map or
-image layer the function will return an error.
+Get Geometry Type
 }
 \examples{
 \dontrun{
