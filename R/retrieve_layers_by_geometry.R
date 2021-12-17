@@ -68,12 +68,15 @@ get_layer_by_point <- function(url, geometry,
 #' @export
 get_layer_by_multipoint <- function(url, geometry,
                                     sp_rel = "esriSpatialRelIntersects", ...) {
+  warning(
+    "get_layer_by_multipoint has been generalized to get_layer_by_point.\n",
+    "Please use that function instead as this one is being deprecated."
+  )
   return(get_layer_by_spatial(url = url,
                               geometry = format_multipoint_coords(geometry),
                               geom_type = "esriGeometryMultipoint",
                               sp_ref = get_sf_crs(geometry),
-                              sp_rel = sp_rel,
-                              ...))
+                              sp_rel = sp_rel, ...))
 }
 
 #' @name get_layers_by_spatial

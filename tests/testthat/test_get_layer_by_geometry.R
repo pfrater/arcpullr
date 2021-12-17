@@ -49,13 +49,25 @@ test_that("get_layer_by_point returns the correct WATERBODY_WBIC",
           })
 
 #test get_layer_by_multipoint
-test_that("get_layer_by_point returns the correct WATERBODY_WBIC",
+
+test_that("get_layer_by_multipoint returns a warning",
+          {
+            expect_warning(
+              get_layer_by_multipoint(url = hydro_lakes, geometry = multipoint)
+            )
+          })
+
+test_that("get_layer_by_multipoint returns the correct WATERBODY_WBIC",
           {
             otter_lake_multipoint <-
-              get_layer_by_multipoint(url = hydro_lakes,
-                                 geometry = multipoint)
+              suppressWarnings(
+                get_layer_by_multipoint(
+                  url = hydro_lakes, geometry = multipoint
+                )
+              )
             expect_equal(otter_lake_multipoint$WATERBODY_WBIC[1],549400)
           })
+
 
 #test get_layer_by_line
 test_that("get_layer_by_line returns the correct WATERBODY_WBIC",
