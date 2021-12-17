@@ -1,7 +1,6 @@
 ---
 title: "Spatial Queries"
-author: "Zac Driscoll"
-date: "12/10/2021"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: html_document
 editor_options: 
   markdown: 
@@ -33,7 +32,6 @@ library(sf)
 #<img src='../man/figures/logo.png' width="160" height="180" style="border: none" align="right"/>
 ```
 
-## Spatial Queries
 
 ArcGIS REST API's may be spatially queried using the get_layer_by\_\* family of functions.These functions require a spatial object of class sf and a spatial relationship to be passed to the geometry and sp_rel arguments respectively.
 
@@ -64,72 +62,57 @@ get_layer_by_envelope
 
 </u >
 
-
-## Spatial Relationship
-
-The "sp_rel" argument can be used to define the spatial relationship
-between the two feature classes involved within a spatial query. The
-default spatial relationships is xxx.
-
+## URL's for examples 
+<button class="btn btn-primary" data-toggle="collapse" data-target="#btn-data"> 
+Example Source Data </button> 
+<div id="btn-data" class="collapse"> 
 ```{r}
-server <- "https://dnrmaps.wi.gov/arcgis2/rest/services/"
+#WDNR Server
+server <- "https://dnrmaps.wi.gov/arcgis/rest/services/"
+server2 <- "https://dnrmaps.wi.gov/arcgis2/rest/services/"
+
+#River URL
 layer <- "TS_AGOL_STAGING_SERVICES/EN_AGOL_STAGING_SurfaceWater_WTM/MapServer/2"
-river_url <- paste0(server,layer)
+river_url <- paste0(server2,layer)
 
+#Country URL 
+layer <- "DW_Map_Dynamic/EN_Basic_Basemap_WTM_Ext_Dynamic_L16/MapServer/3"
+county_url <- paste0(server,layer)
+
+#Trout URL 
+layer <- "FM_Trout/FM_TROUT_HAB_SITES_WTM_Ext/MapServer/0"
+trout_url <- paste0(server,layer)
+
+#Watershed URL
+layer <- "WT_SWDV/WT_Inland_Water_Resources_WTM_Ext_v2/MapServer/5"
+watershed_url <- paste0(server,layer)
+
+#get layers for queries
 brown_county <- wis_counties[wis_counties$county == "brown",]
-brown_rivers <-get_layer_by_poly(river_url,brown_county)
-plot_layer(brown_rivers)
-
-```
-
-Using "esriSpatialRelCrosses" results in different records being
-returned. 
-```{r}
-brown_rivers <-get_layer_by_poly(river_url,brown_county,sp_rel = "esriSpatialRelCrosses")
-plot_layer(brown_rivers)
-```
-
-
-The 'sp_rel_lookup' data.frame explains the various different types of
-spatial relationships available through ArcGIS REST APIs.
-
-```{r, echo = FALSE}
-sp_rel_lookup %>%
-  DT::datatable()
-```
-
-The 'sp_rel_valid' data.frame shows which spatial relationships are
-valid with different geometry types being queried and used to do spatial
-queries.
-
-```{r, echo = FALSE}
-sp_rel_lookup %>%
-  DT::datatable()
-
-```
-
-The valid_sp_rel function can be used to to see which spatial relation
-types are applicable to the feature classes being queried and the sf
-objects use do to a spatial query
-
-
-## get_layer_by_line
-The get_layer_by_line function uses A LINSESTRING or MULTILINESTRING sf object to query an ArcGIS REST API. The below example uses the
- a MULTILINESTRING sf object of the Milwaukee River to query the Wisconsin County polygon layer. 
-```{r}
-#Get the Milwaukee River MULTILINELINESTRING from the 
-#Wisconsin Department Natural Resources server. 
 mke_river <- get_spatial_layer(river_url, 
                                where = "RIVER_SYS_NAME = 'Milwaukee River'")
 
-#Pass the mke_river sf object to the geometry arguement  to perform
-#a spatial query.
-server2 <- "https://dnrmaps.wi.gov/arcgis/rest/services/"
-layer <- "DW_Map_Dynamic/EN_Basic_Basemap_WTM_Ext_Dynamic_L16/MapServer/3"
-county_url <- paste0(server2,layer)
+trout_hab_project<- 
+  get_spatial_layer(
+    trout_url,
+    where = "WATERBODYNAMECOMBINED = 'Little Bois Brule'")
+
+trout_hab_projects<- 
+  get_spatial_layer(
+    trout_url,
+    where = "FISCALYEAR = 2018")
+
+
+
+```
+</div>
+<br>
+
+## get_layer_by_line
+The get_layer_by_line function uses A LINSESTRING or MULTILINESTRING sf object to query an ArcGIS REST API. The below example uses a MULTILINESTRING sf object of the Milwaukee River to query the Wisconsin County polygon layer. 
+```{r}
 counties <- get_layer_by_line(url = county_url, geometry = mke_river)
 
-#A plot showing the result of the the two queries 
 ggplot2::ggplot() + 
   ggplot2::geom_sf(data = counties) +
   ggplot2::geom_sf(data = mke_river,color = "blue")
@@ -138,50 +121,61 @@ ggplot2::ggplot() +
 
 ## get_layer_by_point
 
-Spatial queries can be performed using a line.
+The get_layer_by_line function uses a POINT sf object to query 
+an ArcGIS REST API. The below example shows how this can be used to get return
+which rivers intersect with a trout habitat project on the Little Bois Brule.
 
 ```{r}
-#get trout habitat projects
-server <- "https://dnrmaps.wi.gov/arcgis/rest/services/"
-layer <- "FM_Trout/FM_TROUT_HAB_SITES_WTM_Ext/MapServer/0"
-trout_url <- paste0(server,layer)
-trout_projects<- 
-  get_spatial_layer(
-    trout_url,
-    where = "WATERBODYNAMECOMBINED = 'Little Bois Brule'",
-    distance = '1000')
+
+trout_streams <-
+  get_layer_by_point(url = river_url, geometry = trout_hab_project)
+
+ggplot2::ggplot() +
+  ggplot2::geom_sf(data = trout_streams, color = "blue") +
+  ggplot2::geom_sf(data = trout_hab_project,color = "red") 
 
 
-#what counties have habitat projects? 
-# counties <- get_layer_by_point(url = county_url, geometry = trout_projects)
-trout_streams <- get_layer_by_point(url = river_url, 
-                                    geometry = trout_projects)
+```
 
+## get_layer_by_multipoint
 
-layer <- "WT_SWDV/WT_Inland_Water_Resources_WTM_Ext_v2/MapServer/5"
-watershed_url <- paste0(server2,layer)
+The get_layer_by_multipoint function uses a MULTIPOINT sf object to query 
+an ArcGIS REST API. The below example shows how this can be used to determine 
+which Wisconsin counties intersect with trout habitat projects completed in 2018
+```{r}
+trout_counties2018 <-
+  get_layer_by_multipoint(url = county_url, geometry = trout_hab_projects)
 
-watershed <- get_layer_by_point(url = watershed_url,
-                                geometry = trout_projects)
-
-
-
-#plot layers
-
-    ggplot2::ggplot() +
-    ggplot2::geom_sf(data = trout_streams, color = "blue")
-
-    
+ggplot2::ggplot() +
+  ggplot2::geom_sf(data = wis_counties)+
+  ggplot2::geom_sf(data = trout_counties2018,
+                   fill = "gray75",color = "gray60") +
+  ggplot2::geom_sf(data = trout_hab_projects,color = "red") 
 ```
 
 ## get_layer_by_polygon
-
-Spatial queries can be performed using a line.
+The get_layer_by_line function uses a POLYGON sf object to query 
+an ArcGIS REST API. The below examples shows how this can be used to find
+what rivers intersect with Wisconsin's Brown County.
 
 ```{r}
-#get trout habitat projects
 brown_rivers <-get_layer_by_poly(river_url,brown_county)
-plot_layer(brown_rivers)
+ggplot2::ggplot()+
+  ggplot2::geom_sf(data = brown_county) +
+  ggplot2::geom_sf(data = brown_rivers,color = "blue",alpha = 0.25)
+```
+
+## get_layer_by_envelope
+The get_layer_by_envelope function accepts any sf object to query an
+ArcGIS REST API using the sf objects bounding box.  The below example
+shows how this is used to query WI's Rivers ArcGIS REST API using a  sf Polygon object 
+of Wisconsin's Brown county. Note how the results compare
+to when this same object is queried using the get_layer_by_polygon function. 
+```{r}
+brown_rivers <- get_layer_by_envelope(river_url,brown_county)
+ggplot2::ggplot()+
+  ggplot2::geom_sf(data = brown_county) +
+  ggplot2::geom_sf(data = brown_rivers,color = "blue",alpha = 0.25)
 
 ```
 
@@ -193,7 +187,55 @@ to further refine queries.
 brown_rivers <- get_layer_by_poly(river_url,
                                   brown_county,
                                   where = "STREAM_ORDER > 3")
+ggplot2::ggplot()+
+  ggplot2::geom_sf(data = brown_county) +
+  ggplot2::geom_sf(data = brown_rivers,color = "blue",alpha = 0.25)
+```
 
-plot_layer(brown_rivers)
+## Spatial Relationship
+
+The "sp_rel" argument can be used to define the spatial relationship
+between the two feature classes involved within a spatial query. The
+default spatial relationships is xxx.
+
+```{r}
+brown_rivers <-get_layer_by_poly(river_url,brown_county)
+ggplot2::ggplot()+
+  ggplot2::geom_sf(data = brown_county) +
+  ggplot2::geom_sf(data = brown_rivers,color = "blue",alpha = 0.25)
 
 ```
+
+Using "esriSpatialRelCrosses" results in different records being
+returned. 
+```{r}
+brown_rivers <-get_layer_by_poly(river_url,brown_county,sp_rel = "esriSpatialRelCrosses")
+ggplot2::ggplot()+
+  ggplot2::geom_sf(data = brown_county) +
+  ggplot2::geom_sf(data = brown_rivers,color = "blue",alpha = 0.25)
+```
+<br>
+
+### Lookup Tables
+The 'sp_rel_lookup' data.frame explains the various different types of
+spatial relationships available through ArcGIS REST APIs.
+
+```{r, echo = FALSE}
+sp_rel_lookup %>%
+  DT::datatable()
+```
+<br>
+The 'sp_rel_valid' data.frame shows which spatial relationships are
+valid with different geometry types being queried and used to do spatial
+queries.
+
+```{r, echo = FALSE}
+sp_rel_valid %>%
+  DT::datatable()
+
+```
+
+### The valid_sp_rel Function 
+The valid_sp_rel function can be used to to see which spatial relation
+types are applicable to the feature classes being queried and the sf
+objects use do to a spatial query.
