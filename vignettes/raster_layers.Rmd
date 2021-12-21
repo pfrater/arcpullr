@@ -1,0 +1,88 @@
+---
+title: "Raster Layers"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+vignette: > 
+  %\VignetteIndexEntry{Raster Layers}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+output: html_document
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+options(rmarkdown.html_vignette.check_title = FALSE)
+library(arcpullr)
+library(sf)
+```
+
+```{r, echo = FALSE}
+#<img src='../man/figures/logo.png' width="160" height="180" style="border: none" align="right"/>
+```
+
+
+`arcpullr` has the capability to query not only vector (Feature) layers, but 
+also raster layers (both Map and Image service types). The syntax for these is 
+generally the same as for the `get_layer_by_*` family of functions. Map and
+Image layers require a bounding box as part of the query, so both 
+`get_map_layer` and `get_image_layer` have required arguments of a URL and an 
+`sf` object. These functions pull the raster layers provided by the URL and return the layer as a RasterLayer object from the `raster` package.
+
+## URL's for examples 
+<button class="btn btn-primary" data-toggle="collapse" data-target="#btn-data"> 
+Example Source Data </button> 
+<div id="btn-data" class="collapse"> 
+```{r}
+# WDNR Server
+image_server <- "https://dnrmaps.wi.gov/arcgis_image/rest/services/"
+
+# WI Landcover Type URL
+landcover_path <- "DW_Land_Cover/EN_Land_Cover2_Lev2/MapServer"
+landcover_url <- paste0(image_server, landcover_path)
+
+# WI Leaf-off Aerial Imagery URL
+leaf_off_path <- "DW_Image/EN_Image_Basemap_Leaf_Off/ImageServer"
+leaf_off_url <- paste0(image_server, leaf_off_path)
+
+# the wis_poly polygon is available as an exported object in arcpullr
+```
+</div>
+<br>
+
+## Map Layers
+
+The `get_map_layer` function takes a URL and an sf object. Since the query for
+this layer type on an ArcGIS REST Service requires a bounding box any sf object
+can be used (i.e. POLYGON, POINT, LINE, etc.) and a bounding box will be created 
+using the extent of the shape.
+
+The example below pulls Wisconsin landcover types and plots them in a map.
+
+```{r, map_layer, fig.height = 7, fig.width = 7}
+wi_landcover <- get_map_layer(landcover_url, wis_poly)
+plot_layer(wi_landcover)
+```
+
+## Image Layers
+
+
+The `get_image_layer` function works the same as `get_map_layer` except that it 
+queries from an Image layer. The easiest way to distinguish a Map layer from an 
+Image layer is by checking the URL. Those from images will end with 
+"ImageServer" whereas those from maps will end with "MapServer". Another way to 
+check is to look a the "Supported Operations" at the bottom of the actual web
+page on the ArcGIS REST Service. It will say either "Export Image" or 
+"Export Map".
+
+This example pulls with Wisconsin Leaf-off Aerial Imagery dataset from the
+Wisconsin Department of Natural Resources.
+
+```{r, image_layer, fig.height = 7, fig.width = 7}
+wi_leaf_off <- get_image_layer(leaf_off_url, wis_poly)
+plot_layer(wi_leaf_off)
+```
