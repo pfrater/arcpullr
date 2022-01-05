@@ -33,32 +33,37 @@ library(sf)
 ```
 
 
-ArcGIS REST API's may be spatially queried using the get_layer_by\_\* family of functions.These functions require a spatial object of class sf and a spatial relationship to be passed to the geometry and sp_rel arguments respectively.
+ArcGIS REST API's may be spatially queried using the get_layer_by\_\* family of 
+functions.These functions require a spatial object of 
+class \code{sf} (*i.e.* of the R package [sf:
+Simple Features for R](https://r-spatial.github.io/sf/)) and a 
+[Spatial Relationship](https://help.arcgis.com/en/webapi/wpf/apiref/ESRI.ArcGIS.Client~ESRI.ArcGIS.Client.Tasks.SpatialRelationship.html)
+to be passed to the geometry and `sp_rel` arguments respectively.
 
 The package contains five functions that can be used to perform
-spatial queires:
+spatial queries:
 
 <ul>
 
 <li>
 
-get_layer_by_line
+`get_layer_by_line`
 
 <li>
 
-get_layer_by_point
+`get_layer_by_point`
 
 <li>
 
-get_layer_by_polygon
+`get_layer_by_polygon`
 
 <li>
 
-get_layer_by_multipoint
+`get_layer_by_multipoint`
 
 <li>
 
-get_layer_by_envelope
+`get_layer_by_envelope`
 
 </u >
 
@@ -109,7 +114,10 @@ trout_hab_projects<-
 <br>
 
 ## get_layer_by_line
-The get_layer_by_line function uses A LINSESTRING or MULTILINESTRING sf object to query an ArcGIS REST API. The below example uses a MULTILINESTRING sf object of the Milwaukee River to query the Wisconsin County polygon layer. 
+The `get_layer_by_line` function uses A LINSESTRING or MULTILINESTRING sf object 
+to query an ArcGIS REST API. The below example uses a MULTILINESTRING sf 
+object of the Milwaukee River to query the Wisconsin County polygon layer. 
+
 ```{r}
 counties <- get_layer_by_line(url = county_url, geometry = mke_river)
 
@@ -121,9 +129,10 @@ ggplot2::ggplot() +
 
 ## get_layer_by_point
 
-The get_layer_by_line function uses a POINT sf object to query 
-an ArcGIS REST API. The below example shows how this can be used to get return
-which rivers intersect with a trout habitat project on the Little Bois Brule.
+The `get_layer_by_line` function uses a POINT sf object to query 
+an ArcGIS REST API. The below example shows how this can be used to return
+which rivers intersect with a trout habitat project on the Little Bois Brule
+river. 
 
 ```{r}
 
@@ -139,7 +148,7 @@ ggplot2::ggplot() +
 
 ## get_layer_by_multipoint
 
-The get_layer_by_multipoint function uses a MULTIPOINT sf object to query 
+The `get_layer_by_multipoint` function uses a MULTIPOINT sf object to query 
 an ArcGIS REST API. The below example shows how this can be used to determine 
 which Wisconsin counties intersect with trout habitat projects completed in 2018
 ```{r}
@@ -154,7 +163,7 @@ ggplot2::ggplot() +
 ```
 
 ## get_layer_by_polygon
-The get_layer_by_line function uses a POLYGON sf object to query 
+The `get_layer_by_line` function uses a POLYGON sf object to query 
 an ArcGIS REST API. The below examples shows how this can be used to find
 what rivers intersect with Wisconsin's Brown County.
 
@@ -166,10 +175,10 @@ ggplot2::ggplot()+
 ```
 
 ## get_layer_by_envelope
-The get_layer_by_envelope function accepts any sf object to query an
+The `get_layer_by_envelope` function accepts any sf object to query an
 ArcGIS REST API using the sf objects bounding box.  The below example
-shows how this is used to query WI's Rivers ArcGIS REST API using a  sf Polygon object 
-of Wisconsin's Brown county. Note how the results compare
+shows how this is used to query WI's Rivers ArcGIS REST API using a  sf POLYGON 
+object of Wisconsin's Brown county. Note how the results compare
 to when this same object is queried using the get_layer_by_polygon function. 
 ```{r}
 brown_rivers <- get_layer_by_envelope(river_url,brown_county)
@@ -180,8 +189,7 @@ ggplot2::ggplot()+
 ```
 
 ## Combining Spatial and SQL Queries
-SQL statements can be passed to the "where" argument
-to further refine queries.
+Spatial queries can be combined with SQL statements to further refine queries.
 
 ```{r}
 brown_rivers <- get_layer_by_poly(river_url,
@@ -194,9 +202,11 @@ ggplot2::ggplot()+
 
 ## Spatial Relationship
 
-The "sp_rel" argument can be used to define the spatial relationship
+The `sp_rel` argument can be used to define the spatial relationship
 between the two feature classes involved within a spatial query. The
-default spatial relationships is xxx.
+default spatial relationships for the `get_layer_by_poly` function is 
+"esriSpatialRelContains". All other functions default to 
+"esriSpatialRelIntersects". 
 
 ```{r}
 brown_rivers <-get_layer_by_poly(river_url,brown_county)
@@ -206,8 +216,8 @@ ggplot2::ggplot()+
 
 ```
 
-Using "esriSpatialRelCrosses" results in different records being
-returned. 
+Using "esriSpatialRelCrosses" returns different records compared to the 
+above example. 
 ```{r}
 brown_rivers <-get_layer_by_poly(river_url,brown_county,sp_rel = "esriSpatialRelCrosses")
 ggplot2::ggplot()+
@@ -217,7 +227,7 @@ ggplot2::ggplot()+
 <br>
 
 ### Lookup Tables
-The 'sp_rel_lookup' data.frame explains the various different types of
+The `sp_rel_lookup` data.frame explains the various types of
 spatial relationships available through ArcGIS REST APIs.
 
 ```{r, echo = FALSE}
@@ -225,7 +235,7 @@ sp_rel_lookup %>%
   DT::datatable()
 ```
 <br>
-The 'sp_rel_valid' data.frame shows which spatial relationships are
+The `sp_rel_valid` data.frame shows which spatial relationships are
 valid with different geometry types being queried and used to do spatial
 queries.
 
@@ -236,6 +246,11 @@ sp_rel_valid %>%
 ```
 
 ### The valid_sp_rel Function 
-The valid_sp_rel function can be used to to see which spatial relation
-types are applicable to the feature classes being queried and the sf
-objects use do to a spatial query.
+The `valid_sp_rel`  function can be used to to see which spatial relation
+types are applicable to different geometries.
+
+```{r, echo = TRUE}
+
+valid_sp_rel("line","line")
+
+```
