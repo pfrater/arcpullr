@@ -1,5 +1,6 @@
 ---
-title: "Introduction to `arcpullr`"
+title: "Introduction to arcpullr"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Introduction to arcpullr}
@@ -18,16 +19,6 @@ knitr::opts_chunk$set(
 library(arcpullr)
 ```
 
-<img src='../man/figures/logo.png' width="160" height="180" style="border: none" align="right"/>
-
-\
-\
-
-The `arcpullr` package provides functions for pulling spatial data from
-an ArcGIS REST API and formatting those layers into either `sf` or `Raster*` objects (depending on the layer being requested). These functions provide the basis for retrieving spatial data housed in an ArcGIS REST API using either spatial or relational queries. The output from these querying functions is intended to work seamlessly with other spatial packages already implemented and established in R.
-
-\
-\
 
 # The `get_spatial_layer()` function
 
@@ -93,52 +84,6 @@ place of a text string.
 ```{r}
 sql_where(ROW_WATERBODY_NAME = 'Wisconsin River', HYDROCODE = 7011)
 ```
-
-\
-\
-
-# The `get_map_layer()` function
-
-This function retrieves map service layers from an ArcGIS REST services
-API and returns them as a `RasterLayer` object (*i.e.* of the R package
-[raster: Geographic Data Analysis and Modeling](https://CRAN.R-project.org/package=raster)).
-
-These layers require a bounding box to query the map layer, which is
-either taken from the `sf_object` argument or optionally can be passed
-via the `bbox` argument.
-
-```{r,eval = FALSE}
-# url <- some url from an ArcGIS REST API layer
-# sf_object <- some sf_object
-raster_layer<- get_map_layer(url,sf_object)
-```
-
-The URL should be a specific raster layer from an ArcGIS REST API, such
-as the [Wisconsin Dep't. of Natural Resources Wiscland
-Layer](https://dnrmaps.wi.gov/arcgis_image/rest/services/DW_Land_Cover/EN_Land_Cover2_Lev2/MapServer). <br> 
-
-\
-\
-
-# The `get_image_layer` function
-
-This function retrieves image service layers from an ArcGIS REST
-services API and returns them as a `RasterStack` object.
-
-These layers require a bounding box to query the map layer, which is
-either taken from the `sf_object` argument or optionally can be passed
-via the `bbox` argument.
-
-```{r,eval = FALSE}
-# url <- some url from an ArcGIS REST API layer
-# sf_object <- some sf_object
-image_layer<- get_image_layer(url,sf_object)
-
-```
-
-The URL should be a specific image layer from an ArcGIS REST API, such
-as the [Wisconsin Dep't. of Natural Resources Leaf Off
-Basemap](https://dnrmaps.wi.gov/arcgis_image/rest/services/DW_Image/EN_Image_Basemap_Leaf_Off/ImageServer).
 
 \
 \

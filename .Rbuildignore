@@ -7,3 +7,7 @@
 ^tests/testthat/test_get_spatial_layer.R$
 ^tests/testthat/test_get_layer_by_geometry.R
 ^other_tests$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^README\.Rmd$

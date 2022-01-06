@@ -32,7 +32,7 @@ Imports:
   rlang (>= 0.4.7),
   raster (>= 3.4.5),
   methods
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Suggests: 
   testthat (>= 3.0.1),
   knitr (>= 1.30),

@@ -1,7 +1,14 @@
 ---
 title: "Spatial Queries"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
-output: html_document
+output:
+  html_document:
+    theme:
+      version: 5
+vignette: > 
+  %\VignetteIndexEntry{Spatial Queries}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
   markdown: 
     wrap: 72
@@ -68,10 +75,13 @@ spatial queries:
 </u >
 
 ## URL's for examples 
-<button class="btn btn-primary" data-toggle="collapse" data-target="#btn-data"> 
-Example Source Data </button> 
-<div id="btn-data" class="collapse"> 
+<a class="btn btn-primary" data-bs-toggle="collapse"href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+Example Source Data
+</a>
+<div class="collapse" id="collapseExample">
+  <div class="card card-body"> 
 ```{r}
+
 #WDNR Server
 server <- "https://dnrmaps.wi.gov/arcgis/rest/services/"
 server2 <- "https://dnrmaps.wi.gov/arcgis2/rest/services/"
@@ -107,9 +117,8 @@ trout_hab_projects<-
     trout_url,
     where = "FISCALYEAR = 2018")
 
-
-
 ```
+</div>
 </div>
 <br>
 

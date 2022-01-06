@@ -35,6 +35,18 @@ the exception of get_layer_by_envelope except that it isn't particularly
 useful for a single point.
 }
 
+\section{\code{\link{get_image_layer}}}{
+
+This is one of the core functions of the package. It retrieves image service
+layers from an ArcGIS REST API designated by the URL
+}
+
+\section{\code{\link{get_map_layer}}}{
+
+This is one of the core functions of the package. It retrieves map service
+layers from an ArcGIS REST API designated by the URL
+}
+
 \section{Helper functions}{
 
 There are a few utility functions to help you along the way. The first is

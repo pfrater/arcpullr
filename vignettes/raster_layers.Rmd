@@ -34,9 +34,11 @@ Image layers require a bounding box as part of the query, so both
 `sf` object. These functions pull the raster layers provided by the URL and return the layer as a RasterLayer object from the `raster` package.
 
 ## URL's for examples 
-<button class="btn btn-primary" data-toggle="collapse" data-target="#btn-data"> 
-Example Source Data </button> 
-<div id="btn-data" class="collapse"> 
+<a class="btn btn-primary" data-bs-toggle="collapse"href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+Example Source Data
+</a>
+<div class="collapse" id="collapseExample">
+  <div class="card card-body"> 
 ```{r}
 # WDNR Server
 image_server <- "https://dnrmaps.wi.gov/arcgis_image/rest/services/"
@@ -51,6 +53,7 @@ leaf_off_url <- paste0(image_server, leaf_off_path)
 
 # the wis_poly polygon is available as an exported object in arcpullr
 ```
+</div>
 </div>
 <br>
 
