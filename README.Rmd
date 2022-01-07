@@ -43,7 +43,7 @@ ArcGIS Rest API](https://dnrmaps.wi.gov/arcgis/rest/services//DW_Map_Dynamic/EN_
 library(arcpullr)
 wdnr_server <-"https://dnrmaps.wi.gov/arcgis/rest/services/"
 counties <- "DW_Map_Dynamic/EN_Basic_Basemap_WTM_Ext_Dynamic_L16/MapServer/3"
-wi_counties_url <- paste(wdnr_server,counties,sep ="/")
+wi_counties_url <- paste(wdnr_server,counties, sep ="/")
 wi_counties <- get_spatial_layer(wi_counties_url)
 
 ggplot2::ggplot() +

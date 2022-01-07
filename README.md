@@ -35,7 +35,7 @@ API](https://dnrmaps.wi.gov/arcgis/rest/services//DW_Map_Dynamic/EN_Basic_Basema
 ``` r
 library(arcpullr)
 #> Loading required package: sf
-#> Linking to GEOS 3.9.1, GDAL 3.2.1, PROJ 7.2.1
+#> Linking to GEOS 3.9.1, GDAL 3.2.1, PROJ 7.2.1; sf_use_s2() is TRUE
 wdnr_server <-"https://dnrmaps.wi.gov/arcgis/rest/services/"
 counties <- "DW_Map_Dynamic/EN_Basic_Basemap_WTM_Ext_Dynamic_L16/MapServer/3"
 wi_counties_url <- paste(wdnr_server,counties,sep ="/")

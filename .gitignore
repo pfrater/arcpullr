@@ -2,7 +2,7 @@
 *.pdf
 inst/doc
 *.ppt
-*.png
+icons/logo.png
 *.pptx
 *.RData
 
