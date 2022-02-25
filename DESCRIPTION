@@ -1,7 +1,7 @@
 Package: arcpullr
 Type: Package
 Title: Pull Data from an 'ArcGIS REST' API
-Version: 0.2.1
+Version: 0.2.2
 Authors@R: c(person(given = "Paul",
            family = "Frater",
            role = c("aut", "cre"),
@@ -24,14 +24,17 @@ Depends:
   R (>= 3.6.0),
   sf (>= 0.9.7),
 Imports:
-  httr (>= 1.4.1),
-  jsonlite (>= 1.6.1),
-  dplyr (>= 1.0.2),
-  ggplot2 (>= 3.3.0),
-  tidyr (>= 1.0.2),
-  rlang (>= 0.4.7),
-  raster (>= 3.4.5),
-  methods
+    httr (>= 1.4.1),
+    jsonlite (>= 1.6.1),
+    dplyr (>= 1.0.2),
+    ggplot2 (>= 3.3.0),
+    tidyr (>= 1.0.2),
+    rlang (>= 0.4.7),
+    raster (>= 3.4.5),
+    methods,
+    bslib,
+    DT,
+    rgdal
 RoxygenNote: 7.1.2
 Suggests: 
   testthat (>= 3.0.1),

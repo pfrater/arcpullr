@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">arcpullr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -69,7 +69,7 @@
   <main id="main"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Raster Layers</h1>
             
-            <h4 data-toc-skip class="date">07 January, 2022</h4>
+            <h4 data-toc-skip class="date">22 February, 2022</h4>
       
       
       <div class="d-none name"><code>raster_layers.Rmd</code></div>
@@ -77,6 +77,8 @@
 
     
     
+To see more complete package documentation check out: <a href="https://pfrater.github.io/arcpullr/" class="external-link"> https://pfrater.github.io/arcpullr/</a>
+<hr>
 <p><code>arcpullr</code> has the capability to query not only vector (Feature) layers, but also raster layers (both Map and Image service types). The syntax for these is generally the same as for the <code>get_layer_by_*</code> family of functions. Map and Image layers require a bounding box as part of the query, so both <code>get_map_layer</code> and <code>get_image_layer</code> have required arguments of a URL and an <code>sf</code> object. These functions pull the raster layers provided by the URL and return the layer as a RasterLayer object from the <code>raster</code> package.</p>
 <div class="section level2">
 <h2 id="urls-for-examples">URL’s for examples<a class="anchor" aria-label="anchor" href="#urls-for-examples"></a>

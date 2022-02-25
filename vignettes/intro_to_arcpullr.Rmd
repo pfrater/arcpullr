@@ -18,7 +18,9 @@ knitr::opts_chunk$set(
 )
 library(arcpullr)
 ```
-
+To see more complete package documentation check out:
+<a href="https://pfrater.github.io/arcpullr/">
+https://pfrater.github.io/arcpullr/</a>
 
 # The `get_spatial_layer()` function
 
