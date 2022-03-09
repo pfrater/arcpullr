@@ -5,7 +5,7 @@
 #' @format An object of class sf and data.frame:
 #' @name sf_example_polys
 #'
-#' @source \code{\link[ggplot2]{map_data}}
+#' @source ggplot2's \code{\link[ggplot2]{map_data}} and \href{https://dnrmaps.wi.gov/arcgis/rest/services}{Wisconsin DNR ArcGIS REST API}
 "iceland_poly"
 
 #' @rdname sf_example_polys
@@ -22,6 +22,58 @@
 
 #' @rdname sf_example_polys
 "wis_poly"
+
+#' @rdname sf_example_polys
+"cook_creek_ws"
+
+#' @rdname sf_example_polys
+"cook_creek_streams"
+
+#' @rdname sf_example_polys
+"cook_creek_env"
+
+#' @rdname sf_example_polys
+"mke_river"
+
+#' @rdname sf_example_polys
+"poly_streams_contains"
+
+#' @rdname sf_example_polys
+"poly_streams_crosses"
+
+#' @rdname sf_example_polys
+"sugar_creek"
+
+#' @rdname sf_example_polys
+"sugar_creek_env"
+
+#' @rdname sf_example_polys
+"trout_hab_project_pt"
+
+#' @rdname sf_example_polys
+"trout_hab_project_pts"
+
+#' @rdname sf_example_polys
+"example_poly"
+
+#' @rdname sf_example_polys
+"trout_hab_project_pts"
+
+
+#' Various example raster objects
+#'
+#' These are raster objects that are used for examples throughout the package
+#'
+#' @name sf_example_raster
+#'
+#' @source \href{https://dnrmaps.wi.gov/arcgis_image/rest/services}{Wisconsin DNR ArcGIS Image Server}
+"wi_landcover"
+
+
+#' @rdname sf_example_raster
+"wi_aerial_imagery"
+
+
 
 #' Spatial relationship descriptor and lookup tables
 #'

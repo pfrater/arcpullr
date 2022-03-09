@@ -54,8 +54,8 @@ landcover_path <- "DW_Land_Cover/EN_Land_Cover2_Lev2/MapServer"
 landcover_url <- paste0(image_server, landcover_path)
 
 # WI Leaf-off Aerial Imagery URL
-leaf_off_path <- "DW_Image/EN_Image_Basemap_Leaf_Off/ImageServer"
-leaf_off_url <- paste0(image_server, leaf_off_path)
+wi_leaf_off_path <- "DW_Image/EN_Image_Basemap_Leaf_Off/ImageServer"
+wi_aerial_imagery_url <- paste0(image_server, wi_leaf_off_path)
 
 # the wis_poly polygon is available as an exported object in arcpullr
 ```
@@ -72,8 +72,14 @@ using the extent of the shape.
 
 The example below pulls Wisconsin landcover types and plots them in a map.
 
-```{r, map_layer, fig.height = 7, fig.width = 7}
+```{r map_layer, eval = FALSE, echo = FALSE}
 wi_landcover <- get_map_layer(landcover_url, wis_poly)
+```
+
+```{r show_map_plotting, ref.label=c('map_layer', 'plot_map_layer'), eval = FALSE}
+```
+
+```{r plot_map_layer, fig.height = 7, fig.width = 7, echo = FALSE}
 plot_layer(wi_landcover)
 ```
 
@@ -91,7 +97,13 @@ page on the ArcGIS REST Service. It will say either "Export Image" or
 This example pulls with Wisconsin Leaf-off Aerial Imagery dataset from the
 Wisconsin Department of Natural Resources.
 
-```{r, image_layer, fig.height = 7, fig.width = 7}
-wi_leaf_off <- get_image_layer(leaf_off_url, wis_poly)
-plot_layer(wi_leaf_off)
+```{r, image_layer, eval = FALSE, echo = FALSE}
+wi_aerial_imagery <- get_image_layer(wi_aerial_imagery_url, wis_poly)
+```
+
+```{r show_map_plotting, ref.label=c("image_layer", "plot_image_layer"), eval = FALSE}
+```
+
+```{r, plot_image_layer, fig.height = 7, fig.width = 7, echo = FALSE}
+plot_layer(wi_aerial_imagery)
 ```

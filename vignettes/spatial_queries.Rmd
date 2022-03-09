@@ -32,10 +32,13 @@ https://pfrater.github.io/arcpullr/</a>
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  warning = FALSE,
+  message = FALSE
 )
 library(arcpullr)
 library(sf)
+sf::sf_use_s2(FALSE)
 ```
 
 ```{r, echo = FALSE}
@@ -45,7 +48,7 @@ library(sf)
 
 ArcGIS REST API's may be spatially queried using the get_layer_by\_\* family of 
 functions. These functions require a spatial object of 
-class \code{sf} (*i.e.* of the R package [sf:
+class `sf` (*i.e.* of the R package [sf:
 Simple Features for R](https://r-spatial.github.io/sf/)) and a 
 [Spatial Relationship](https://help.arcgis.com/en/webapi/wpf/apiref/ESRI.ArcGIS.Client~ESRI.ArcGIS.Client.Tasks.SpatialRelationship.html)
 to be passed to the geometry and `sp_rel` arguments respectively.
@@ -83,7 +86,7 @@ Example Source Data
 </a>
 <div class="collapse" id="collapseExample">
   <div class="card card-body"> 
-```{r}
+```{r url_setup, eval = FALSE}
 
 #WDNR Server
 server <- "https://dnrmaps.wi.gov/arcgis/rest/services/"
@@ -102,24 +105,27 @@ layer <- "FM_Trout/FM_TROUT_HAB_SITES_WTM_Ext/MapServer/0"
 trout_url <- paste0(server,layer)
 
 #Watershed URL
-layer <- "WT_SWDV/WT_Inland_Water_Resources_WTM_Ext_v2/MapServer/5"
+layer <- "WT_SWDV/WT_Federal_Hydrologic_Units_WTM_Ext/MapServer/0"
 watershed_url <- paste0(server,layer)
 
 #get layers for queries
-brown_county <- wis_counties[wis_counties$county == "brown",]
-mke_river <- get_spatial_layer(river_url, 
-                               where = "RIVER_SYS_NAME = 'Milwaukee River'")
+mke_river <- get_spatial_layer(
+  river_url, 
+  where = "RIVER_SYS_NAME = 'Milwaukee River'"
+)
 
-trout_hab_project<- 
-  get_spatial_layer(
-    trout_url,
-    where = "WATERBODYNAMECOMBINED = 'Little Bois Brule'")
+trout_hab_project_pts <- get_spatial_layer(
+  trout_url,
+  where = "WATERBODYNAMECOMBINED = 'Sugar Creek' and FISCALYEAR = 2017"
+)
 
-trout_hab_projects<- 
-  get_spatial_layer(
-    trout_url,
-    where = "FISCALYEAR = 2018")
+trout_hab_project_pt <- trout_hab_project_pts[1, ]
 
+# get watershed layer for Cook Creek
+cook_creek_ws <- get_spatial_layer(
+  watershed_url,
+  where = "HUC12_NAME = 'Cook Creek'"
+)
 ```
 </div>
 </div>
@@ -130,87 +136,123 @@ The `get_layer_by_line` function uses A LINSESTRING or MULTILINESTRING sf object
 to query an ArcGIS REST API. The below example uses a MULTILINESTRING sf 
 object of the Milwaukee River to query the Wisconsin County polygon layer. 
 
-```{r}
-counties <- get_layer_by_line(url = county_url, geometry = mke_river)
+```{r pull_by_line, eval = FALSE, echo = FALSE}
+mke_river_counties <- get_layer_by_line(url = county_url, geometry = mke_river)
+```
 
-ggplot2::ggplot() + 
-  ggplot2::geom_sf(data = counties) +
-  ggplot2::geom_sf(data = mke_river,color = "blue")
+```{r, echo = FALSE}
+mke_river_counties <- sf::st_filter(
+  wis_counties, 
+  mke_river, 
+  .pred = sf::st_intersects
+)
+```
 
+```{r show_by_line, ref.label=c("pull_by_line", "plot_by_line"), eval = FALSE}
+```
+
+```{r plot_by_line, echo = FALSE}
+plot_layer(mke_river, outline_poly = mke_river_counties)
 ```
 
 ## get_layer_by_point
 
 The `get_layer_by_line` function uses a POINT sf object to query 
 an ArcGIS REST API. The below example shows how this can be used to return
-which rivers intersect with a trout habitat project on the Little Bois Brule
-river. 
+which rivers intersect with a trout habitat project on Sugar Creek in southeast
+Wisconsin.
 
-```{r}
-
-trout_streams <-
-  get_layer_by_point(url = river_url, geometry = trout_hab_project)
-
-ggplot2::ggplot() +
-  ggplot2::geom_sf(data = trout_streams, color = "blue") +
-  ggplot2::geom_sf(data = trout_hab_project,color = "red") 
-
-
+```{r pull_by_point, eval = FALSE, echo = FALSE}
+trout_stream <- get_layer_by_point(url = river_url, geometry = trout_hab_project_pt)
 ```
 
-## get_layer_by_multipoint
-
-The `get_layer_by_multipoint` function uses a MULTIPOINT sf object to query 
-an ArcGIS REST API. The below example shows how this can be used to determine 
-which Wisconsin counties intersect with trout habitat projects completed in 2018
-```{r}
-trout_counties2018 <-
-  get_layer_by_multipoint(url = county_url, geometry = trout_hab_projects)
-
-ggplot2::ggplot() +
-  ggplot2::geom_sf(data = wis_counties)+
-  ggplot2::geom_sf(data = trout_counties2018,
-                   fill = "gray75",color = "gray60") +
-  ggplot2::geom_sf(data = trout_hab_projects,color = "red") 
+```{r, echo = FALSE, mesage = FALSE}
+trout_stream <- sf::st_filter(
+  sugar_creek, 
+  sf::st_buffer(trout_hab_project_pt, 0.0001), 
+  .pred = sf::st_intersects
+)
 ```
+
+```{r show_by_point, ref.label=c("pull_by_point", "plot_by_point"), eval = FALSE}
+```
+
+```{r plot_by_point, echo = FALSE}
+plot_layer(trout_stream) +
+  ggplot2::geom_sf(data = trout_hab_project_pt, color = "red", size = 2)
+```
+
+
+
+
+`get_layer_by_point` can also handle multipoint objects. This example shows the
+same stream as above with a single point, but now with multiple restoration 
+points.
+
+```{r pull_by_multipoint, eval = FALSE, echo = FALSE}
+restored_streams <- get_layer_by_point(url = river_url, geometry = trout_hab_project_pts)
+```
+
+```{r show_by_multipoint, ref.label=c("pull_by_multipoint", "plot_by_multipoint"), eval = FALSE}
+```
+
+```{r, echo = FALSE}
+restored_streams <- sugar_creek
+```
+
+```{r plot_by_multipoint, fig.height = 7, fig.width = 7, echo = FALSE}
+plot_layer(restored_streams) + 
+  ggplot2::geom_sf(data = trout_hab_project_pts, color = "blue")
+```
+
+
+
 
 ## get_layer_by_polygon
+
 The `get_layer_by_line` function uses a POLYGON sf object to query 
 an ArcGIS REST API. The below examples shows how this can be used to find
-what rivers intersect with Wisconsin's Brown County.
+what rivers are within a particular watershed.
 
-```{r}
-brown_rivers <-get_layer_by_poly(river_url,brown_county)
-ggplot2::ggplot()+
-  ggplot2::geom_sf(data = brown_county) +
-  ggplot2::geom_sf(data = brown_rivers,color = "blue",alpha = 0.25)
+```{r, pull_by_poly, eval = FALSE, echo = FALSE}
+cook_creek_streams <- `get_layer_by_poly(river_url, cook_creek_ws)
+```
+
+```{r show_by_poly, ref.label=c("pull_by_poly", "plot_by_poly"), eval = FALSE}
+```
+
+```{r plot_by_poly, echo = FALSE}
+plot_layer(cook_creek_streams, cook_creek_ws)
 ```
 
 ## get_layer_by_envelope
 The `get_layer_by_envelope` function accepts any sf object to query an
 ArcGIS REST API using the sf objects bounding box.  The below example
 shows how this is used to query WI's Rivers ArcGIS REST API using a  sf POLYGON 
-object of Wisconsin's Brown county. Note how the results compare
-to when this same object is queried using the get_layer_by_polygon function. 
-```{r}
-brown_rivers <- get_layer_by_envelope(river_url,brown_county)
-ggplot2::ggplot()+
-  ggplot2::geom_sf(data = brown_county) +
-  ggplot2::geom_sf(data = brown_rivers,color = "blue",alpha = 0.25)
+object of a watershed for a small stream. Note how the results compare
+to when this same object is queried using the `get_layer_by_poly` function. 
+
+```{r, pull_by_env, eval = FALSE, echo = FALSE}
+cook_creek_env <- get_layer_by_envelope(river_url, cook_creek_ws)
 
 ```
+
+```{r show_by_env, ref.label=c("pull_by_env", "plot_by_env"), eval = FALSE}
+```
+
+```{r plot_by_env, echo = FALSE}
+# example of the envelope to visualize how it spatially queries
+example_env <- sf::st_as_sfc(sf::st_bbox(cook_creek_ws))
+
+plot_layer(cook_creek_env, cook_creek_ws) + 
+  ggplot2::geom_sf(data = example_env, fill = NA)
+```
+
+\
+\
 
 ## Combining Spatial and SQL Queries
 Spatial queries can be combined with SQL statements to further refine queries.
-
-```{r}
-brown_rivers <- get_layer_by_poly(river_url,
-                                  brown_county,
-                                  where = "STREAM_ORDER > 3")
-ggplot2::ggplot()+
-  ggplot2::geom_sf(data = brown_county) +
-  ggplot2::geom_sf(data = brown_rivers,color = "blue",alpha = 0.25)
-```
 
 ## Spatial Relationship
 
@@ -220,22 +262,38 @@ default spatial relationships for the `get_layer_by_poly` function is
 "esriSpatialRelContains". All other functions default to 
 "esriSpatialRelIntersects". 
 
-```{r}
-brown_rivers <-get_layer_by_poly(river_url,brown_county)
-ggplot2::ggplot()+
-  ggplot2::geom_sf(data = brown_county) +
-  ggplot2::geom_sf(data = brown_rivers,color = "blue",alpha = 0.25)
+```{r pull_sp_rel_contains, eval = FALSE, echo = FALSE}
+example_poly <- sf_polygon(
+  c(-90.62, 43.76),
+  c(-90.62, 43.77),
+  c(-90.61, 43.77),
+  c(-90.61, 43.76),
+  c(-90.62, 43.76)
+)
+poly_streams_contains <- get_layer_by_poly(river_url, example_poly)
+```
 
+```{r show_sp_rel_contains, ref.label=c("pull_sp_rel_contains", "plot_sp_rel_contains"), eval = FALSE}
+```
+
+```{r plot_sp_rel_contains, echo = FALSE}
+plot_layer(poly_streams_contains, outline_poly = example_poly)
 ```
 
 Using "esriSpatialRelCrosses" returns different records compared to the 
-above example. 
-```{r}
-brown_rivers <-get_layer_by_poly(river_url,brown_county,sp_rel = "esriSpatialRelCrosses")
-ggplot2::ggplot()+
-  ggplot2::geom_sf(data = brown_county) +
-  ggplot2::geom_sf(data = brown_rivers,color = "blue",alpha = 0.25)
+above example (i.e. this returns records when they cross the polygon border).
+
+```{r pull_sp_rel_crosses, eval = FALSE, echo = FALSE}
+poly_streams_crosses <- get_layer_by_poly(river_url, example_poly, sp_rel = "esriSpatialRelCrosses")
 ```
+
+```{r show_sp_rel_crosses, ref.label=c("pull_sp_rel_crosses", "plot_sp_rel_crosses"), eval = FALSE}
+```
+
+```{r plot_sp_rel_crosses, echo = FALSE}
+plot_layer(poly_streams_crosses, outline_poly = example_poly)
+```
+
 <br>
 
 ### Lookup Tables

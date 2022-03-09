@@ -1,28 +1,58 @@
 ---
 title: "Introduction to arcpullr"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
-output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Introduction to arcpullr}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
+output: 
+  html_document:
+    theme:
+      version: 5
 editor_options: 
   markdown: 
     wrap: 72
 ---
+
+To see more complete package documentation check out:
+<a href="https://pfrater.github.io/arcpullr/">
+https://pfrater.github.io/arcpullr/</a>
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+options(rmarkdown.html_vignette.check_title = FALSE)
 library(arcpullr)
 ```
-To see more complete package documentation check out:
-<a href="https://pfrater.github.io/arcpullr/">
-https://pfrater.github.io/arcpullr/</a>
 
-# The `get_spatial_layer()` function
+
+## URL's for examples 
+<a class="btn btn-primary" data-bs-toggle="collapse"href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+Example Source Data
+</a>
+<div class="collapse" id="collapseExample">
+  <div class="card card-body"> 
+```{r}
+wdnr_base_url <- "https://dnrmaps.wi.gov/arcgis/rest/services"
+streams_layer_url <- "WT_SWDV/WT_Inland_Water_Resources_WTM_Ext_v2/MapServer/2"
+streams_url <- paste(wdnr_base_url, streams_layer_url, sep = "/")
+
+# the mke_county polygon is available as an exported object in arcpullr
+open_water_layer_url <- "WT_SWDV/WT_Inland_Water_Resources_WTM_Ext_v2/MapServer/3"
+hydro_url <- paste(wdnr_base_url, open_water_layer_url, sep = "/")
+
+wis_county_layer_url <- "https://datcpgis.wi.gov/arcgis/rest/services/Base/PolygonsExternal/MapServer/0"
+```
+</div>
+</div>
+<br>
+
+
+# Feature (i.e. vector) Layers
+
+## The `get_spatial_layer()` function
 
 This is one of the core functions of the package, and allows users to pull Feature Service data from an ArcGIS REST API.
 
@@ -57,14 +87,12 @@ create simple `sf` objects using `sf_lines()`, `sf_points()`, or
 `sf_polygons()` to test out the service feature.
 
 ```{r, eval = FALSE}
-wdnr_base_url <- "https://dnrmaps.wi.gov/arcgis/rest/services"
-streams_layer_url <- "WT_SWDV/WT_Inland_Water_Resources_WTM_Ext_v2/MapServer/2"
-streams_url <- paste(wdnr_base_url, streams_layer_url, sep = "/")
 mke_waters <- get_layer_by_poly(url = streams_url, mke_county)
 ```
 
 Spatial queries can be done with polygons, lines, or points...just use
-the respective `get_layer_by_*` function.
+the respective `get_layer_by_*` function. See the 
+[vignette on spatial querying](spatial_queries.html) for more detailed examples.
 
 ### Querying via SQL
 
@@ -72,20 +100,21 @@ To query via SQL within the function the field name for the query of
 interest must be known. For example,
 
 ```{r, eval = FALSE}
-open_water_layer_url <- "WT_SWDV/WT_Inland_Water_Resources_WTM_Ext_v2/MapServer/3"
-hydro_url <- paste(wdnr_base_url, open_water_layer_url, sep = "/")
-wi_river <- get_spatial_layer(hydro_url, 
-  where = "WATERBODY_ROW_NAME = 'Wisconsin River'"
-)
+wi_river <- get_spatial_layer(hydro_url, where = "WATERBODY_ROW_NAME = 'Wisconsin River'")
 ```
 
-For multiple WHERE clauses there is a helper function to string them
-together properly. This can be called to the where argument above in
-place of a text string.
+For multiple WHERE clauses see the `?sql_where` function, which automates the 
+creation of a WHERE clause.
 
-```{r}
-sql_where(ROW_WATERBODY_NAME = 'Wisconsin River', HYDROCODE = 7011)
-```
+\
+\
+
+# Raster Layers
+
+arcpullr is capable of pulling raster layers as well (denoted as map and image
+layers by ArcGIS REST APIs). Utilize the `get_map_layer` and `get_image_layer`
+functions to pull these respective layers. See more information in the 
+[vignette on raster layers](raster_layers.html)
 
 \
 \
@@ -98,11 +127,15 @@ also included the `plot_layer` function. This function will plot layers using
 `ggplot2` by default or can be switched to base graphics using the `plot_pkg` 
 argument. 
 
-```{r,warning = FALSE, echo = TRUE, eval = FALSE}
-wdnr_base_url <- "https://dnrmaps.wi.gov/arcgis/rest/services/"
-wolf_zone_layer_url <- "DW_Map_Dynamic/EN_Hunting_Zones_WTM_Ext/MapServer/0"
-wolf_zone_url <- paste0(wdnr_base_url,wolf_zone_layer_url)
-wi_wolf_zones <- get_spatial_layer(url = wolf_zone_url)
-plot_layer(wi_wolf_zones)
+```{r pull_county_layer, warning = FALSE, echo = FALSE, eval = FALSE}
+wis_counties <- get_spatial_layer(url = wis_county_url)
 ```
+
+```{r show_layer_plotting, ref.block=c("pull_county_layer", "plot_county_layer"), eval = FALSE}
+```
+
+```{r plot_county_layer, fig.height = 7, fig.width = 7, echo = FALSE}
+plot_layer(wis_counties)
+```
+
 

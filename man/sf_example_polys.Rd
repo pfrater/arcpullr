@@ -9,6 +9,17 @@
 \alias{reykjanes_poly}
 \alias{wis_counties}
 \alias{wis_poly}
+\alias{cook_creek_ws}
+\alias{cook_creek_streams}
+\alias{cook_creek_env}
+\alias{mke_river}
+\alias{poly_streams_contains}
+\alias{poly_streams_crosses}
+\alias{sugar_creek}
+\alias{sugar_creek_env}
+\alias{trout_hab_project_pt}
+\alias{trout_hab_project_pts}
+\alias{example_poly}
 \title{Various example sf polygons}
 \format{
 An object of class sf and data.frame:
@@ -22,9 +33,33 @@ An object of class \code{sf} (inherits from \code{data.frame}) with 1 rows and 2
 An object of class \code{sf} (inherits from \code{data.frame}) with 72 rows and 3 columns.
 
 An object of class \code{sf} (inherits from \code{data.frame}) with 1 rows and 2 columns.
+
+An object of class \code{sf} (inherits from \code{data.frame}) with 1 rows and 7 columns.
+
+An object of class \code{sf} (inherits from \code{tbl_df}, \code{tbl}, \code{data.frame}) with 5 rows and 3 columns.
+
+An object of class \code{sf} (inherits from \code{tbl_df}, \code{tbl}, \code{data.frame}) with 10 rows and 3 columns.
+
+An object of class \code{sf} (inherits from \code{tbl_df}, \code{tbl}, \code{data.frame}) with 5 rows and 5 columns.
+
+An object of class \code{sf} (inherits from \code{data.frame}) with 1 rows and 28 columns.
+
+An object of class \code{sf} (inherits from \code{data.frame}) with 4 rows and 28 columns.
+
+An object of class \code{sf} (inherits from \code{data.frame}) with 7 rows and 28 columns.
+
+An object of class \code{sf} (inherits from \code{data.frame}) with 15 rows and 28 columns.
+
+An object of class \code{sf} (inherits from \code{data.frame}) with 1 rows and 11 columns.
+
+An object of class \code{sf} (inherits from \code{data.frame}) with 4 rows and 11 columns.
+
+An object of class \code{sf} (inherits from \code{data.frame}) with 1 rows and 1 columns.
+
+An object of class \code{sf} (inherits from \code{data.frame}) with 4 rows and 11 columns.
 }
 \source{
-\code{\link[ggplot2]{map_data}}
+ggplot2's \code{\link[ggplot2]{map_data}} and \href{https://dnrmaps.wi.gov/arcgis/rest/services}{Wisconsin DNR ArcGIS REST API}
 }
 \usage{
 iceland_poly
@@ -38,6 +73,30 @@ reykjanes_poly
 wis_counties
 
 wis_poly
+
+cook_creek_ws
+
+cook_creek_streams
+
+cook_creek_env
+
+mke_river
+
+poly_streams_contains
+
+poly_streams_crosses
+
+sugar_creek
+
+sugar_creek_env
+
+trout_hab_project_pt
+
+trout_hab_project_pts
+
+example_poly
+
+trout_hab_project_pts
 }
 \description{
 These are sf polygons that are used for examples throughout the package
