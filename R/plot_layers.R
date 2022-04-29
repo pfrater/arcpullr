@@ -57,6 +57,7 @@ plot_layer.sf <- function(x,
     }
   } else if (plot_pkg %in% c("ggplot", "ggplot2")) {
     g <- ggplot2::ggplot(data = NULL)
+    g <- g + ggplot2::geom_sf(data = x)
     if (!is.null(outline_poly)) {
       g <-
         g +
@@ -65,10 +66,7 @@ plot_layer.sf <- function(x,
                          size = outline_size,
                          color = outline_color)
     }
-    g <-
-      g +
-      ggplot2::geom_sf(data = x) +
-      ggplot2::theme_bw()
+    g <- g + ggplot2::theme_bw()
     return(g)
   } else {
     stop("This function only set up to work with base plotting or ggplot")

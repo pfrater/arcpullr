@@ -221,6 +221,16 @@ sf_polygon <- function(..., crs = 4326) {
   return(sf)
 }
 
+#' @rdname sf_objects
+#' @export
+#' @param xmin,xmax,ymin,ymax Corners for sf_box
+sf_box <- function(xmin, ymin, xmax, ymax, crs = 4326) {
+  a <- c(xmin, ymin)
+  b <- c(xmin, ymax)
+  c <- c(xmax, ymax)
+  d <- c(xmax, ymin)
+  return(sf_polygon(a,b,c,d,a, crs = crs))
+}
 
 
 #' Format a SQL where clause from arguments
@@ -449,6 +459,39 @@ get_supported_operations <- function(url, ...) {
 
 get_raster_layers <- function(url) {
   layer_html <- get_layer_html(url)
+}
+
+#' Lookup function for shorthand versions of spatial relation text strings
+#'
+#' After typing "esriSpatialRelIntersects" into 4 to 5 functions, you'll get
+#' pretty sick of typing that. This function serves to allow shorthand strings
+#' to be passed to the \code{sp_rel} arguments of the
+#' \code{\link{get_layers_by_spatial}} family of functions. For example, you can
+#' pass  "intersects" to this function and it will return
+#' "esriSpatialRelIntersects"
+#'
+#' @param x A character string. One of "contains", "crosses",
+#' "envelopeintersects", "indexintersects", "intersects", "overlaps",
+#' "relation", "touches", "within"
+#'
+#' @return The appropriately named ESRI version of \code{x}. For example,
+#' an \code{x} value of "intersects" returns "esriSpatialRelIntersects"
+#' @export
+#'
+#' @examples
+#' sp_rel_xref("intersects")
+sp_rel_xref <- function(x) {
+  if (x %in% sp_rel_ref$sp.rel.ref) {
+    return(x)
+  } else {
+    reg_x <- paste0("^", gsub("e?s$", "", x))
+    sp_rel_ind <- grep(reg_x, sp_rel_ref$sp.xref)
+    out <- sp_rel_ref$sp.rel.ref[sp_rel_ind]
+    if (length(out) == 0) {
+      stop(paste("Could not find a spatial relationship for", x))
+    }
+    return(out)
+  }
 }
 
 #' Check to see which spatial relation types are applicable to the feature

@@ -84,7 +84,8 @@ get_esri_features <- function(query_url, fields, where, token='', ...) {
     get_esri_features_by_id,
     query_url,
     fields,
-    token
+    token,
+    ...
   )
   merged <- unlist(results, recursive=FALSE)
   return(merged)

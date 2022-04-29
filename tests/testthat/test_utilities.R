@@ -34,3 +34,54 @@ test_that("get_sf_crs returns the correct CRS values for polygons", {
   expect_equal(get_sf_crs(iceland_poly), 4326)
   expect_equal(get_sf_crs(mke_county), 4326)
 })
+
+test_that("sp_rel_lookup returns correct spatial relation character string", {
+  sp_xref <- sp_rel_ref$sp.xref
+  sp_xref2 <- gsub("e?s$", "", sp_xref)
+  expect_equal(sp_rel_xref(sp_xref[1]), "esriSpatialRelContains")
+  expect_equal(sp_rel_xref(sp_xref2[1]), "esriSpatialRelContains")
+  expect_equal(sp_rel_xref("esriSpatialRelContains"), "esriSpatialRelContains")
+
+  expect_equal(sp_rel_xref(sp_xref[2]), "esriSpatialRelCrosses")
+  expect_equal(sp_rel_xref(sp_xref2[2]), "esriSpatialRelCrosses")
+  expect_equal(sp_rel_xref("esriSpatialRelCrosses"), "esriSpatialRelCrosses")
+
+  expect_equal(sp_rel_xref(sp_xref[3]), "esriSpatialRelEnvelopeIntersects")
+  expect_equal(sp_rel_xref(sp_xref2[3]), "esriSpatialRelEnvelopeIntersects")
+  expect_equal(
+    sp_rel_xref("esriSpatialRelEnvelopeIntersects"),
+    "esriSpatialRelEnvelopeIntersects"
+  )
+
+  expect_equal(sp_rel_xref(sp_xref[4]), "esriSpatialRelIndexIntersects")
+  expect_equal(sp_rel_xref(sp_xref2[4]), "esriSpatialRelIndexIntersects")
+  expect_equal(
+    sp_rel_xref("esriSpatialRelIndexIntersects"),
+    "esriSpatialRelIndexIntersects"
+  )
+
+  expect_equal(sp_rel_xref(sp_xref[5]), "esriSpatialRelIntersects")
+  expect_equal(sp_rel_xref(sp_xref2[5]), "esriSpatialRelIntersects")
+  expect_equal(
+    sp_rel_xref("esriSpatialRelIntersects"),
+    "esriSpatialRelIntersects"
+  )
+
+  expect_equal(sp_rel_xref(sp_xref[6]), "esriSpatialRelOverlaps")
+  expect_equal(sp_rel_xref(sp_xref2[6]), "esriSpatialRelOverlaps")
+  expect_equal(sp_rel_xref("esriSpatialRelOverlaps"), "esriSpatialRelOverlaps")
+
+  expect_equal(sp_rel_xref(sp_xref[7]), "esriSpatialRelRelation")
+  expect_equal(sp_rel_xref(sp_xref2[7]), "esriSpatialRelRelation")
+  expect_equal(sp_rel_xref("esriSpatialRelRelation"), "esriSpatialRelRelation")
+
+  expect_equal(sp_rel_xref(sp_xref[8]), "esriSpatialRelTouches")
+  expect_equal(sp_rel_xref(sp_xref2[8]), "esriSpatialRelTouches")
+  expect_equal(sp_rel_xref("esriSpatialRelTouches"), "esriSpatialRelTouches")
+
+  expect_equal(sp_rel_xref(sp_xref[9]), "esriSpatialRelWithin")
+  expect_equal(sp_rel_xref(sp_xref2[9]), "esriSpatialRelWithin")
+  expect_equal(sp_rel_xref("esriSpatialRelWithin"), "esriSpatialRelWithin")
+
+  expect_error(sp_rel_xref("test"))
+})

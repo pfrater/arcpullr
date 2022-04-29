@@ -25,30 +25,45 @@
 #' hydro_url <- paste0(base_wdnr_url, hydro_path)
 #' mke_waters <- get_layer_by_poly(url = hydro_url, mke_county)
 get_layer_by_poly <- function(url, geometry,
-                              sp_rel = "esriSpatialRelContains",
+                              sp_rel = "contains",
                               ...) {
+  if (!sf::st_is_valid(geometry)) {
+    cat(
+      "The polygon you provided is not valid. Would you like to make it valid ",
+      "now?\n1: Yes\n2: No"
+    )
+    make_me_valid <- readline("Selection: ")
+    if (tolower(make_me_valid) %in% c("1", "y", "yes")) {
+      geometry <- sf::st_make_valid(geometry)
+      warning(
+        "Initially invalid geometries may not return the same results as ",
+        "geometries that are created validly. ",
+        "You may want to create your geometry correctly first."
+      )
+    }
+  }
   return(get_layer_by_spatial(url = url,
                               geometry = format_polygon_coords(geometry),
                               geom_type = "esriGeometryPolygon",
                               sp_ref = get_sf_crs(geometry),
-                              sp_rel = sp_rel, ...))
+                              sp_rel = sp_rel_xref(sp_rel), ...))
 }
 
 #' @name get_layers_by_spatial
 #' @export
 get_layer_by_line <- function(url, geometry,
-                              sp_rel = "esriSpatialRelIntersects", ...) {
+                              sp_rel = "intersects", ...) {
   return(get_layer_by_spatial(url = url,
                               geometry = format_line_coords(geometry),
                               geom_type = "esriGeometryPolyline",
                               sp_ref = get_sf_crs(geometry),
-                              sp_rel = sp_rel, ...))
+                              sp_rel = sp_rel_xref(sp_rel), ...))
 }
 
 #' @name get_layers_by_spatial
 #' @export
 get_layer_by_point <- function(url, geometry,
-                               sp_rel = "esriSpatialRelIntersects", ...) {
+                               sp_rel = "intersects", ...) {
   npts <- nrow(sf::st_coordinates(geometry))
   if (npts == 1) {
     format_geom <- format_point_coords(geometry)
@@ -61,13 +76,13 @@ get_layer_by_point <- function(url, geometry,
                               geometry = format_geom,
                               geom_type = geom_type,
                               sp_ref = get_sf_crs(geometry),
-                              sp_rel = sp_rel, ...))
+                              sp_rel = sp_rel_xref(sp_rel), ...))
 }
 
 #' @name get_layers_by_spatial
 #' @export
 get_layer_by_multipoint <- function(url, geometry,
-                                    sp_rel = "esriSpatialRelIntersects", ...) {
+                                    sp_rel = "intersects", ...) {
   warning(
     "get_layer_by_multipoint has been generalized to get_layer_by_point.\n",
     "Please use that function instead as this one is being deprecated."
@@ -76,24 +91,24 @@ get_layer_by_multipoint <- function(url, geometry,
                               geometry = format_multipoint_coords(geometry),
                               geom_type = "esriGeometryMultipoint",
                               sp_ref = get_sf_crs(geometry),
-                              sp_rel = sp_rel, ...))
+                              sp_rel = sp_rel_xref(sp_rel), ...))
 }
 
 #' @name get_layers_by_spatial
 #' @export
 get_layer_by_envelope <- function(url, geometry,
-                                  sp_rel = "esriSpatialRelIntersects", ...) {
+                                  sp_rel = "intersects", ...) {
   return(get_layer_by_spatial(url = url,
                               geometry = format_envelope_coords(geometry),
                               geom_type = "esriGeometryEnvelope",
                               sp_ref = get_sf_crs(geometry),
-                              sp_rel = sp_rel, ...))
+                              sp_rel = sp_rel_xref(sp_rel), ...))
 }
 
 #' @name get_layers_by_spatial
 #' @export
 get_layer_by_spatial <- function(url, geometry, geom_type, sp_ref = NULL,
-                                 sp_rel = "esriSpatialRelIntersects", ...) {
+                                 sp_rel = "intersects", ...) {
   if (is.null(sp_ref)) {
     if ("sf" %in% class(geometry)) {
       sp_ref <- get_sf_crs(geometry)

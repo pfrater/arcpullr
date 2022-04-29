@@ -6,6 +6,7 @@
 \alias{sf_point}
 \alias{sf_points}
 \alias{sf_polygon}
+\alias{sf_box}
 \title{Create sf objects from coordinates}
 \usage{
 sf_line(..., crs = 4326)
@@ -15,11 +16,15 @@ sf_point(..., crs = 4326)
 sf_points(..., crs = 4326)
 
 sf_polygon(..., crs = 4326)
+
+sf_box(xmin, ymin, xmax, ymax, crs = 4326)
 }
 \arguments{
 \item{...}{The coordinates of the object}
 
 \item{crs}{The coordinate reference system. Defaults to 4326}
+
+\item{xmin, xmax, ymin, ymax}{Corners for sf_box}
 }
 \value{
 An sf object of the appropriate type
