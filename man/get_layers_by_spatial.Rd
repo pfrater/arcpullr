@@ -34,7 +34,8 @@ get_layer_by_spatial(
 
 \item{geometry}{An \code{sf} object used for the spatial query}
 
-\item{sp_rel}{Character. The type of relationship to query by.}
+\item{sp_rel}{Character. The type of relationship to query by. Possible
+options include "intersects", "contains", and "crosses"}
 
 \item{...}{Additional arguements to pass to \code{\link{get_spatial_layer}}}
 

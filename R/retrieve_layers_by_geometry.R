@@ -11,7 +11,8 @@
 #' automatically specified in all \code{get_layer_by_*} functions except
 #' \code{get_spatial_layer}
 #' @param sp_ref The spatial reference value
-#' @param sp_rel Character. The type of relationship to query by.
+#' @param sp_rel Character. The type of relationship to query by. Possible
+#' options include "intersects", "contains", and "crosses"
 #' @param ... Additional arguements to pass to \code{\link{get_spatial_layer}}
 #'
 #' @return An object of class "sf" of the appropriate layer
