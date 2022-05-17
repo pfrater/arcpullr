@@ -10,6 +10,7 @@ get_spatial_layer(
   where = "1=1",
   token = "",
   sf_type = NULL,
+  head = FALSE,
   ...
 )
 }
@@ -25,6 +26,10 @@ get_spatial_layer(
 \item{sf_type}{A character string specifying the layer geometry to convert to
 sf ("esriGeometryPolygon", "esriGeometryPoint", "esriGeometryPolyline"),
 if NULL (default) the server will take its best guess}
+
+\item{head}{Logical or numeric. Limits the number of records returned from a
+query. If TRUE, only the first 10 records will be returned. If numeric, then
+the number of records specified in \code{head} will be returned}
 
 \item{...}{Additional arguements to pass to the ArcGIS REST POST request}
 }

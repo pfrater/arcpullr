@@ -41,7 +41,8 @@ test_that("get_esri_features returns proper feature", {
   test_feature <- get_esri_features(
     query_url = stream_query_url,
     fields = "*",
-    where = oak_creek_where
+    where = oak_creek_where,
+    head = FALSE
   )
   expect_equal(test_feature[[1]]$attributes$RIVER_SYS_NAME, "Oak Creek")
   expect_equal(test_feature[[1]]$attributes$RIVER_SYS_WBIC, 14500)

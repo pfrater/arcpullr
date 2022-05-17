@@ -259,8 +259,8 @@ Spatial queries can be combined with SQL statements to further refine queries.
 The `sp_rel` argument can be used to define the spatial relationship
 between the two feature classes involved within a spatial query. The
 default spatial relationships for the `get_layer_by_poly` function is 
-"esriSpatialRelContains". All other functions default to 
-"esriSpatialRelIntersects". 
+"contains". All other functions default to 
+"intersects". 
 
 ```{r pull_sp_rel_contains, eval = FALSE, echo = FALSE}
 example_poly <- sf_polygon(
@@ -280,11 +280,11 @@ poly_streams_contains <- get_layer_by_poly(river_url, example_poly)
 plot_layer(poly_streams_contains, outline_poly = example_poly)
 ```
 
-Using "esriSpatialRelCrosses" returns different records compared to the 
+Using "crosses" returns different records compared to the 
 above example (i.e. this returns records when they cross the polygon border).
 
 ```{r pull_sp_rel_crosses, eval = FALSE, echo = FALSE}
-poly_streams_crosses <- get_layer_by_poly(river_url, example_poly, sp_rel = "esriSpatialRelCrosses")
+poly_streams_crosses <- get_layer_by_poly(river_url, example_poly, sp_rel = "crosses")
 ```
 
 ```{r show_sp_rel_crosses, ref.label=c("pull_sp_rel_crosses", "plot_sp_rel_crosses"), eval = FALSE}

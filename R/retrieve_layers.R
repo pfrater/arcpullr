@@ -22,6 +22,9 @@
 #' @param sf_type A character string specifying the layer geometry to convert to
 #' sf ("esriGeometryPolygon", "esriGeometryPoint", "esriGeometryPolyline"),
 #' if NULL (default) the server will take its best guess
+#' @param head Logical or numeric. Limits the number of records returned from a
+#' query. If TRUE, only the first 10 records will be returned. If numeric, then
+#' the number of records specified in \code{head} will be returned
 #' @param ... Additional arguements to pass to the ArcGIS REST POST request
 #'
 #' @return
@@ -41,6 +44,7 @@ get_spatial_layer <- function(url,
                               where = "1=1",
                               token = "",
                               sf_type = NULL,
+                              head = FALSE,
                               ...) {
   layer_info <- jsonlite::fromJSON(
     httr::content(
@@ -67,18 +71,26 @@ get_spatial_layer <- function(url,
     sf_type <- layer_info$geometryType
   }
   query_url <- paste(url, "query", sep="/")
-  esri_features <- get_esri_features(query_url, out_fields, where, token, ...)
+  esri_features <- get_esri_features(
+    query_url, out_fields, where, token, head, ...
+  )
   simple_features <- esri2sfGeom(esri_features, sf_type)
   return(simple_features)
 }
 
-get_esri_features <- function(query_url, fields, where, token='', ...) {
+get_esri_features <- function(query_url, fields, where, token='', head, ...) {
   ids <- get_object_ids(query_url, where, token, ...)
   if(is.null(ids)){
     warning("No records match the search critera")
     return()
   }
-  id_splits <- split(ids, ceiling(seq_along(ids)/500))
+  if (isTRUE(head)) {
+    id_splits <- ids[1:5]
+  } else if (head > 0 & head < 500) {
+    id_splits <- ids[1:head]
+  } else {
+    id_splits <- split(ids, ceiling(seq_along(ids)/500))
+  }
   results <- lapply(
     id_splits,
     get_esri_features_by_id,
