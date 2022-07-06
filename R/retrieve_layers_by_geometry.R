@@ -28,7 +28,7 @@
 get_layer_by_poly <- function(url, geometry,
                               sp_rel = "contains",
                               ...) {
-  if (!sf::st_is_valid(geometry)) {
+  if (!all(sf::st_is_valid(geometry))) {
     cat(
       "The polygon you provided is not valid. Would you like to make it valid ",
       "now?\n1: Yes\n2: No"
