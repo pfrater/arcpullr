@@ -10,8 +10,6 @@ wi_landcover <- get_map_layer(landcover_url, wis_poly)
 
 wi_leaf_off_path <- "DW_Image/EN_Image_Basemap_Leaf_Off/ImageServer"
 wi_aerial_imagery_url <- paste0(image_server, wi_leaf_off_path)
-wi_aerial_imagery <-
-  get_image_layer(wi_aerial_imagery_url, wis_poly) %>%
-  raster::aggregate(fact = 1.5)
+wi_aerial_imagery <- get_image_layer(wi_aerial_imagery_url, wis_poly)
 
 usethis::use_data(wi_landcover, wi_aerial_imagery, overwrite = TRUE)

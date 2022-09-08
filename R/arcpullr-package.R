@@ -2,7 +2,8 @@
 #'
 #' A package for pulling spatial data from an ArcGIS REST API
 #'
-#' \if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
+#' \if{html}{\figure{logo.png}{options: alt='logo' width='15\%'}}
+#' \if{latex}{\figure{logo.png}{options: width=0.5in}}
 #' The role of the arcpullr package is simple...to pull spatial data from an
 #' ArcGIS REST API. These APIs are housed by various different agencies,
 #' organizations, entitites, etc., but allow a consistent format for storing and

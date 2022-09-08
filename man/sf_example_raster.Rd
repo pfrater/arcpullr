@@ -9,7 +9,7 @@
 \format{
 An object of class \code{RasterLayer} of dimension 400 x 400 x 1.
 
-An object of class \code{RasterBrick} of dimension 200 x 200 x 3.
+An object of class \code{RasterBrick} of dimension 400 x 400 x 3.
 }
 \source{
 \href{https://dnrmaps.wi.gov/arcgis_image/rest/services}{Wisconsin DNR ArcGIS Image Server}

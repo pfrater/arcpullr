@@ -28,8 +28,10 @@ library(sf)
 ```
 
 ```{r, echo = FALSE}
-#<img src='../man/figures/logo.png' width="160" height="180" style="border: none" align="right"/>
+#
 ```
+
+<img src='../man/figures/logo.png' width="160" height="180" style="border: none; float: right"/>
 
 
 `arcpullr` has the capability to query not only vector (Feature) layers, but 
@@ -104,6 +106,6 @@ wi_aerial_imagery <- get_image_layer(wi_aerial_imagery_url, wis_poly)
 ```{r show_map_plotting, ref.label=c("image_layer", "plot_image_layer"), eval = FALSE}
 ```
 
-```{r, plot_image_layer, fig.height = 7, fig.width = 7, echo = FALSE}
+```{r, plot_image_layer, fig.height = 5, fig.width = 5, echo = FALSE}
 plot_layer(wi_aerial_imagery)
 ```

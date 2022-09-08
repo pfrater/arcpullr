@@ -94,10 +94,16 @@
     <loc>/reference/sf_example_polys.html</loc>
   </url>
   <url>
+    <loc>/reference/sf_example_raster.html</loc>
+  </url>
+  <url>
     <loc>/reference/sf_objects.html</loc>
   </url>
   <url>
     <loc>/reference/sp_rel_lookups.html</loc>
+  </url>
+  <url>
+    <loc>/reference/sp_rel_xref.html</loc>
   </url>
   <url>
     <loc>/reference/sql_where.html</loc>

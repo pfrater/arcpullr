@@ -12,14 +12,14 @@ an ArcGIS REST services API and returns them as an sf object"><meta property="og
     
     <a class="navbar-brand me-2" href="../index.html">arcpullr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.7</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div id="navbar" class="collapse navbar-collapse ms-2">
+    <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
@@ -59,6 +59,7 @@ an ArcGIS REST services API and returns them as an <code>sf</code> object</p>
   where <span class="op">=</span> <span class="st">"1=1"</span>,
   token <span class="op">=</span> <span class="st">""</span>,
   sf_type <span class="op">=</span> <span class="cn">NULL</span>,
+  head <span class="op">=</span> <span class="cn">FALSE</span>,
   <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
     </div>
@@ -67,22 +68,41 @@ an ArcGIS REST services API and returns them as an <code>sf</code> object</p>
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>url</dt>
 <dd><p>A character string of the url for the layer to pull</p></dd>
+
+
 <dt>out_fields</dt>
 <dd><p>A character string of the fields to pull for each layer</p></dd>
+
+
 <dt>where</dt>
 <dd><p>A character string of the where condition. Default is 1=1</p></dd>
+
+
 <dt>token</dt>
 <dd><p>A character string of the token (if needed)</p></dd>
+
+
 <dt>sf_type</dt>
 <dd><p>A character string specifying the layer geometry to convert to
 sf ("esriGeometryPolygon", "esriGeometryPoint", "esriGeometryPolyline"),
 if NULL (default) the server will take its best guess</p></dd>
+
+
+<dt>head</dt>
+<dd><p>Logical or numeric. Limits the number of records returned from a
+query. If TRUE, only the first 10 records will be returned. If numeric, then
+the number of records specified in <code>head</code> will be returned</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Additional arguements to pass to the ArcGIS REST POST request</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>An object of class "sf" of the appropriate layer</p>
+    
+
+<p>An object of class "sf" of the appropriate layer</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -117,7 +137,7 @@ needed. This syntax can be tricky if you're not used to it.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
     </footer></div>

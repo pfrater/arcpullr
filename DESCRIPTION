@@ -1,7 +1,7 @@
 Package: arcpullr
 Type: Package
 Title: Pull Data from an 'ArcGIS REST' API
-Version: 0.2.6
+Version: 0.2.7
 Authors@R: c(person(given = "Paul",
            family = "Frater",
            role = c("aut", "cre"),
@@ -35,7 +35,7 @@ Imports:
     bslib,
     DT,
     rgdal
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.1
 Suggests: 
   testthat (>= 3.0.1),
   knitr (>= 1.30),

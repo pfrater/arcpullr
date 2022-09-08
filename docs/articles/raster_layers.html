@@ -33,14 +33,14 @@
     
     <a class="navbar-brand me-2" href="../index.html">arcpullr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.7</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div id="navbar" class="collapse navbar-collapse ms-2">
+    <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
@@ -65,11 +65,14 @@
   </div>
 </nav><div class="container template-article">
 
+
+
+
 <div class="row">
-  <main id="main"><div class="page-header">
+  <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Raster Layers</h1>
             
-            <h4 data-toc-skip class="date">22 February, 2022</h4>
+            <h4 data-toc-skip class="date">29 August, 2022</h4>
       
       
       <div class="d-none name"><code>raster_layers.Rmd</code></div>
@@ -77,13 +80,25 @@
 
     
     
-To see more complete package documentation check out: <a href="https://pfrater.github.io/arcpullr/" class="external-link"> https://pfrater.github.io/arcpullr/</a>
+To see more complete package documentation check out:
+<a href="https://pfrater.github.io/arcpullr/" class="external-link">
+https://pfrater.github.io/arcpullr/</a>
 <hr>
-<p><code>arcpullr</code> has the capability to query not only vector (Feature) layers, but also raster layers (both Map and Image service types). The syntax for these is generally the same as for the <code>get_layer_by_*</code> family of functions. Map and Image layers require a bounding box as part of the query, so both <code>get_map_layer</code> and <code>get_image_layer</code> have required arguments of a URL and an <code>sf</code> object. These functions pull the raster layers provided by the URL and return the layer as a RasterLayer object from the <code>raster</code> package.</p>
+<p><img src="../reference/figures/logo.png" width="160" height="180" style="border: none; text-align: left"></p>
+<p><code>arcpullr</code> has the capability to query not only vector
+(Feature) layers, but also raster layers (both Map and Image service
+types). The syntax for these is generally the same as for the
+<code>get_layer_by_*</code> family of functions. Map and Image layers
+require a bounding box as part of the query, so both
+<code>get_map_layer</code> and <code>get_image_layer</code> have
+required arguments of a URL and an <code>sf</code> object. These
+functions pull the raster layers provided by the URL and return the
+layer as a RasterLayer object from the <code>raster</code> package.</p>
 <div class="section level2">
 <h2 id="urls-for-examples">URL’s for examples<a class="anchor" aria-label="anchor" href="#urls-for-examples"></a>
 </h2>
-<a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample"> Example Source Data </a>
+<a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+Example Source Data </a>
 <div id="collapseExample" class="collapse">
 <div class="card card-body">
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -95,8 +110,8 @@ To see more complete package documentation check out: <a href="https://pfrater.g
 <span class="va">landcover_url</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">image_server</span>, <span class="va">landcover_path</span><span class="op">)</span>
 
 <span class="co"># WI Leaf-off Aerial Imagery URL</span>
-<span class="va">leaf_off_path</span> <span class="op">&lt;-</span> <span class="st">"DW_Image/EN_Image_Basemap_Leaf_Off/ImageServer"</span>
-<span class="va">leaf_off_url</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">image_server</span>, <span class="va">leaf_off_path</span><span class="op">)</span>
+<span class="va">wi_leaf_off_path</span> <span class="op">&lt;-</span> <span class="st">"DW_Image/EN_Image_Basemap_Leaf_Off/ImageServer"</span>
+<span class="va">wi_aerial_imagery_url</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">image_server</span>, <span class="va">wi_leaf_off_path</span><span class="op">)</span>
 
 <span class="co"># the wis_poly polygon is available as an exported object in arcpullr</span></code></pre></div>
 </div>
@@ -106,22 +121,34 @@ To see more complete package documentation check out: <a href="https://pfrater.g
 <div class="section level2">
 <h2 id="map-layers">Map Layers<a class="anchor" aria-label="anchor" href="#map-layers"></a>
 </h2>
-<p>The <code>get_map_layer</code> function takes a URL and an sf object. Since the query for this layer type on an ArcGIS REST Service requires a bounding box any sf object can be used (i.e. POLYGON, POINT, LINE, etc.) and a bounding box will be created using the extent of the shape.</p>
-<p>The example below pulls Wisconsin landcover types and plots them in a map.</p>
+<p>The <code>get_map_layer</code> function takes a URL and an sf object.
+Since the query for this layer type on an ArcGIS REST Service requires a
+bounding box any sf object can be used (i.e. POLYGON, POINT, LINE, etc.)
+and a bounding box will be created using the extent of the shape.</p>
+<p>The example below pulls Wisconsin landcover types and plots them in a
+map.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">wi_landcover</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_map_layer.html">get_map_layer</a></span><span class="op">(</span><span class="va">landcover_url</span>, <span class="va">wis_poly</span><span class="op">)</span>
 <span class="fu"><a href="../reference/plot_layer.html">plot_layer</a></span><span class="op">(</span><span class="va">wi_landcover</span><span class="op">)</span></code></pre></div>
-<p><img src="raster_layers_files/figure-html/map_layer-1.png" width="672"></p>
+<p><img src="raster_layers_files/figure-html/plot_map_layer-1.png" width="672"></p>
 </div>
 <div class="section level2">
 <h2 id="image-layers">Image Layers<a class="anchor" aria-label="anchor" href="#image-layers"></a>
 </h2>
-<p>The <code>get_image_layer</code> function works the same as <code>get_map_layer</code> except that it queries from an Image layer. The easiest way to distinguish a Map layer from an Image layer is by checking the URL. Those from images will end with “ImageServer” whereas those from maps will end with “MapServer”. Another way to check is to look a the “Supported Operations” at the bottom of the actual web page on the ArcGIS REST Service. It will say either “Export Image” or “Export Map”.</p>
-<p>This example pulls with Wisconsin Leaf-off Aerial Imagery dataset from the Wisconsin Department of Natural Resources.</p>
+<p>The <code>get_image_layer</code> function works the same as
+<code>get_map_layer</code> except that it queries from an Image layer.
+The easiest way to distinguish a Map layer from an Image layer is by
+checking the URL. Those from images will end with “ImageServer” whereas
+those from maps will end with “MapServer”. Another way to check is to
+look a the “Supported Operations” at the bottom of the actual web page
+on the ArcGIS REST Service. It will say either “Export Image” or “Export
+Map”.</p>
+<p>This example pulls with Wisconsin Leaf-off Aerial Imagery dataset
+from the Wisconsin Department of Natural Resources.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">wi_leaf_off</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_image_layer.html">get_image_layer</a></span><span class="op">(</span><span class="va">leaf_off_url</span>, <span class="va">wis_poly</span><span class="op">)</span>
-<span class="fu"><a href="../reference/plot_layer.html">plot_layer</a></span><span class="op">(</span><span class="va">wi_leaf_off</span><span class="op">)</span></code></pre></div>
-<p><img src="raster_layers_files/figure-html/image_layer-1.png" width="672"></p>
+<code class="sourceCode R"><span class="va">wi_aerial_imagery</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_image_layer.html">get_image_layer</a></span><span class="op">(</span><span class="va">wi_aerial_imagery_url</span>, <span class="va">wis_poly</span><span class="op">)</span>
+<span class="fu"><a href="../reference/plot_layer.html">plot_layer</a></span><span class="op">(</span><span class="va">wi_aerial_imagery</span><span class="op">)</span></code></pre></div>
+<p><img src="raster_layers_files/figure-html/plot_image_layer-1.png" width="672"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
@@ -136,7 +163,7 @@ To see more complete package documentation check out: <a href="https://pfrater.g
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
     </footer>

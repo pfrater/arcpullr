@@ -33,14 +33,14 @@
     
     <a class="navbar-brand me-2" href="../index.html">arcpullr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.7</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div id="navbar" class="collapse navbar-collapse ms-2">
+    <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
@@ -64,17 +64,18 @@
     
   </div>
 </nav><div class="container template-article">
+
+
+
 <script src="spatial_queries_files/htmlwidgets-1.5.4/htmlwidgets.js"></script><link href="spatial_queries_files/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet">
-<script src="spatial_queries_files/datatables-binding-0.19/datatables.js"></script><script src="spatial_queries_files/jquery-3.6.0/jquery-3.6.0.min.js"></script><link href="spatial_queries_files/dt-core-bootstrap4-1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet">
-<link href="spatial_queries_files/dt-core-bootstrap4-1.10.20/css/dataTables.bootstrap4.extra.css" rel="stylesheet">
-<script src="spatial_queries_files/dt-core-bootstrap4-1.10.20/js/jquery.dataTables.min.js"></script><script src="spatial_queries_files/dt-core-bootstrap4-1.10.20/js/dataTables.bootstrap4.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="spatial_queries_files/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
-<script src="spatial_queries_files/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><script src="spatial_queries_files/bs3compat-0.3.1/transition.js"></script><script src="spatial_queries_files/bs3compat-0.3.1/tabs.js"></script><script src="spatial_queries_files/bs3compat-0.3.1/bs3compat.js"></script><link href="spatial_queries_files/crosstalk-1.1.1/css/crosstalk.css" rel="stylesheet">
-<script src="spatial_queries_files/crosstalk-1.1.1/js/crosstalk.min.js"></script><div class="row">
-  <main id="main"><div class="page-header">
+<script src="spatial_queries_files/datatables-binding-0.22/datatables.js"></script><link href="spatial_queries_files/dt-core-bootstrap4-1.11.3/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+<link href="spatial_queries_files/dt-core-bootstrap4-1.11.3/css/dataTables.bootstrap4.extra.css" rel="stylesheet">
+<script src="spatial_queries_files/dt-core-bootstrap4-1.11.3/js/jquery.dataTables.min.js"></script><script src="spatial_queries_files/dt-core-bootstrap4-1.11.3/js/dataTables.bootstrap4.min.js"></script><script src="spatial_queries_files/bs3compat-0.3.1/transition.js"></script><script src="spatial_queries_files/bs3compat-0.3.1/tabs.js"></script><script src="spatial_queries_files/bs3compat-0.3.1/bs3compat.js"></script><link href="spatial_queries_files/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet">
+<script src="spatial_queries_files/crosstalk-1.2.0/js/crosstalk.min.js"></script><div class="row">
+  <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Spatial Queries</h1>
             
-            <h4 data-toc-skip class="date">22 February, 2022</h4>
+            <h4 data-toc-skip class="date">29 August, 2022</h4>
       
       
       <div class="d-none name"><code>spatial_queries.Rmd</code></div>
@@ -82,10 +83,18 @@
 
     
     
-To see more complete package documentation check out: <a href="https://pfrater.github.io/arcpullr/" class="external-link"> https://pfrater.github.io/arcpullr/</a>
+To see more complete package documentation check out:
+<a href="https://pfrater.github.io/arcpullr/" class="external-link">
+https://pfrater.github.io/arcpullr/</a>
 <hr>
-<p>ArcGIS REST API’s may be spatially queried using the get_layer_by_* family of functions. These functions require a spatial object of class  (<em>i.e.</em> of the R package <a href="https://r-spatial.github.io/sf/" class="external-link">sf: Simple Features for R</a>) and a <a href="https://help.arcgis.com/en/webapi/wpf/apiref/ESRI.ArcGIS.Client~ESRI.ArcGIS.Client.Tasks.SpatialRelationship.html" class="external-link">Spatial Relationship</a> to be passed to the geometry and <code>sp_rel</code> arguments respectively.</p>
-<p>The package contains five functions that can be used to perform spatial queries:</p>
+<p>ArcGIS REST API’s may be spatially queried using the get_layer_by_*
+family of functions. These functions require a spatial object of class
+<code>sf</code> (<em>i.e.</em> of the R package <a href="https://r-spatial.github.io/sf/" class="external-link">sf: Simple Features for R</a>)
+and a <a href="https://help.arcgis.com/en/webapi/wpf/apiref/ESRI.ArcGIS.Client~ESRI.ArcGIS.Client.Tasks.SpatialRelationship.html" class="external-link">Spatial
+Relationship</a> to be passed to the geometry and <code>sp_rel</code>
+arguments respectively.</p>
+<p>The package contains five functions that can be used to perform
+spatial queries:</p>
 <ul>
 <li>
 <p><code>get_layer_by_line</code></p>
@@ -105,7 +114,8 @@ To see more complete package documentation check out: <a href="https://pfrater.g
 <div class="section level2">
 <h2 id="urls-for-examples">URL’s for examples<a class="anchor" aria-label="anchor" href="#urls-for-examples"></a>
 </h2>
-<a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample"> Example Source Data </a>
+<a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+Example Source Data </a>
 <div id="collapseExample" class="collapse">
 <div class="card card-body">
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -127,25 +137,27 @@ To see more complete package documentation check out: <a href="https://pfrater.g
 <span class="va">trout_url</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">server</span>,<span class="va">layer</span><span class="op">)</span>
 
 <span class="co">#Watershed URL</span>
-<span class="va">layer</span> <span class="op">&lt;-</span> <span class="st">"WT_SWDV/WT_Inland_Water_Resources_WTM_Ext_v2/MapServer/5"</span>
+<span class="va">layer</span> <span class="op">&lt;-</span> <span class="st">"WT_SWDV/WT_Federal_Hydrologic_Units_WTM_Ext/MapServer/0"</span>
 <span class="va">watershed_url</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">server</span>,<span class="va">layer</span><span class="op">)</span>
 
 <span class="co">#get layers for queries</span>
-<span class="va">brown_county</span> <span class="op">&lt;-</span> <span class="va">wis_counties</span><span class="op">[</span><span class="va">wis_counties</span><span class="op">$</span><span class="va">county</span> <span class="op">==</span> <span class="st">"brown"</span>,<span class="op">]</span>
-<span class="va">mke_river</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_spatial_layer.html">get_spatial_layer</a></span><span class="op">(</span><span class="va">river_url</span>, 
-                               where <span class="op">=</span> <span class="st">"RIVER_SYS_NAME = 'Milwaukee River'"</span><span class="op">)</span>
-<span class="co">#&gt; Warning in CPL_crs_from_input(x): GDAL Message 1: +init=epsg:XXXX syntax is</span>
-<span class="co">#&gt; deprecated. It might return a CRS with a non-EPSG compliant axis order.</span>
+<span class="va">mke_river</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_spatial_layer.html">get_spatial_layer</a></span><span class="op">(</span>
+  <span class="va">river_url</span>, 
+  where <span class="op">=</span> <span class="st">"RIVER_SYS_NAME = 'Milwaukee River'"</span>
+<span class="op">)</span>
 
-<span class="va">trout_hab_project</span><span class="op">&lt;-</span> 
-  <span class="fu"><a href="../reference/get_spatial_layer.html">get_spatial_layer</a></span><span class="op">(</span>
-    <span class="va">trout_url</span>,
-    where <span class="op">=</span> <span class="st">"WATERBODYNAMECOMBINED = 'Little Bois Brule'"</span><span class="op">)</span>
+<span class="va">trout_hab_project_pts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_spatial_layer.html">get_spatial_layer</a></span><span class="op">(</span>
+  <span class="va">trout_url</span>,
+  where <span class="op">=</span> <span class="st">"WATERBODYNAMECOMBINED = 'Sugar Creek' and FISCALYEAR = 2017"</span>
+<span class="op">)</span>
 
-<span class="va">trout_hab_projects</span><span class="op">&lt;-</span> 
-  <span class="fu"><a href="../reference/get_spatial_layer.html">get_spatial_layer</a></span><span class="op">(</span>
-    <span class="va">trout_url</span>,
-    where <span class="op">=</span> <span class="st">"FISCALYEAR = 2018"</span><span class="op">)</span></code></pre></div>
+<span class="va">trout_hab_project_pt</span> <span class="op">&lt;-</span> <span class="va">trout_hab_project_pts</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span>
+
+<span class="co"># get watershed layer for Cook Creek</span>
+<span class="va">cook_creek_ws</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_spatial_layer.html">get_spatial_layer</a></span><span class="op">(</span>
+  <span class="va">watershed_url</span>,
+  where <span class="op">=</span> <span class="st">"HUC12_NAME = 'Cook Creek'"</span>
+<span class="op">)</span></code></pre></div>
 </div>
 </div>
 <p><br></p>
@@ -153,112 +165,117 @@ To see more complete package documentation check out: <a href="https://pfrater.g
 <div class="section level2">
 <h2 id="get_layer_by_line">get_layer_by_line<a class="anchor" aria-label="anchor" href="#get_layer_by_line"></a>
 </h2>
-<p>The <code>get_layer_by_line</code> function uses A LINSESTRING or MULTILINESTRING sf object to query an ArcGIS REST API. The below example uses a MULTILINESTRING sf object of the Milwaukee River to query the Wisconsin County polygon layer.</p>
+<p>The <code>get_layer_by_line</code> function uses A LINSESTRING or
+MULTILINESTRING sf object to query an ArcGIS REST API. The below example
+uses a MULTILINESTRING sf object of the Milwaukee River to query the
+Wisconsin County polygon layer.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">counties</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_layers_by_spatial.html">get_layer_by_line</a></span><span class="op">(</span>url <span class="op">=</span> <span class="va">county_url</span>, geometry <span class="op">=</span> <span class="va">mke_river</span><span class="op">)</span>
-
-<span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">counties</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">mke_river</span>,color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span></code></pre></div>
-<p><img src="spatial_queries_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
+<code class="sourceCode R"><span class="va">mke_river_counties</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_layers_by_spatial.html">get_layer_by_line</a></span><span class="op">(</span>url <span class="op">=</span> <span class="va">county_url</span>, geometry <span class="op">=</span> <span class="va">mke_river</span><span class="op">)</span>
+<span class="fu"><a href="../reference/plot_layer.html">plot_layer</a></span><span class="op">(</span><span class="va">mke_river</span>, outline_poly <span class="op">=</span> <span class="va">mke_river_counties</span><span class="op">)</span></code></pre></div>
+<p><img src="spatial_queries_files/figure-html/plot_by_line-1.png" width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="get_layer_by_point">get_layer_by_point<a class="anchor" aria-label="anchor" href="#get_layer_by_point"></a>
 </h2>
-<p>The <code>get_layer_by_line</code> function uses a POINT sf object to query an ArcGIS REST API. The below example shows how this can be used to return which rivers intersect with a trout habitat project on the Little Bois Brule river.</p>
+<p>The <code>get_layer_by_line</code> function uses a POINT sf object to
+query an ArcGIS REST API. The below example shows how this can be used
+to return which rivers intersect with a trout habitat project on Sugar
+Creek in southeast Wisconsin.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="va">trout_streams</span> <span class="op">&lt;-</span>
-  <span class="fu"><a href="../reference/get_layers_by_spatial.html">get_layer_by_point</a></span><span class="op">(</span>url <span class="op">=</span> <span class="va">river_url</span>, geometry <span class="op">=</span> <span class="va">trout_hab_project</span><span class="op">)</span>
-
-<span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">trout_streams</span>, color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">trout_hab_project</span>,color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> </code></pre></div>
-<p><img src="spatial_queries_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
-</div>
-<div class="section level2">
-<h2 id="get_layer_by_multipoint">get_layer_by_multipoint<a class="anchor" aria-label="anchor" href="#get_layer_by_multipoint"></a>
-</h2>
-<p>The <code>get_layer_by_multipoint</code> function uses a MULTIPOINT sf object to query an ArcGIS REST API. The below example shows how this can be used to determine which Wisconsin counties intersect with trout habitat projects completed in 2018</p>
+<code class="sourceCode R"><span class="va">trout_stream</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_layers_by_spatial.html">get_layer_by_point</a></span><span class="op">(</span>url <span class="op">=</span> <span class="va">river_url</span>, geometry <span class="op">=</span> <span class="va">trout_hab_project_pt</span><span class="op">)</span>
+<span class="fu"><a href="../reference/plot_layer.html">plot_layer</a></span><span class="op">(</span><span class="va">trout_stream</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">trout_hab_project_pt</span>, color <span class="op">=</span> <span class="st">"red"</span>, size <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
+<p><img src="spatial_queries_files/figure-html/plot_by_point-1.png" width="700"></p>
+<p><code>get_layer_by_point</code> can also handle multipoint objects.
+This example shows the same stream as above with a single point, but now
+with multiple restoration points.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">trout_counties2018</span> <span class="op">&lt;-</span>
-  <span class="fu"><a href="../reference/get_layers_by_spatial.html">get_layer_by_multipoint</a></span><span class="op">(</span>url <span class="op">=</span> <span class="va">county_url</span>, geometry <span class="op">=</span> <span class="va">trout_hab_projects</span><span class="op">)</span>
-<span class="co">#&gt; Warning in get_layer_by_multipoint(url = county_url, geometry = trout_hab_projects): get_layer_by_multipoint has been generalized to get_layer_by_point.</span>
-<span class="co">#&gt; Please use that function instead as this one is being deprecated.</span>
-
-<span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">wis_counties</span><span class="op">)</span><span class="op">+</span>
-  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">trout_counties2018</span>,
-                   fill <span class="op">=</span> <span class="st">"gray75"</span>,color <span class="op">=</span> <span class="st">"gray60"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">trout_hab_projects</span>,color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> </code></pre></div>
-<p><img src="spatial_queries_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
+<code class="sourceCode R"><span class="va">restored_streams</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_layers_by_spatial.html">get_layer_by_point</a></span><span class="op">(</span>url <span class="op">=</span> <span class="va">river_url</span>, geometry <span class="op">=</span> <span class="va">trout_hab_project_pts</span><span class="op">)</span>
+<span class="fu"><a href="../reference/plot_layer.html">plot_layer</a></span><span class="op">(</span><span class="va">restored_streams</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">trout_hab_project_pts</span>, color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span></code></pre></div>
+<p><img src="spatial_queries_files/figure-html/plot_by_multipoint-1.png" width="672"></p>
 </div>
 <div class="section level2">
 <h2 id="get_layer_by_polygon">get_layer_by_polygon<a class="anchor" aria-label="anchor" href="#get_layer_by_polygon"></a>
 </h2>
-<p>The <code>get_layer_by_line</code> function uses a POLYGON sf object to query an ArcGIS REST API. The below examples shows how this can be used to find what rivers intersect with Wisconsin’s Brown County.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">brown_rivers</span> <span class="op">&lt;-</span><span class="fu"><a href="../reference/get_layers_by_spatial.html">get_layer_by_poly</a></span><span class="op">(</span><span class="va">river_url</span>,<span class="va">brown_county</span><span class="op">)</span>
-<span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span>
-  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">brown_county</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">brown_rivers</span>,color <span class="op">=</span> <span class="st">"blue"</span>,alpha <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span></code></pre></div>
-<p><img src="spatial_queries_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
+<p>The <code>get_layer_by_line</code> function uses a POLYGON sf object
+to query an ArcGIS REST API. The below examples shows how this can be
+used to find what rivers are within a particular watershed.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>cook_creek_streams <span class="ot">&lt;-</span> <span class="st">`</span><span class="at">get_layer_by_poly(river_url, cook_creek_ws)</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="at">plot_layer(cook_creek_streams, cook_creek_ws)</span></span></code></pre></div>
+<p><img src="spatial_queries_files/figure-html/plot_by_poly-1.png" width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="get_layer_by_envelope">get_layer_by_envelope<a class="anchor" aria-label="anchor" href="#get_layer_by_envelope"></a>
 </h2>
-<p>The <code>get_layer_by_envelope</code> function accepts any sf object to query an ArcGIS REST API using the sf objects bounding box. The below example shows how this is used to query WI’s Rivers ArcGIS REST API using a sf POLYGON object of Wisconsin’s Brown county. Note how the results compare to when this same object is queried using the get_layer_by_polygon function.</p>
+<p>The <code>get_layer_by_envelope</code> function accepts any sf object
+to query an ArcGIS REST API using the sf objects bounding box. The below
+example shows how this is used to query WI’s Rivers ArcGIS REST API
+using a sf POLYGON object of a watershed for a small stream. Note how
+the results compare to when this same object is queried using the
+<code>get_layer_by_poly</code> function.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">brown_rivers</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_layers_by_spatial.html">get_layer_by_envelope</a></span><span class="op">(</span><span class="va">river_url</span>,<span class="va">brown_county</span><span class="op">)</span>
-<span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span>
-  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">brown_county</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">brown_rivers</span>,color <span class="op">=</span> <span class="st">"blue"</span>,alpha <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span></code></pre></div>
-<p><img src="spatial_queries_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
+<code class="sourceCode R"><span class="va">cook_creek_env</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_layers_by_spatial.html">get_layer_by_envelope</a></span><span class="op">(</span><span class="va">river_url</span>, <span class="va">cook_creek_ws</span><span class="op">)</span>
+
+<span class="co"># example of the envelope to visualize how it spatially queries</span>
+<span class="va">example_env</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sfc.html" class="external-link">st_as_sfc</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span><span class="va">cook_creek_ws</span><span class="op">)</span><span class="op">)</span>
+
+<span class="fu"><a href="../reference/plot_layer.html">plot_layer</a></span><span class="op">(</span><span class="va">cook_creek_env</span>, <span class="va">cook_creek_ws</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">example_env</span>, fill <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></code></pre></div>
+<p><img src="spatial_queries_files/figure-html/plot_by_env-1.png" width="700"></p>
+<p><br><br></p>
 </div>
 <div class="section level2">
 <h2 id="combining-spatial-and-sql-queries">Combining Spatial and SQL Queries<a class="anchor" aria-label="anchor" href="#combining-spatial-and-sql-queries"></a>
 </h2>
-<p>Spatial queries can be combined with SQL statements to further refine queries.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">brown_rivers</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_layers_by_spatial.html">get_layer_by_poly</a></span><span class="op">(</span><span class="va">river_url</span>,
-                                  <span class="va">brown_county</span>,
-                                  where <span class="op">=</span> <span class="st">"STREAM_ORDER &gt; 3"</span><span class="op">)</span>
-<span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span>
-  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">brown_county</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">brown_rivers</span>,color <span class="op">=</span> <span class="st">"blue"</span>,alpha <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span></code></pre></div>
-<p><img src="spatial_queries_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
+<p>Spatial queries can be combined with SQL statements to further refine
+queries.</p>
 </div>
 <div class="section level2">
 <h2 id="spatial-relationship">Spatial Relationship<a class="anchor" aria-label="anchor" href="#spatial-relationship"></a>
 </h2>
-<p>The <code>sp_rel</code> argument can be used to define the spatial relationship between the two feature classes involved within a spatial query. The default spatial relationships for the <code>get_layer_by_poly</code> function is “esriSpatialRelContains”. All other functions default to “esriSpatialRelIntersects”.</p>
+<p>The <code>sp_rel</code> argument can be used to define the spatial
+relationship between the two feature classes involved within a spatial
+query. The default spatial relationships for the
+<code>get_layer_by_poly</code> function is “contains”. All other
+functions default to “intersects”.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">example_poly</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sf_objects.html">sf_polygon</a></span><span class="op">(</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">90.62</span>, <span class="fl">43.76</span><span class="op">)</span>,
+  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">90.62</span>, <span class="fl">43.77</span><span class="op">)</span>,
+  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">90.61</span>, <span class="fl">43.77</span><span class="op">)</span>,
+  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">90.61</span>, <span class="fl">43.76</span><span class="op">)</span>,
+  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">90.62</span>, <span class="fl">43.76</span><span class="op">)</span>
+<span class="op">)</span>
+<span class="va">poly_streams_contains</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_layers_by_spatial.html">get_layer_by_poly</a></span><span class="op">(</span><span class="va">river_url</span>, <span class="va">example_poly</span><span class="op">)</span>
+<span class="fu"><a href="../reference/plot_layer.html">plot_layer</a></span><span class="op">(</span><span class="va">poly_streams_contains</span>, outline_poly <span class="op">=</span> <span class="va">example_poly</span><span class="op">)</span></code></pre></div>
+<p><img src="spatial_queries_files/figure-html/plot_sp_rel_contains-1.png" width="700"></p>
+<p>Using “crosses” returns different records compared to the above
+example (i.e. this returns records when they cross the polygon
+border).</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">brown_rivers</span> <span class="op">&lt;-</span><span class="fu"><a href="../reference/get_layers_by_spatial.html">get_layer_by_poly</a></span><span class="op">(</span><span class="va">river_url</span>,<span class="va">brown_county</span><span class="op">)</span>
-<span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span>
-  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">brown_county</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">brown_rivers</span>,color <span class="op">=</span> <span class="st">"blue"</span>,alpha <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span></code></pre></div>
-<p><img src="spatial_queries_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
-<p>Using “esriSpatialRelCrosses” returns different records compared to the above example.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">brown_rivers</span> <span class="op">&lt;-</span><span class="fu"><a href="../reference/get_layers_by_spatial.html">get_layer_by_poly</a></span><span class="op">(</span><span class="va">river_url</span>,<span class="va">brown_county</span>,sp_rel <span class="op">=</span> <span class="st">"esriSpatialRelCrosses"</span><span class="op">)</span>
-<span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span>
-  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">brown_county</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">brown_rivers</span>,color <span class="op">=</span> <span class="st">"blue"</span>,alpha <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span></code></pre></div>
-<p><img src="spatial_queries_files/figure-html/unnamed-chunk-11-1.png" width="700"><br></p>
+<code class="sourceCode R"><span class="va">poly_streams_crosses</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_layers_by_spatial.html">get_layer_by_poly</a></span><span class="op">(</span><span class="va">river_url</span>, <span class="va">example_poly</span>, sp_rel <span class="op">=</span> <span class="st">"crosses"</span><span class="op">)</span>
+<span class="fu"><a href="../reference/plot_layer.html">plot_layer</a></span><span class="op">(</span><span class="va">poly_streams_crosses</span>, outline_poly <span class="op">=</span> <span class="va">example_poly</span><span class="op">)</span></code></pre></div>
+<p><img src="spatial_queries_files/figure-html/plot_sp_rel_crosses-1.png" width="700"></p>
+<p><br></p>
 <div class="section level3">
 <h3 id="lookup-tables">Lookup Tables<a class="anchor" aria-label="anchor" href="#lookup-tables"></a>
 </h3>
-<p>The <code>sp_rel_lookup</code> data.frame explains the various types of spatial relationships available through ArcGIS REST APIs.</p>
-<div id="htmlwidget-a30938d08e3a72fac31f" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-a30938d08e3a72fac31f">{"x":{"style":"bootstrap4","filter":"none","vertical":false,"data":[["1","2","3","4","5","6","7","8","9"],["esriSpatialRelContains","esriSpatialRelCrosses","esriSpatialRelEnvelopeIntersects","esriSpatialRelIndexIntersects","esriSpatialRelIntersects","esriSpatialRelOverlaps","esriSpatialRelRelation","esriSpatialRelTouches","esriSpatialRelWithin"],["Part or all of a feature from feature class 1 is contained within a feature from feature class 2.","The feature from feature class 1 crosses a feature from feature class 2.","The envelope of feature class 1 intersects with the envelope of feature class 2.","The envelope of the query feature class intersects the index entry for the target feature class.","Part of a feature from feature class 1 is contained in a feature from feature class 2.","Features from feature class 1 overlap features in feature class 2.","Indicates that a spatial relationship function will be used.","The feature from feature class 1 touches the border of a feature from feature class 2.","The feature from feature class 1 is completely enclosed by the feature from feature class 2."]],"container":"<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>sp_rel<\/th>\n      <th>description<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"order":[],"autoWidth":false,"orderClasses":false,"columnDefs":[{"orderable":false,"targets":0}]}},"evals":[],"jsHooks":[]}</script><p><br> The <code>sp_rel_valid</code> data.frame shows which spatial relationships are valid with different geometry types being queried and used to do spatial queries.</p>
-<div id="htmlwidget-37144d4509ce860c5307" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-37144d4509ce860c5307">{"x":{"style":"bootstrap4","filter":"none","vertical":false,"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81","82","83","84","85","86","87","88","89","90","91","92","93","94","95","96","97","98","99","100","101","102","103","104","105"],["area","area","area","area","area","area","area","area","area","area","area","area","area","area","area","area","area","area","area","area","area","area","area","area","area","area","line","line","line","line","line","line","line","line","line","line","line","line","line","line","line","line","line","line","line","line","line","line","line","line","line","line","line","multipoint","multipoint","multipoint","multipoint","multipoint","multipoint","multipoint","multipoint","multipoint","multipoint","multipoint","multipoint","multipoint","multipoint","multipoint","multipoint","multipoint","multipoint","multipoint","multipoint","multipoint","multipoint","multipoint","multipoint","multipoint","multipoint","point","point","point","point","point","point","point","point","point","point","point","point","point","point","point","point","point","point","point","point","point","point","point","point","point","point"],["area","area","area","area","area","area","envelope","envelope","envelope","envelope","envelope","envelope","line","line","line","line","line","multipoint","multipoint","multipoint","multipoint","point","point","point","point","point","area","area","area","area","area","area","envelope","envelope","envelope","envelope","envelope","envelope","line","line","line","line","line","multipoint","multipoint","multipoint","multipoint","multipoint","point","point","point","point","point","area","area","area","area","area","envelope","envelope","envelope","envelope","envelope","line","line","line","line","line","multipoint","multipoint","multipoint","multipoint","multipoint","point","point","point","point","point","point","area","area","area","area","area","envelope","envelope","envelope","envelope","envelope","line","line","line","line","line","multipoint","multipoint","multipoint","multipoint","multipoint","point","point","point","point","point","point"],["esriSpatialRelContains","esriSpatialRelEnvelopeIntersects","esriSpatialRelIndexIntersects","esriSpatialRelIntersects","esriSpatialRelOverlaps","esriSpatialRelRelation","esriSpatialRelContains","esriSpatialRelEnvelopeIntersects","esriSpatialRelIndexIntersects","esriSpatialRelIntersects","esriSpatialRelOverlaps","esriSpatialRelRelation","esriSpatialRelCrosses","esriSpatialRelEnvelopeIntersects","esriSpatialRelIndexIntersects","esriSpatialRelIntersects","esriSpatialRelRelation","esriSpatialRelEnvelopeIntersects","esriSpatialRelIndexIntersects","esriSpatialRelIntersects","esriSpatialRelRelation","esriSpatialRelEnvelopeIntersects","esriSpatialRelIndexIntersects","esriSpatialRelIntersects","esriSpatialRelRelation","esriSpatialRelWithin","esriSpatialRelContains","esriSpatialRelCrosses","esriSpatialRelEnvelopeIntersects","esriSpatialRelIndexIntersects","esriSpatialRelIntersects","esriSpatialRelRelation","esriSpatialRelContains","esriSpatialRelCrosses","esriSpatialRelEnvelopeIntersects","esriSpatialRelIndexIntersects","esriSpatialRelIntersects","esriSpatialRelRelation","esriSpatialRelCrosses","esriSpatialRelEnvelopeIntersects","esriSpatialRelIndexIntersects","esriSpatialRelIntersects","esriSpatialRelRelation","esriSpatialRelEnvelopeIntersects","esriSpatialRelIndexIntersects","esriSpatialRelIntersects","esriSpatialRelRelation","esriSpatialRelTouches","esriSpatialRelEnvelopeIntersects","esriSpatialRelIndexIntersects","esriSpatialRelIntersects","esriSpatialRelRelation","esriSpatialRelTouches","esriSpatialRelContains","esriSpatialRelEnvelopeIntersects","esriSpatialRelIndexIntersects","esriSpatialRelIntersects","esriSpatialRelRelation","esriSpatialRelContains","esriSpatialRelEnvelopeIntersects","esriSpatialRelIndexIntersects","esriSpatialRelIntersects","esriSpatialRelRelation","esriSpatialRelContains","esriSpatialRelEnvelopeIntersects","esriSpatialRelIndexIntersects","esriSpatialRelIntersects","esriSpatialRelRelation","esriSpatialRelContains","esriSpatialRelEnvelopeIntersects","esriSpatialRelIndexIntersects","esriSpatialRelIntersects","esriSpatialRelRelation","esriSpatialRelContains","esriSpatialRelEnvelopeIntersects","esriSpatialRelIndexIntersects","esriSpatialRelIntersects","esriSpatialRelRelation","esriSpatialRelWithin","esriSpatialRelContains","esriSpatialRelEnvelopeIntersects","esriSpatialRelIndexIntersects","esriSpatialRelIntersects","esriSpatialRelRelation","esriSpatialRelContains","esriSpatialRelEnvelopeIntersects","esriSpatialRelIndexIntersects","esriSpatialRelIntersects","esriSpatialRelRelation","esriSpatialRelContains","esriSpatialRelEnvelopeIntersects","esriSpatialRelIndexIntersects","esriSpatialRelIntersects","esriSpatialRelRelation","esriSpatialRelContains","esriSpatialRelEnvelopeIntersects","esriSpatialRelIndexIntersects","esriSpatialRelIntersects","esriSpatialRelRelation","esriSpatialRelContains","esriSpatialRelEnvelopeIntersects","esriSpatialRelIndexIntersects","esriSpatialRelIntersects","esriSpatialRelRelation","esriSpatialRelWithin"]],"container":"<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>feature_class<\/th>\n      <th>query_feature_class<\/th>\n      <th>sp_rel<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"order":[],"autoWidth":false,"orderClasses":false,"columnDefs":[{"orderable":false,"targets":0}]}},"evals":[],"jsHooks":[]}</script>
+<p>The <code>sp_rel_lookup</code> data.frame explains the various types
+of spatial relationships available through ArcGIS REST APIs.</p>
+<div id="htmlwidget-5ca8543266722857671d" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-5ca8543266722857671d">{"x":{"style":"bootstrap4","filter":"none","vertical":false,"data":[["1","2","3","4","5","6","7","8","9"],["esriSpatialRelContains","esriSpatialRelCrosses","esriSpatialRelEnvelopeIntersects","esriSpatialRelIndexIntersects","esriSpatialRelIntersects","esriSpatialRelOverlaps","esriSpatialRelRelation","esriSpatialRelTouches","esriSpatialRelWithin"],["Part or all of a feature from feature class 1 is contained within a feature from feature class 2.","The feature from feature class 1 crosses a feature from feature class 2.","The envelope of feature class 1 intersects with the envelope of feature class 2.","The envelope of the query feature class intersects the index entry for the target feature class.","Part of a feature from feature class 1 is contained in a feature from feature class 2.","Features from feature class 1 overlap features in feature class 2.","Indicates that a spatial relationship function will be used.","The feature from feature class 1 touches the border of a feature from feature class 2.","The feature from feature class 1 is completely enclosed by the feature from feature class 2."]],"container":"<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>sp_rel<\/th>\n      <th>description<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script><p><br> The <code>sp_rel_valid</code> data.frame shows which spatial
+relationships are valid with different geometry types being queried and
+used to do spatial queries.</p>
+<div id="htmlwidget-ae8dea051163e9237991" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-ae8dea051163e9237991">{"x":{"style":"bootstrap4","filter":"none","vertical":false,"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81","82","83","84","85","86","87","88","89","90","91","92","93","94","95","96","97","98","99","100","101","102","103","104","105"],["area","area","area","area","area","area","area","area","area","area","area","area","area","area","area","area","area","area","area","area","area","area","area","area","area","area","line","line","line","line","line","line","line","line","line","line","line","line","line","line","line","line","line","line","line","line","line","line","line","line","line","line","line","multipoint","multipoint","multipoint","multipoint","multipoint","multipoint","multipoint","multipoint","multipoint","multipoint","multipoint","multipoint","multipoint","multipoint","multipoint","multipoint","multipoint","multipoint","multipoint","multipoint","multipoint","multipoint","multipoint","multipoint","multipoint","multipoint","point","point","point","point","point","point","point","point","point","point","point","point","point","point","point","point","point","point","point","point","point","point","point","point","point","point"],["area","area","area","area","area","area","envelope","envelope","envelope","envelope","envelope","envelope","line","line","line","line","line","multipoint","multipoint","multipoint","multipoint","point","point","point","point","point","area","area","area","area","area","area","envelope","envelope","envelope","envelope","envelope","envelope","line","line","line","line","line","multipoint","multipoint","multipoint","multipoint","multipoint","point","point","point","point","point","area","area","area","area","area","envelope","envelope","envelope","envelope","envelope","line","line","line","line","line","multipoint","multipoint","multipoint","multipoint","multipoint","point","point","point","point","point","point","area","area","area","area","area","envelope","envelope","envelope","envelope","envelope","line","line","line","line","line","multipoint","multipoint","multipoint","multipoint","multipoint","point","point","point","point","point","point"],["esriSpatialRelContains","esriSpatialRelEnvelopeIntersects","esriSpatialRelIndexIntersects","esriSpatialRelIntersects","esriSpatialRelOverlaps","esriSpatialRelRelation","esriSpatialRelContains","esriSpatialRelEnvelopeIntersects","esriSpatialRelIndexIntersects","esriSpatialRelIntersects","esriSpatialRelOverlaps","esriSpatialRelRelation","esriSpatialRelCrosses","esriSpatialRelEnvelopeIntersects","esriSpatialRelIndexIntersects","esriSpatialRelIntersects","esriSpatialRelRelation","esriSpatialRelEnvelopeIntersects","esriSpatialRelIndexIntersects","esriSpatialRelIntersects","esriSpatialRelRelation","esriSpatialRelEnvelopeIntersects","esriSpatialRelIndexIntersects","esriSpatialRelIntersects","esriSpatialRelRelation","esriSpatialRelWithin","esriSpatialRelContains","esriSpatialRelCrosses","esriSpatialRelEnvelopeIntersects","esriSpatialRelIndexIntersects","esriSpatialRelIntersects","esriSpatialRelRelation","esriSpatialRelContains","esriSpatialRelCrosses","esriSpatialRelEnvelopeIntersects","esriSpatialRelIndexIntersects","esriSpatialRelIntersects","esriSpatialRelRelation","esriSpatialRelCrosses","esriSpatialRelEnvelopeIntersects","esriSpatialRelIndexIntersects","esriSpatialRelIntersects","esriSpatialRelRelation","esriSpatialRelEnvelopeIntersects","esriSpatialRelIndexIntersects","esriSpatialRelIntersects","esriSpatialRelRelation","esriSpatialRelTouches","esriSpatialRelEnvelopeIntersects","esriSpatialRelIndexIntersects","esriSpatialRelIntersects","esriSpatialRelRelation","esriSpatialRelTouches","esriSpatialRelContains","esriSpatialRelEnvelopeIntersects","esriSpatialRelIndexIntersects","esriSpatialRelIntersects","esriSpatialRelRelation","esriSpatialRelContains","esriSpatialRelEnvelopeIntersects","esriSpatialRelIndexIntersects","esriSpatialRelIntersects","esriSpatialRelRelation","esriSpatialRelContains","esriSpatialRelEnvelopeIntersects","esriSpatialRelIndexIntersects","esriSpatialRelIntersects","esriSpatialRelRelation","esriSpatialRelContains","esriSpatialRelEnvelopeIntersects","esriSpatialRelIndexIntersects","esriSpatialRelIntersects","esriSpatialRelRelation","esriSpatialRelContains","esriSpatialRelEnvelopeIntersects","esriSpatialRelIndexIntersects","esriSpatialRelIntersects","esriSpatialRelRelation","esriSpatialRelWithin","esriSpatialRelContains","esriSpatialRelEnvelopeIntersects","esriSpatialRelIndexIntersects","esriSpatialRelIntersects","esriSpatialRelRelation","esriSpatialRelContains","esriSpatialRelEnvelopeIntersects","esriSpatialRelIndexIntersects","esriSpatialRelIntersects","esriSpatialRelRelation","esriSpatialRelContains","esriSpatialRelEnvelopeIntersects","esriSpatialRelIndexIntersects","esriSpatialRelIntersects","esriSpatialRelRelation","esriSpatialRelContains","esriSpatialRelEnvelopeIntersects","esriSpatialRelIndexIntersects","esriSpatialRelIntersects","esriSpatialRelRelation","esriSpatialRelContains","esriSpatialRelEnvelopeIntersects","esriSpatialRelIndexIntersects","esriSpatialRelIntersects","esriSpatialRelRelation","esriSpatialRelWithin"]],"container":"<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>feature_class<\/th>\n      <th>query_feature_class<\/th>\n      <th>sp_rel<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div class="section level3">
 <h3 id="the-valid_sp_rel-function">The valid_sp_rel Function<a class="anchor" aria-label="anchor" href="#the-valid_sp_rel-function"></a>
 </h3>
-<p>The <code>valid_sp_rel</code> function can be used to to see which spatial relation types are applicable to different geometries.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<p>The <code>valid_sp_rel</code> function can be used to to see which
+spatial relation types are applicable to different geometries.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="fu"><a href="../reference/valid_sp_rel.html">valid_sp_rel</a></span><span class="op">(</span><span class="st">"line"</span>,<span class="st">"line"</span><span class="op">)</span>
 <span class="co">#&gt; [1] "esriSpatialRelCrosses"            "esriSpatialRelEnvelopeIntersects"</span>
@@ -280,7 +297,7 @@ To see more complete package documentation check out: <a href="https://pfrater.g
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
     </footer>
