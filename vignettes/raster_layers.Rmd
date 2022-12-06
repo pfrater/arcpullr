@@ -28,10 +28,9 @@ library(sf)
 ```
 
 ```{r, echo = FALSE}
-#
+#<img src='../man/figures/logo.png' width="160" height="180" style="border: none; float: right"/>
 ```
 
-<img src='../man/figures/logo.png' width="160" height="180" style="border: none; float: right"/>
 
 
 `arcpullr` has the capability to query not only vector (Feature) layers, but 

@@ -185,7 +185,11 @@ esri2sfGeom <- function(jsonFeats, sf_type) {
 
 esri2sfPoint <- function(features) {
   getPointGeometry <- function(feature) {
-    return(sf::st_point(unlist(feature$geometry)))
+    if (is.null(feature$geometry)) {
+      return(sf::st_point())
+    } else {
+      return(sf::st_point(unlist(feature$geometry)))
+    }
   }
   geoms <- sf::st_sfc(lapply(features, getPointGeometry))
   return(geoms)
@@ -217,7 +221,11 @@ esri2sfPolyline <- function(features) {
     return(sf::st_multilinestring(lapply(paths, path2matrix)))
   }
   getGeometry <- function(feature) {
-    return(paths2multiline(feature$geometry$paths))
+    if (is.null(unlist(feature$geometry$paths))) {
+      return(sf::st_multilinestring())
+    } else {
+      return(paths2multiline(feature$geometry$paths))
+    }
   }
   geoms <- sf::st_sfc(lapply(features, getGeometry))
   return(geoms)

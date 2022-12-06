@@ -42,10 +42,9 @@ sf::sf_use_s2(FALSE)
 ```
 
 ```{r, echo = FALSE}
-#
+#<img src='../man/figures/logo.png' width="160" height="180" style="border: none; float: right"/>
 ```
 
-<img src='../man/figures/logo.png' width="160" height="180" style="border: none; float: right"/>
 
 
 ArcGIS REST API's may be spatially queried using the get_layer_by\_\* family of 
