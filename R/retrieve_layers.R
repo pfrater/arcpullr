@@ -23,9 +23,15 @@
 #' sf ("esriGeometryPolygon", "esriGeometryPoint", "esriGeometryPolyline"),
 #' if NULL (default) the server will take its best guess
 #' @param head Logical or numeric. Limits the number of records returned from a
-#' query. If TRUE, only the first 10 records will be returned. If numeric, then
+#' query. If TRUE, only the first 5 records will be returned. If numeric, then
 #' the number of records specified in \code{head} will be returned
-#' @param ... Additional arguements to pass to the ArcGIS REST POST request
+#' @param idsplit Positive integer. Limits the number of records returned in
+#' each request. To get the full set of records, multiple requests will be made
+#' in batches of no more than \code{idsplit} in size. These will then be merged.
+#' Setting this to a smaller value can be useful when requesting
+#' fewer, complicated features, which might otherwise silently return an empty
+#' layer.
+#' @param ... Additional arguments to pass to the ArcGIS REST POST request
 #'
 #' @return
 #' An object of class "sf" of the appropriate layer
@@ -45,6 +51,7 @@ get_spatial_layer <- function(url,
                               token = "",
                               sf_type = NULL,
                               head = FALSE,
+                              idsplit = 500,
                               ...) {
   layer_info <- jsonlite::fromJSON(
     httr::content(
@@ -72,13 +79,14 @@ get_spatial_layer <- function(url,
   }
   query_url <- paste(url, "query", sep="/")
   esri_features <- get_esri_features(
-    query_url, out_fields, where, token, head, ...
+    query_url, out_fields, where, token, head, idsplit, ...
   )
   simple_features <- esri2sfGeom(esri_features, sf_type)
   return(simple_features)
 }
 
-get_esri_features <- function(query_url, fields, where, token='', head, ...) {
+get_esri_features <- function(query_url, fields, where, token='', head,
+                              idsplit, ...) {
   ids <- get_object_ids(query_url, where, token, ...)
   if(is.null(ids)){
     warning("No records match the search critera")
@@ -86,10 +94,10 @@ get_esri_features <- function(query_url, fields, where, token='', head, ...) {
   }
   if (isTRUE(head)) {
     id_splits <- ids[1:5]
-  } else if (head > 0 & head < 500) {
+  } else if (head > 0 & head < idsplit) {
     id_splits <- ids[1:head]
   } else {
-    id_splits <- split(ids, ceiling(seq_along(ids)/500))
+    id_splits <- split(ids, ceiling(seq_along(ids)/idsplit))
   }
   results <- lapply(
     id_splits,

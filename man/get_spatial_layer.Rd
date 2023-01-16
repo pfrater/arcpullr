@@ -11,6 +11,7 @@ get_spatial_layer(
   token = "",
   sf_type = NULL,
   head = FALSE,
+  idsplit = 500,
   ...
 )
 }
@@ -28,10 +29,17 @@ sf ("esriGeometryPolygon", "esriGeometryPoint", "esriGeometryPolyline"),
 if NULL (default) the server will take its best guess}
 
 \item{head}{Logical or numeric. Limits the number of records returned from a
-query. If TRUE, only the first 10 records will be returned. If numeric, then
+query. If TRUE, only the first 5 records will be returned. If numeric, then
 the number of records specified in \code{head} will be returned}
 
-\item{...}{Additional arguements to pass to the ArcGIS REST POST request}
+\item{idsplit}{Positive integer. Limits the number of records returned in
+each request. To get the full set of records, multiple requests will be made
+in batches of no more than \code{idsplit} in size. These will then be merged.
+Setting this to a smaller value can be useful when requesting
+fewer, complicated features, which might otherwise silently return an empty
+layer.}
+
+\item{...}{Additional arguments to pass to the ArcGIS REST POST request}
 }
 \value{
 An object of class "sf" of the appropriate layer
