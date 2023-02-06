@@ -321,8 +321,8 @@ get_image_layer <- function(url,
                             bbox = NULL,
                             token = "",
                             clip_raster = TRUE,
-                            format = "png",
-                            transparent = TRUE,
+                            format = "tiff",
+                            transparent = FALSE,
                             ...) {
   out <- get_raster_layer(
     url = url,
@@ -393,6 +393,7 @@ get_raster_layer <- function(url,
   if (export_type == "map") {
     export_url <- paste(url, "export", sep = "/")
   } else if (export_type == "image") {
+    format<- "tiff"
     if (add_legend) {
       warning("You can only use add_legend with get_map_layer(). ",
               "Setting add_legend to FALSE")
