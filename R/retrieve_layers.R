@@ -267,6 +267,7 @@ esri2sfPolyline <- function(features) {
 get_map_layer <- function(url,
                           sf_object = NULL,
                           bbox = NULL,
+                          bbox_crs = NULL,
                           token = "",
                           clip_raster = TRUE,
                           format = "png",
@@ -277,6 +278,7 @@ get_map_layer <- function(url,
     url = url,
     sf_object = sf_object,
     bbox = bbox,
+    bbox_crs = bbox_crs,
     token = token,
     clip_raster = clip_raster,
     format = format,
@@ -319,6 +321,7 @@ get_map_layer <- function(url,
 get_image_layer <- function(url,
                             sf_object = NULL,
                             bbox = NULL,
+                            bbox_crs = NULL,
                             token = "",
                             clip_raster = TRUE,
                             format = "png",
@@ -328,6 +331,7 @@ get_image_layer <- function(url,
     url = url,
     sf_object = sf_object,
     bbox = bbox,
+    bbox_crs = bbox_crs,
     token = token,
     clip_raster = clip_raster,
     format = format,
@@ -348,7 +352,8 @@ get_image_layer <- function(url,
 #'
 #' @param url A character string of the url for the layer to pull
 #' @param sf_object An \code{sf} object used for the bounding box
-#' @param bbox Character string of the bounding box
+#' @param bbox Vector of bounding box coordinates
+#' @param bbox_crs CRS for bbox (required if bbox is used)
 #' @param token A character string of the token (if needed)
 #' @param clip_raster Logical. Should the raster be clipped to contain only
 #' the pixels that reside in the \code{sf_object}? By default, ArcGIS returns
@@ -369,6 +374,7 @@ get_image_layer <- function(url,
 get_raster_layer <- function(url,
                              sf_object = NULL,
                              bbox = NULL,
+                             bbox_crs = NULL,
                              token = "",
                              clip_raster = TRUE,
                              format = "png",
@@ -389,6 +395,13 @@ get_raster_layer <- function(url,
     bbox <- sf::st_bbox(sf_object)
     bbox_coords <- paste(bbox, collapse = ", ")
     bbox_sr <- get_sf_crs(sf_object)
+  } else {
+    if (is.null(bbox_crs)) {
+      stop("You must specify bbox_crs if you are using the bbox argument")
+    } else {
+      bbox_sr <- bbox_crs
+    }
+    bbox_coords <- paste(bbox, collapse = ", ")
   }
   if (export_type == "map") {
     export_url <- paste(url, "export", sep = "/")
