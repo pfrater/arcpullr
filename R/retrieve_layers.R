@@ -106,7 +106,7 @@ get_table_layer <- function(url,
   layer_info <- get_layer_info(url, token)
   args <- list(query_url, out_fields, where, token, head, ...)
   if(!"idsplits" %in% names(args))
-    args <- c(args, list(idsplits = layer_info$MaxRecordCount))
+    args <- c(args, list(idsplits = layer_info$maxRecordCount))
   esri_features <- do.call(get_esri_features, args)
   atts <-
     lapply(esri_features, "[[", 1) %>%
