@@ -28,10 +28,11 @@ sf ("esriGeometryPolygon", "esriGeometryPoint", "esriGeometryPolyline"),
 if NULL (default) the server will take its best guess}
 
 \item{head}{Logical or numeric. Limits the number of records returned from a
-query. If TRUE, only the first 10 records will be returned. If numeric, then
+query. If TRUE, only the first 5 records will be returned. If numeric, then
 the number of records specified in \code{head} will be returned}
 
-\item{...}{Additional arguements to pass to the ArcGIS REST POST request}
+\item{...}{Additional arguments to pass to the ArcGIS REST POST request (or
+associated internal functions used to query them)}
 }
 \value{
 An object of class "sf" of the appropriate layer
