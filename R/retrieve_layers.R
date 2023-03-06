@@ -72,9 +72,10 @@ get_spatial_layer <- function(url,
     sf_type <- layer_info$geometryType
   }
   query_url <- paste(url, "query", sep="/")
-  esri_features <- get_esri_features(
-    query_url, out_fields, where, token, head, ...
-  )
+  args <- list(query_url, out_fields, where, token, head, ...)
+  if(!"idsplits" %in% names(args))
+    args <- c(args, list(idsplits = layer_info$MaxRecordCount))
+  esri_features <- do.call(get_esri_features, args)
   simple_features <- esri2sfGeom(esri_features, sf_type)
   return(simple_features)
 }
