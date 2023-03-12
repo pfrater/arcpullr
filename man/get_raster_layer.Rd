@@ -9,6 +9,7 @@ get_raster_layer(
   url,
   sf_object = NULL,
   bbox = NULL,
+  bbox_crs = NULL,
   token = "",
   clip_raster = TRUE,
   format = "png",
@@ -23,7 +24,9 @@ get_raster_layer(
 
 \item{sf_object}{An \code{sf} object used for the bounding box}
 
-\item{bbox}{Character string of the bounding box}
+\item{bbox}{Vector of bounding box coordinates}
+
+\item{bbox_crs}{CRS for bbox (required if bbox is used)}
 
 \item{token}{A character string of the token (if needed)}
 
