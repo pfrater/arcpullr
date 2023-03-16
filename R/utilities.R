@@ -251,10 +251,7 @@ sf_box <- function(xmin, ymin, xmax, ymax, crs = 4326) {
 #' @examples
 #' \dontrun{
 #' wbics <- sql_where(WATERBODY_WBIC = c(805400, 804600), rel_op = "IN")
-#' base_wdnr_url <- "https://dnrmaps.wi.gov/arcgis/rest/services/"
-#' hydro_path <- "WT_SWDV/WT_Inland_Water_Resources_WTM_Ext_v2/MapServer/3"
-#' hydro_url <- paste0(base_wdnr_url, hydro_path)
-#' lakes <- get_spatial_layer(url = hydro_url, where = wbics)
+#' lakes <- get_spatial_layer(wi_hydro_url, where = wbics)
 #' plot_layer(lakes)
 #' }
 sql_where <- function(..., rel_op = "=") {

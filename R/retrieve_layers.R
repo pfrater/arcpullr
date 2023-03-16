@@ -506,13 +506,15 @@ get_raster_layer <- function(url,
   raster_crs <- raster::crs(sf_object)
 
   # set the extent and projection of the raster layer
+  temp_file <- tempfile()
+  download.file(raster_url, temp_file, quiet = TRUE)
   if (export_type == "map") {
-    out <- raster::raster(raster_url)
+    out <- raster::raster(temp_file)
     if (raster::nbands(out) > 1) {
-      out <- raster::stack(raster_url)
+      out <- raster::stack(temp_file)
     }
   } else if (export_type == "image") {
-    out <- raster::stack(raster_url)
+    out <- raster::stack(temp_file)
   }
   raster::extent(out) <- raster_extent
   raster::projection(out) <- raster_crs

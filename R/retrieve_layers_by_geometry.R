@@ -21,10 +21,9 @@
 #' @name get_layers_by_spatial
 #'
 #' @examples
-#' base_wdnr_url <- "https://dnrmaps.wi.gov/arcgis/rest/services/"
-#' hydro_path <- "WT_SWDV/WT_Inland_Water_Resources_WTM_Ext_v2/MapServer/2"
-#' hydro_url <- paste0(base_wdnr_url, hydro_path)
-#' mke_waters <- get_layer_by_poly(url = hydro_url, mke_county)
+#' \dontrun{
+#'   mke_waters <- get_layer_by_poly(wi_hydro_url, mke_county)
+#' }
 get_layer_by_poly <- function(url, geometry,
                               sp_rel = "contains",
                               ...) {
