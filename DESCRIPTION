@@ -33,8 +33,7 @@ Imports:
     raster (>= 3.4.5),
     methods,
     bslib,
-    DT,
-    rgdal
+    DT
 RoxygenNote: 7.2.1
 Suggests: 
   testthat (>= 3.0.1),
