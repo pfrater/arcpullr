@@ -74,6 +74,26 @@
 "wi_aerial_imagery"
 
 
+#' Various URLs used in examples
+#'
+#' These are URLs that are used for examples throughout the package
+#'
+#' @format Character strings of URLs
+#' @name example_urls
+"reykjanes_lava_flow_url"
+
+#' @rdname example_urls
+#' @export
+"wi_hydro_url"
+
+#' @rdname example_urls
+#' @export
+"wi_landcover_url"
+
+#' @rdname example_urls
+#' @export
+"wi_leaf_off_url"
+
 
 #' Spatial relationship descriptor and lookup tables
 #'

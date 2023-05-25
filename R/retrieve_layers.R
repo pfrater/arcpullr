@@ -507,7 +507,7 @@ get_raster_layer <- function(url,
 
   # set the extent and projection of the raster layer
   temp_file <- tempfile()
-  download.file(raster_url, temp_file, quiet = TRUE)
+  utils::download.file(raster_url, temp_file, quiet = TRUE)
   if (export_type == "map") {
     out <- raster::raster(temp_file)
     if (raster::nbands(out) > 1) {
