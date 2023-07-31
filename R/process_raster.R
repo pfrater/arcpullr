@@ -138,8 +138,69 @@ setMethod("raster_colors", "RasterBrick", function(x) {
   return(out)
 })
 
+#' Convert RasterBrick into data.frame of colors that can be used for plotting
+#'
+#' This function is used internally by \code{\link{plot_layer}} to convert a
+#' RasterBrick object to a data.frame of colors for each pixel that can be used
+#' for plotting with ggplot2. Note that this function assumes that the first
+#' three bands in the RasterBrick objects are the RGB values and all additional
+#' bands are ignored.
+#'
+#' @param x A RasterBrick object
+#'
+#' @return A data.frame with 3 columns and \code{length(raster_object)} rows
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' wi_leaf_off_layer <- get_image_layer(wi_leaf_off_url, wis_poly)
+#' wi_leaf_off_data <- raster_colors(wi_leaf_off_layer)
+#' }
+setMethod("raster_colors", "SpatRaster", function(x) {
+  raster_coords <- terra::xyFromCell(x, seq_len(terra::ncell(x)))
+  if (any(terra::has.colors(x))) {
+    raster_values <- terra::readValues(x)
+    raster_cols <- terra::coltab(x)[[1]]
+    raster_cols <- rgb(raster_cols$red,
+                       raster_cols$green,
+                       raster_cols$blue,
+                       maxColorValue = 255)
+    #spatial rasters do not have a lost for legend
+    # raster_names <- x@legend@names
+    out <-
+      raster_coords %>%
+      as.data.frame() %>%
+      dplyr::mutate(value = raster_values) %>%
+      dplyr::mutate(color = raster_cols[raster_values + 1]) %>%
+      dplyr::select(.data$x, .data$y, .data$color)
+  } else {
+    raster_values <- terra::values(x)
+    raster_nbands <- length(names(x))
+    raster_values <-
+      raster_values %>%
+      as.data.frame() %>%
+      dplyr::select(1:3) %>%
+      stats::setNames(c("red", "green", "blue")) %>%
+      dplyr::mutate_all(tidyr::replace_na, 0L) %>%
+      dplyr::mutate(color = grDevices::rgb(.data$red, .data$green, .data$blue, maxColorValue = 255))
+    out <-
+      raster_coords %>%
+      as.data.frame() %>%
+      cbind(raster_values) %>%
+      dplyr::select(.data$x, .data$y, .data$color)
+  }
 
 
+  #spatial raster do not have a slot for legends
+  # if (length(raster_names) > 0) {
+  #   legend <- data.frame(
+  #     color = raster_cols,
+  #     name = raster_names
+  #   )
+  #   out <- dplyr::left_join(out, legend, by = "color")
+  # }
+  return(out)
+})
 
 
 #' Match colors in RasterLayer color space to the provided legend values

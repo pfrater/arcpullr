@@ -126,6 +126,7 @@ setMethod("plot_layer", "RasterLayer", function(x,
     }
     # check to see if legend should be implemented
     if (legend && ("name" %in% names(plot_data))) {
+      browser()
       g <-
         g +
         ggplot2::scale_fill_identity(
@@ -271,6 +272,65 @@ setMethod("plot_layer", "RasterBrick", function(x,
   }
 })
 
+#' Plot a Spatial Raster object
+#'
+#' @inheritParams plot_layer
+#'
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' wi_aerial <- get_map_layer(wi_leaf_off_url, wis_poly)
+#' plot_layer(wi_aerial, outline_poly = wis_poly)
+#' }
+setMethod("plot_layer", "SpatRaster", function(x,
+                                                outline_poly = NULL,
+                                                outline_size = 1.2,
+                                                outline_color = "gray30",
+                                                plot_pkg = "ggplot",
+                                                ...) {
+  if (plot_pkg == "base") {
+    if (is.null(outline_poly)) {
+      terra::plot(x, colNA = NA, ...)
+    } else {
+      terra::plot(x, ...)
+      graphics::plot(
+        outline_poly,
+        add = TRUE,
+        col = "transparent",
+        lwd = outline_size,
+        border = outline_color,
+        ...
+      ) %>% suppressWarnings()
+    }
+  } else if (plot_pkg %in% c("ggplot", "ggplot2")) {
+    plot_data <- raster_colors(x)
+    plot_data <- dplyr::filter(plot_data, .data$color != "#000000")
+    g <-
+      ggplot2::ggplot(data = NULL) +
+      ggplot2::geom_tile(data = plot_data,
+                         ggplot2::aes_string("x", "y",
+                                             fill = as.character("color")))
+    if (!is.null(outline_poly)) {
+      g <-
+        g +
+        ggplot2::geom_sf(data = outline_poly,
+                         fill = ggplot2::alpha(0.01),
+                         size = outline_size,
+                         color = outline_color)
+    }
+    x_crs <- terra::crs(x)
+    g <- g + ggplot2::scale_fill_identity() + ggplot2::coord_sf(crs = x_crs)
+    if (requireNamespace("cowplot", quietly = TRUE)) {
+      g <- g + cowplot::theme_map()
+    } else {
+      g <- g + ggplot2::theme_minimal()
+    }
+    return(g)
+  } else {
+    stop("This function only set up to work with base plotting or ggplot")
+  }
+})
 
 
 #' Plot an sf object
