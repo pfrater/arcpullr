@@ -46,5 +46,5 @@ Suggests:
   cowplot (>= 1.1.1),
   magick (>= 2.5.2)
 VignetteBuilder: knitr
-URL: https://github.com/pfrater/arcpullr
+URL: https://github.com/pfrater/arcpullr, https://pfrater.github.io/arcpullr/
 BugReports: https://github.com/pfrater/arcpullr/issues
