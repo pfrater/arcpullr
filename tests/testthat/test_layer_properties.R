@@ -3,9 +3,9 @@ context("Retrieve Legend")
 legend <- get_layer_legend(wi_landcover_url)
 
 legend_colors <- c(
-  "#C94242", "#D89382", "#F2EF87", "#E6E2A1", "#E6AC2B", "#9D7207", "#006300",
-  "#69B869", "#199919", "#CEECF9", "#95EEF2", "#6FA3BA", "#00D1DD", "#077C82",
-  "#797979", "#A8976B"
+  "#C84141", "#D89382", "#F2EE86", "#E6E2A1", "#E6AC2E", "#9C7209",
+  "#016400", "#6AB86A", "#1E981E", "#CEEBF9", "#95EDF2", "#70A3BA",
+  "#00D1DC", "#0F7C82", "#787878", "#A8976D"
 )
 
 legend_values <- c(

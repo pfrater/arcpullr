@@ -5,7 +5,8 @@
 ^icons$
 ^todo$
 ^tests/testthat/test_get_spatial_layer.R$
-^tests/testthat/test_get_layer_by_geometry.R
+^tests/testthat/test_get_layer_by_geometry.R$
+^tests/testthat/test_layer_properies.R$
 ^other_tests$
 ^_pkgdown\.yml$
 ^docs$

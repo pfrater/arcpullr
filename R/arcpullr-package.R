@@ -48,7 +48,5 @@
 #'
 #' @aliases arcpullr
 #'
-#' @docType package
-#' @name arcpullr-package
-NULL
-#' NULL
+#' @keywords internal
+"_PACKAGE"

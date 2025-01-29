@@ -139,6 +139,44 @@ setMethod("raster_colors", "RasterBrick", function(x) {
 })
 
 
+#' Convert SpatRaster into data.frame of colors that can be used for plotting
+#'
+#' This function is used internally by \code{\link{plot_layer}} to convert a
+#' SpatRaster object to a data.frame of colors for each pixel that can be used
+#' for plotting with ggplot2. Note that this function assumes that the
+#' SpatRaster objects use RGB values.
+#'
+#' @param x A SpatRaster object
+#'
+#' @return A data.frame with 3 columns and \code{length(raster_object)} rows
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' wi_leaf_off_layer <- get_image_layer(wi_leaf_off_url, wis_poly)
+#' wi_leaf_off_data <- raster_colors(wi_leaf_off_layer)
+#' }
+setMethod("raster_colors", "SpatRaster", function(x) {
+  raster_coords <- terra::xyFromCell(x, seq_len(terra::ncell(x)))
+  raster_values <- terra::values(x)
+  raster_nbands <- length(names(x))
+  raster_values <-
+    raster_values %>%
+    as.data.frame() %>%
+    dplyr::select(1:3) %>%
+    stats::setNames(c("red", "green", "blue")) %>%
+    dplyr::mutate_all(tidyr::replace_na, 0L) %>%
+    dplyr::mutate(color = grDevices::rgb(
+      .data$red, .data$green, .data$blue, maxColorValue = 255
+    ))
+  out <-
+    raster_coords %>%
+    as.data.frame() %>%
+    cbind(raster_values) %>%
+    dplyr::select(.data$x, .data$y, .data$color)
+  return(out)
+})
+
 
 
 
@@ -168,32 +206,49 @@ setMethod("raster_colors", "RasterBrick", function(x) {
 #' \dontrun{
 #' wi_landcover <- get_map_layer(wi_landcover_url, wis_poly)
 #' legend <- get_layer_legend(wi_landcover_url)
-#' new_legend <- match_raster_colors(legend, wi_landcover_url)
+#' new_legend <- match_legend_colors(legend, wi_landcover_url)
 #' }
-match_raster_colors <- function(legend, x) {
+match_legend_colors <- function(legend, x) {
   stopifnot("raster_legend" %in% class(legend))
-  raster_cols <-
-    x %>%
-    raster_colors() %>%
-    dplyr::pull(.data$color) %>%
-    unique()
-  legend_cols <- legend$color
-  raster_legend_lookup <- lapply(legend_cols, function(x) {
+
+  out <-
+    legend |>
+    dplyr::mutate(raster_cols = list(x)) |>
+    dplyr::mutate(rgb = purrr::map2(color, raster_cols, \(col, rc) {
+      temp_rgb <- grDevices::col2rgb(col)
+
+    }))
+
+  raster_legend_lookup <- lapply(legend, \(i) {
     col_diffs <- sqrt(
       sweep(
-        grDevices::col2rgb(raster_cols),
-        1,
-        grDevices::col2rgb(x)
+        grDevices::col2rgb(x[[1]]), 1,
+        grDevices::col2rgb()
       )^2
     )
-    raster_col_ind <- which.min(colSums(col_diffs))
-    return(data.frame(legend_col = x, raster_col = raster_cols[raster_col_ind]))
   })
-  raster_legend_lookup <- do.call("rbind", raster_legend_lookup)
-  corrected_legend <-
-    legend %>%
-    dplyr::full_join(raster_legend_lookup, by = c("color" = "legend_col")) %>%
-    dplyr::select(.data$raster_col, .data$value) %>%
-    dplyr::rename(color = .data$raster_col)
-  return(corrected_legend)
+
+    # x %>%
+    # raster_colors() %>%
+    # dplyr::pull(.data$color) %>%
+    # unique()
+  # legend_cols <- legend$color
+  # raster_legend_lookup <- lapply(legend_cols, function(x) {
+  #   col_diffs <- sqrt(
+  #     sweep(
+  #       grDevices::col2rgb(raster_cols),
+  #       1,
+  #       grDevices::col2rgb(x)
+  #     )^2
+  #   )
+  #   raster_col_ind <- which.min(colSums(col_diffs))
+  #   return(data.frame(legend_col = x, raster_col = raster_cols[raster_col_ind]))
+  # })
+  # raster_legend_lookup <- do.call("rbind", raster_legend_lookup)
+  # corrected_legend <-
+  #   legend %>%
+  #   dplyr::full_join(raster_legend_lookup, by = c("color" = "legend_col")) %>%
+  #   dplyr::select(.data$raster_col, .data$value) %>%
+  #   dplyr::rename(color = .data$raster_col)
+  # return(corrected_legend)
 }

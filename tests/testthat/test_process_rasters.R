@@ -71,8 +71,8 @@ legend <-
   ) %>%
   structure(class = c("raster_legend", "data.frame"))
 
-test_that("match_raster_colors matches RasterLayer colors correctly", {
-  color_match <- match_raster_colors(legend, simple_raster)
+test_that("match_legend_colors matches RasterLayer colors correctly", {
+  color_match <- match_legend_colors(legend, simple_raster)
   exp_legend <- data.frame(
     color = c("blue", "red", "green"),
     value = c("z", "y", "x")

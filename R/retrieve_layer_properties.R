@@ -39,7 +39,7 @@ get_layer_legend <- function(url) {
       magick::image_read() %>%
       magick::image_data(channels = "rgb") %>%
       as.integer() %>%
-      raster::brick() %>%
+      terra::rast() %>%
       raster_colors() %>%
       dplyr::count(.data$color) %>%
       dplyr::arrange(dplyr::desc(.data$n)) %>%

@@ -63,3 +63,13 @@ more complex SQL WHERE clauses used to query by the where argument in the
 retrieval functions above.
 }
 
+\author{
+\strong{Maintainer}: Paul Frater \email{paul.frater@wisconsin.gov} (\href{https://orcid.org/0000-0002-7237-6563}{ORCID})
+
+Authors:
+\itemize{
+  \item Zac Driscoll \email{zdriscoll@mmsd.com} (\href{https://orcid.org/0000-0002-8233-0980}{ORCID})
+}
+
+}
+\keyword{internal}
