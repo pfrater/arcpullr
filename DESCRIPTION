@@ -1,7 +1,7 @@
 Package: arcpullr
 Type: Package
 Title: Pull Data from an 'ArcGIS REST' API
-Version: 0.2.8
+Version: 0.2.9
 Authors@R: c(person(given = "Paul",
            family = "Frater",
            role = c("aut", "cre"),
@@ -35,10 +35,10 @@ Imports:
     purrr,
     grDevices,
     graphics,
-    DT
-RoxygenNote: 7.3.2
+    DT,
+    methods
+RoxygenNote: 7.2.3
 Suggests: 
-  methods,
   testthat (>= 3.0.1),
   knitr (>= 1.30),
   rmarkdown (>= 2.6),
