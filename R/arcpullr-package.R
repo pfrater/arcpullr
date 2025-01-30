@@ -50,3 +50,26 @@
 #'
 #' @keywords internal
 "_PACKAGE"
+
+
+#' @import sf
+NULL
+
+
+#' @import purrr
+NULL
+
+#' @import terra
+
+#' @importFrom dplyr %>%
+NULL
+
+#' @importFrom rlang .data
+NULL
+
+#' @importFrom DT datatable
+NULL
+
+#' @importFrom utils download.file
+NULL
+

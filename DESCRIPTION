@@ -31,6 +31,8 @@ Imports:
     tidyr (>= 1.0.2),
     rlang (>= 0.4.7),
     raster (>= 3.4.5),
+    terra,
+    purrr,
     grDevices,
     graphics,
     DT

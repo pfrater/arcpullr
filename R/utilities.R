@@ -42,7 +42,7 @@ format_point_coords <- function(sf_obj) {
     sf_obj %>%
     sf::st_coordinates() %>%
     data.frame() %>%
-    dplyr::select(.data$X, .data$Y)
+    dplyr::select("X", "Y")
   pt_str <- paste(paste0("'", tolower(names(out)), "':"), out, collapse = ",")
   coord_string <- paste("{", pt_str, ", {'spatialReference': ", crs, "}}")
   return(coord_string)
@@ -83,7 +83,7 @@ format_envelope_coords <- function(sf_obj) {
 #     sf_obj %>%
 #     sf::st_coordinates() %>%
 #     data.frame() %>%
-#     dplyr::select(.data$X, .data$Y) %>%
+#     dplyr::select("X", "Y") %>%
 #     tidyr::unite(col= "coordinates",sep = ",") %>%
 #     dplyr::mutate(coordinates = paste("[", .data$coordinates, "]",sep="")) %>%
 #     dplyr::summarise(coordinates =  paste(.data$coordinates,collapse = ",")) %>%
@@ -124,7 +124,7 @@ format_coords <- function(sf_obj, geom_type) {
       sf_obj[x, ] %>%
       sf::st_coordinates() %>%
       data.frame() %>%
-      dplyr::select(.data$X, .data$Y) %>%
+      dplyr::select("X", "Y") %>%
       tidyr::unite(col= "coordinates",sep = ",") %>%
       dplyr::mutate(coordinates = paste0("[", .data$coordinates, "]")) %>%
       dplyr::summarise(coordinates =  paste(.data$coordinates, collapse = ","))

@@ -530,7 +530,7 @@ get_base_raster_layer <- function(url,
     raster_cols <- raster::colortable(out)
     legend <-
       get_layer_legend(url) %>%
-      match_raster_colors(out) %>%
+      match_legend_colors(out) %>%
       dplyr::arrange(color = match(.data$color, raster_cols[-1]))
     if (nrow(legend) == length(raster_cols)) {
       legend_names <- legend$value

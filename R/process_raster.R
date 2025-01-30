@@ -47,7 +47,7 @@ setMethod("raster_colors", "RasterLayer", function(x) {
     as.data.frame() %>%
     dplyr::mutate(value = raster_values) %>%
     dplyr::mutate(color = raster_cols[raster_values + 1]) %>%
-    dplyr::select(.data$x, .data$y, .data$color)
+    dplyr::select("x", "y", "color")
   if (length(raster_names) > 0) {
     legend <- data.frame(
       color = raster_cols,
@@ -95,7 +95,7 @@ setMethod("raster_colors", "RasterStack", function(x) {
     raster_coords %>%
     as.data.frame() %>%
     cbind(raster_values) %>%
-    dplyr::select(.data$x, .data$y, .data$color)
+    dplyr::select("x", "y", "color")
   return(out)
 })
 
@@ -134,7 +134,7 @@ setMethod("raster_colors", "RasterBrick", function(x) {
     raster_coords %>%
     as.data.frame() %>%
     cbind(raster_values) %>%
-    dplyr::select(.data$x, .data$y, .data$color)
+    dplyr::select("x", "y", "color")
   return(out)
 })
 
@@ -173,7 +173,7 @@ setMethod("raster_colors", "SpatRaster", function(x) {
     raster_coords %>%
     as.data.frame() %>%
     cbind(raster_values) %>%
-    dplyr::select(.data$x, .data$y, .data$color)
+    dplyr::select("x", "y", "color")
   return(out)
 })
 
@@ -214,12 +214,12 @@ match_legend_colors <- function(legend, x) {
   out <-
     legend |>
     dplyr::mutate(raster_cols = list(x)) |>
-    dplyr::mutate(rgb = purrr::map2(color, raster_cols, \(col, rc) {
+    dplyr::mutate(rgb = purrr::map2(.data$color, .data$raster_cols, \(col, rc) {
       temp_rgb <- grDevices::col2rgb(col)
 
     }))
 
-  raster_legend_lookup <- lapply(legend, \(i) {
+  raster_legend_lookup <- lapply(legend, \(x) {
     col_diffs <- sqrt(
       sweep(
         grDevices::col2rgb(x[[1]]), 1,
@@ -248,7 +248,7 @@ match_legend_colors <- function(legend, x) {
   # corrected_legend <-
   #   legend %>%
   #   dplyr::full_join(raster_legend_lookup, by = c("color" = "legend_col")) %>%
-  #   dplyr::select(.data$raster_col, .data$value) %>%
+  #   dplyr::select("raster_col", "value") %>%
   #   dplyr::rename(color = .data$raster_col)
   # return(corrected_legend)
 }
