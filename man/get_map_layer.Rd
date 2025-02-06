@@ -45,7 +45,7 @@ package}
 \item{...}{Additional arguments to pass to the ArcGIS REST API}
 }
 \value{
-A "RasterLayer" object
+A "SpatRaster" object
 }
 \description{
 This function retrieves map service layers from an ArcGIS

@@ -2,15 +2,16 @@
 % Please edit documentation in R/process_raster.R
 \name{match_legend_colors}
 \alias{match_legend_colors}
-\title{Match colors in RasterLayer color space to the provided legend values}
+\title{Match colors in SpatRaster coltab to the provided legend values}
 \usage{
-match_legend_colors(legend, x)
+match_legend_colors(legend, raster_cols)
 }
 \arguments{
 \item{legend}{An object of class raster_legend as returned by
 \code{\link{get_layer_legend}}}
 
-\item{x}{A RasterLayer object as returned by \code{\link{get_map_layer}}}
+\item{raster_cols}{The colortable from a SpatRaster object. Use the first
+item in the list}
 }
 \value{
 A raster_legend object with corrected colors to match those in
@@ -18,7 +19,7 @@ A raster_legend object with corrected colors to match those in
 }
 \description{
 Colors provided by the legend do not always correspond exactly with the
-colors in the colortable of a RasterLayer object. They are usually pretty
+colors in the coltab of a SpatRaster object. They are usually pretty
 close, though, so this function finds the closest colors, maps them to the
 appropriate colors in the Raster* object, and applies that to the legend.
 }
@@ -36,4 +37,5 @@ wi_landcover <- get_map_layer(wi_landcover_url, wis_poly)
 legend <- get_layer_legend(wi_landcover_url)
 new_legend <- match_legend_colors(legend, wi_landcover_url)
 }
+
 }

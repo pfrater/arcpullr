@@ -1,114 +1,46 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>/404.html</loc>
-  </url>
-  <url>
-    <loc>/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>/articles/intro_to_arcpullr.html</loc>
-  </url>
-  <url>
-    <loc>/articles/raster_layers.html</loc>
-  </url>
-  <url>
-    <loc>/articles/spatial_queries.html</loc>
-  </url>
-  <url>
-    <loc>/authors.html</loc>
-  </url>
-  <url>
-    <loc>/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/arcpullr-package.html</loc>
-  </url>
-  <url>
-    <loc>/reference/format_coords.html</loc>
-  </url>
-  <url>
-    <loc>/reference/get_geometry_type.html</loc>
-  </url>
-  <url>
-    <loc>/reference/get_image_layer.html</loc>
-  </url>
-  <url>
-    <loc>/reference/get_layers_by_spatial.html</loc>
-  </url>
-  <url>
-    <loc>/reference/get_layer_html.html</loc>
-  </url>
-  <url>
-    <loc>/reference/get_layer_legend.html</loc>
-  </url>
-  <url>
-    <loc>/reference/get_map_layer.html</loc>
-  </url>
-  <url>
-    <loc>/reference/get_raster_layer.html</loc>
-  </url>
-  <url>
-    <loc>/reference/get_service_type.html</loc>
-  </url>
-  <url>
-    <loc>/reference/get_sf_crs.html</loc>
-  </url>
-  <url>
-    <loc>/reference/get_spatial_layer.html</loc>
-  </url>
-  <url>
-    <loc>/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/match_raster_colors.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plot_layer-RasterBrick-method.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plot_layer-RasterLayer-method.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plot_layer-RasterStack-method.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plot_layer-sf-method.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plot_layer.html</loc>
-  </url>
-  <url>
-    <loc>/reference/raster_colors-RasterBrick-method.html</loc>
-  </url>
-  <url>
-    <loc>/reference/raster_colors-RasterLayer-method.html</loc>
-  </url>
-  <url>
-    <loc>/reference/raster_colors-RasterStack-method.html</loc>
-  </url>
-  <url>
-    <loc>/reference/raster_colors.html</loc>
-  </url>
-  <url>
-    <loc>/reference/sf_example_polys.html</loc>
-  </url>
-  <url>
-    <loc>/reference/sf_example_raster.html</loc>
-  </url>
-  <url>
-    <loc>/reference/sf_objects.html</loc>
-  </url>
-  <url>
-    <loc>/reference/sp_rel_lookups.html</loc>
-  </url>
-  <url>
-    <loc>/reference/sp_rel_xref.html</loc>
-  </url>
-  <url>
-    <loc>/reference/sql_where.html</loc>
-  </url>
-  <url>
-    <loc>/reference/valid_sp_rel.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>/404.html</loc></url>
+<url><loc>/articles/index.html</loc></url>
+<url><loc>/articles/intro_to_arcpullr.html</loc></url>
+<url><loc>/articles/raster_layers.html</loc></url>
+<url><loc>/articles/spatial_queries.html</loc></url>
+<url><loc>/authors.html</loc></url>
+<url><loc>/index.html</loc></url>
+<url><loc>/reference/arcpullr-package.html</loc></url>
+<url><loc>/reference/example_urls.html</loc></url>
+<url><loc>/reference/format_coords.html</loc></url>
+<url><loc>/reference/get_geometry_type.html</loc></url>
+<url><loc>/reference/get_image_layer.html</loc></url>
+<url><loc>/reference/get_layers_by_spatial.html</loc></url>
+<url><loc>/reference/get_layer_html.html</loc></url>
+<url><loc>/reference/get_layer_info.html</loc></url>
+<url><loc>/reference/get_layer_legend.html</loc></url>
+<url><loc>/reference/get_map_layer.html</loc></url>
+<url><loc>/reference/get_raster_layer.html</loc></url>
+<url><loc>/reference/get_service_type.html</loc></url>
+<url><loc>/reference/get_sf_crs.html</loc></url>
+<url><loc>/reference/get_spatial_layer.html</loc></url>
+<url><loc>/reference/get_table_layer.html</loc></url>
+<url><loc>/reference/index.html</loc></url>
+<url><loc>/reference/match_legend_colors.html</loc></url>
+<url><loc>/reference/match_raster_colors.html</loc></url>
+<url><loc>/reference/plot_layer-RasterBrick-method.html</loc></url>
+<url><loc>/reference/plot_layer-RasterLayer-method.html</loc></url>
+<url><loc>/reference/plot_layer-RasterStack-method.html</loc></url>
+<url><loc>/reference/plot_layer-sf-method.html</loc></url>
+<url><loc>/reference/plot_layer-SpatRaster-method.html</loc></url>
+<url><loc>/reference/plot_layer.html</loc></url>
+<url><loc>/reference/raster_colors-RasterBrick-method.html</loc></url>
+<url><loc>/reference/raster_colors-RasterLayer-method.html</loc></url>
+<url><loc>/reference/raster_colors-RasterStack-method.html</loc></url>
+<url><loc>/reference/raster_colors-SpatRaster-method.html</loc></url>
+<url><loc>/reference/raster_colors.html</loc></url>
+<url><loc>/reference/sf_example_polys.html</loc></url>
+<url><loc>/reference/sf_example_raster.html</loc></url>
+<url><loc>/reference/sf_objects.html</loc></url>
+<url><loc>/reference/sp_rel_lookups.html</loc></url>
+<url><loc>/reference/sp_rel_xref.html</loc></url>
+<url><loc>/reference/sql_where.html</loc></url>
+<url><loc>/reference/valid_sp_rel.html</loc></url>
 </urlset>
+

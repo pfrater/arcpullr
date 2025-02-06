@@ -39,9 +39,9 @@ format_multipoint_coords <- function(sf_obj) {
 format_point_coords <- function(sf_obj) {
   crs <- get_sf_crs(sf_obj)
   out <-
-    sf_obj %>%
-    sf::st_coordinates() %>%
-    data.frame() %>%
+    sf_obj |>
+    sf::st_coordinates() |>
+    data.frame() |>
     dplyr::select("X", "Y")
   pt_str <- paste(paste0("'", tolower(names(out)), "':"), out, collapse = ",")
   coord_string <- paste("{", pt_str, ", {'spatialReference': ", crs, "}}")
@@ -80,18 +80,18 @@ format_envelope_coords <- function(sf_obj) {
 #   geometry_type <- sprintf("'%s'", geometry_type)
 #   crs <- get_sf_crs(sf_obj)
 #   out <-
-#     sf_obj %>%
-#     sf::st_coordinates() %>%
-#     data.frame() %>%
-#     dplyr::select("X", "Y") %>%
-#     tidyr::unite(col= "coordinates",sep = ",") %>%
-#     dplyr::mutate(coordinates = paste("[", .data$coordinates, "]",sep="")) %>%
-#     dplyr::summarise(coordinates =  paste(.data$coordinates,collapse = ",")) %>%
+#     sf_obj |>
+#     sf::st_coordinates() |>
+#     data.frame() |>
+#     dplyr::select("X", "Y") |>
+#     tidyr::unite(col= "coordinates",sep = ",") |>
+#     dplyr::mutate(coordinates = paste("[", .data$coordinates, "]",sep="")) |>
+#     dplyr::summarise(coordinates =  paste(.data$coordinates,collapse = ",")) |>
 #     dplyr::mutate(coordinates = paste("{", geometry_type, ":",left_bracket,
 #                                       .data$coordinates,
 #                                       right_bracket,
 #                                       ",'spatialReference':{'wkid':", crs,
-#                                       "}}", sep = "")) %>%
+#                                       "}}", sep = "")) |>
 #     dplyr::pull()
 #   return(out)
 # }
@@ -121,22 +121,22 @@ format_coords <- function(sf_obj, geom_type) {
   crs <- get_sf_crs(sf_obj)
   out <- lapply(1:nrow(sf_obj), function(x) {
     out <-
-      sf_obj[x, ] %>%
-      sf::st_coordinates() %>%
-      data.frame() %>%
-      dplyr::select("X", "Y") %>%
-      tidyr::unite(col= "coordinates",sep = ",") %>%
-      dplyr::mutate(coordinates = paste0("[", .data$coordinates, "]")) %>%
+      sf_obj[x, ] |>
+      sf::st_coordinates() |>
+      data.frame() |>
+      dplyr::select("X", "Y") |>
+      tidyr::unite(col= "coordinates",sep = ",") |>
+      dplyr::mutate(coordinates = paste0("[", .data$coordinates, "]")) |>
       dplyr::summarise(coordinates =  paste(.data$coordinates, collapse = ","))
   }
   )
   out <-
-    do.call("rbind", out) %>%
+    do.call("rbind", out) |>
     dplyr::mutate(coordinates = dplyr::case_when(
       geom_type == "multipoint" ~ .data$coordinates,
       TRUE ~ paste0("[", .data$coordinates, "]")
-    )) %>%
-    dplyr::pull() %>%
+    )) |>
+    dplyr::pull() |>
     paste(collapse = ", ")
   out <-
     paste("{", geometry_type, ":",
@@ -303,9 +303,9 @@ sql_where <- function(..., rel_op = "=") {
 #' @return A character string of the HTML body
 get_layer_html <- function(url) {
   layer_html <-
-    xml2::read_html(url) %>%
-    rvest::html_nodes("body") %>%
-    rvest::html_text() %>%
+    xml2::read_html(url) |>
+    rvest::html_nodes("body") |>
+    rvest::html_text() |>
     stringr::str_replace("\\s+", " ")
   return(layer_html)
 }
@@ -357,9 +357,9 @@ get_service_type <- function(url, ...) {
       out <- "map"
     } else {
       out <-
-        html %>%
-        stringr::str_match(base::paste0("Type:\\s+","(.*?) ")) %>%
-        stringr::str_replace("Type:", "") %>%
+        html |>
+        stringr::str_match(base::paste0("Type:\\s+","(.*?) ")) |>
+        stringr::str_replace("Type:", "") |>
         stringr::str_trim()
       out <- paste0(tolower(out[2]), "_layer")
     }
@@ -370,13 +370,13 @@ get_service_type <- function(url, ...) {
   args <- list(...)
   if ("html" %in% names(args)) {
     geom_type <-
-      args$html %>%
+      args$html |>
       find_layer_type()
   } else if (httr::http_error(url) == TRUE) {
     return("url_error")
   } else {
     geom_type <-
-      get_layer_html(url) %>%
+      get_layer_html(url) |>
       find_layer_type()
   }
   return(geom_type)
@@ -414,9 +414,9 @@ get_geometry_type <- function(url) {
            " a raster")
     } else {
       geom_type <-
-        layer_html %>%
-        stringr::str_match(base::paste0("Geometry Type: ","(.*?) ")) %>%
-        stringr::str_replace("Description:", "") %>%
+        layer_html |>
+        stringr::str_match(base::paste0("Geometry Type: ","(.*?) ")) |>
+        stringr::str_replace("Description:", "") |>
         stringr::str_trim()
       return(geom_type[2])
     }
@@ -435,10 +435,10 @@ get_supported_operations <- function(url, ...) {
 
   extract_so <- function(html) {
     out <-
-      html %>%
-      stringr::str_extract("Supported Operations:(\\s*.*)*$") %>%
-      stringr::str_trim() %>%
-      stringr::str_split("\r\n\\s+") %>%
+      html |>
+      stringr::str_extract("Supported Operations:(\\s*.*)*$") |>
+      stringr::str_trim() |>
+      stringr::str_split("\r\n\\s+") |>
       unlist()
     out <- grep("Supported Operations:", out, value = TRUE, invert = TRUE)
     return(out)
@@ -511,7 +511,7 @@ valid_sp_rel <- function(fc1, fc2, pull = TRUE) {
   fc1 <- tolower(fc1)
   fc2 <- tolower(fc2)
   out <-
-    arcpullr::sp_rel_valid %>%
+    arcpullr::sp_rel_valid |>
     dplyr::filter(.data$feature_class == fc1, .data$query_feature_class == fc2)
   if (nrow(out) == 0) {
     stop("One of the supplied feature classes cannot be found.")

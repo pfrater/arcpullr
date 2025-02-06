@@ -110,7 +110,7 @@ get_table_layer <- function(url,
     args <- c(args, list(idsplits = layer_info$maxRecordCount))
   esri_features <- do.call(get_esri_features, args)
   atts <-
-    lapply(esri_features, "[[", 1) %>%
+    lapply(esri_features, "[[", 1) |>
     lapply(
       function(att)
         lapply(att, function(x) ifelse(is.null(x), NA, x))
@@ -237,7 +237,7 @@ esri2sfGeom <- function(jsonFeats, sf_type) {
     geoms <- esri2sfPolyline(jsonFeats)
   }
   # attributes
-  atts <- lapply(jsonFeats, '[[', 1) %>%
+  atts <- lapply(jsonFeats, '[[', 1) |>
     lapply(function(att)
       lapply(att,
              function(x) {
@@ -322,9 +322,9 @@ esri2sfPolyline <- function(features) {
 #' first determine how they fit into the POST request and make adjustments as
 #' needed. This syntax can be tricky if you're not used to it.
 #'
-#' @inheritParams get_base_raster_layer
+#' @inheritParams get_raster_layer
 #'
-#' @return A "RasterLayer" object
+#' @return A "SpatRaster" object
 #' @export
 #'
 #' @examples
@@ -342,7 +342,7 @@ get_map_layer <- function(url,
                           transparent = TRUE,
                           add_legend = TRUE,
                           ...) {
-  out <- get_base_raster_layer(
+  out <- get_raster_layer(
     url = url,
     sf_object = sf_object,
     bbox = bbox,
@@ -376,9 +376,9 @@ get_map_layer <- function(url,
 #' first determine how they fit into the POST request and make adjustments as
 #' needed. This syntax can be tricky if you're not used to it.
 #'
-#' @inheritParams get_base_raster_layer
+#' @inheritParams get_raster_layer
 #'
-#' @return A "RasterStack" object
+#' @return A "SpatRaster" object
 #' @export
 #'
 #' @examples
@@ -395,7 +395,7 @@ get_image_layer <- function(url,
                             format = "png",
                             transparent = TRUE,
                             ...) {
-  out <- get_base_raster_layer(
+  out <- get_raster_layer(
     url = url,
     sf_object = sf_object,
     bbox = bbox,
@@ -437,113 +437,8 @@ get_image_layer <- function(url,
 #' (TRUE, default) or not (FALSE)
 #' @param ... Additional arguments to pass to the ArcGIS REST API
 #'
-#' @return An object of type \code{RasterLayer} if \code{export_type = "map"} or
-#' an object of type \code{RasterStack} if \code{export_type = "image"}
-get_base_raster_layer <- function(url,
-                                  sf_object = NULL,
-                                  bbox = NULL,
-                                  bbox_crs = NULL,
-                                  token = "",
-                                  clip_raster = TRUE,
-                                  format = "png",
-                                  transparent = TRUE,
-                                  export_type = "map",
-                                  add_legend = FALSE,
-                                  ...) {
-  if (is.null(sf_object) && is.null(bbox)) {
-    stop(
-      "You must specify either an sf_object to spatially query by ",
-      "or a bbox as a character string"
-    )
-  } else if (!is.null(sf_object) && !is.null(bbox)) {
-    stop(
-      "You must specify either an sf_object or a bbox, but may not specify both"
-    )
-  } else if (!is.null(sf_object)) {
-    bbox <- sf::st_bbox(sf_object)
-    bbox_coords <- paste(bbox, collapse = ", ")
-    bbox_sr <- get_sf_crs(sf_object)
-  } else {
-    if (is.null(bbox_crs)) {
-      stop("You must specify bbox_crs if you are using the bbox argument")
-    } else {
-      bbox_sr <- bbox_crs
-    }
-    bbox_coords <- paste(bbox, collapse = ", ")
-  }
-  if (export_type == "map") {
-    export_url <- paste(url, "export", sep = "/")
-  } else if (export_type == "image") {
-    if (add_legend) {
-      warning("You can only use add_legend with get_map_layer(). ",
-              "Setting add_legend to FALSE")
-    }
-    add_legend <- FALSE
-    export_url <- paste(url, "exportImage", sep = "/")
-  }
-  if (transparent) {
-    if (!(grepl("png|gif", format))) {
-      transparent <- FALSE
-      warning("Transparent background only available for png and gif formats")
-    }
-  }
-  response_raw <- httr::POST(
-    url = export_url,
-    body = list(
-      f = "json",
-      token = token,
-      bbox = bbox_coords,
-      bboxSR = bbox_sr,
-      imageSR = bbox_sr,
-      transparent = transparent,
-      format = format,
-      ...
-    )
-  )
-  response <- jsonlite::fromJSON(rawToChar(response_raw$content))
-  raster_url <- response$href
-  raster_extent <- raster::extent(unlist(response$extent[c(1, 3, 2, 4)]))
-  raster_crs <- raster::crs(sf_object)
-
-  # set the extent and projection of the raster layer
-  temp_file <- tempfile()
-  utils::download.file(raster_url, temp_file, quiet = TRUE)
-  if (export_type == "map") {
-    out <- raster::raster(temp_file)
-    if (raster::nbands(out) > 1) {
-      out <- raster::stack(temp_file)
-    }
-  } else if (export_type == "image") {
-    out <- raster::stack(temp_file)
-  }
-  raster::extent(out) <- raster_extent
-  raster::projection(out) <- raster_crs
-
-  # read the raster into memory (as opposed to a connection)
-  out <- raster::readAll(out)
-
-  if (clip_raster) {
-    out <- raster::mask(out, sf_object)
-  }
-
-  if (add_legend) {
-    raster_cols <- raster::colortable(out)
-    legend <-
-      get_layer_legend(url) %>%
-      match_legend_colors(out) %>%
-      dplyr::arrange(color = match(.data$color, raster_cols[-1]))
-    if (nrow(legend) == length(raster_cols)) {
-      legend_names <- legend$value
-    } else {
-      legend_names <- c(NA, legend$value)
-    }
-    out@legend@names <- legend_names
-  }
-
-  return(out)
-}
-
-get_base_terra_layer <- function(url,
+#' @return An object of type \code{SpatRaster}
+get_raster_layer <- function(url,
                                  sf_object = NULL,
                                  bbox = NULL,
                                  bbox_crs = NULL,
@@ -609,23 +504,9 @@ get_base_terra_layer <- function(url,
   raster_extent <- terra::ext(unlist(response$extent[c(1, 3, 2, 4)]))
   raster_crs <- terra::crs(sf_object)
 
-  # set the extent and projection of the raster layer
-  # temp_file <- tempfile()
-  # utils::download.file(raster_url, temp_file, quiet = TRUE)
-  # if (export_type == "map") {
-  #   out <- terra::rast(raster_url)
-  #   if (raster::nbands(out) > 1) {
-  #     out <- terra::rast(raster_url)
-  #   }
-  # } else if (export_type == "image") {
-  #   out <- terra::rast(raster_url)
-  # }
   out <- suppressWarnings(terra::rast(raster_url))
   terra::ext(out) <- raster_extent
   terra::crs(out) <- raster_crs
-
-  # read the raster into memory (as opposed to a connection)
-  # out <- terra::readValues(out)
 
   if (clip_raster) {
     out <- terra::crop(out, sf_object)
@@ -634,18 +515,12 @@ get_base_terra_layer <- function(url,
   if (add_legend) {
     raster_cols <- terra::coltab(out)[[1]]
     legend <-
-      get_layer_legend(url) %>%
-      match_legend_colors(raster_cols) %>%
-      dplyr::arrange(order)
-      # dplyr::arrange(color = match(.data$color, raster_cols[-1]))
-    if (nrow(legend) == length(raster_cols)) {
-      legend_names <- legend$value
-    } else {
-      legend_names <- c(NA, legend$value)
-    }
-    out@legend@names <- legend_names
+      get_layer_legend(url) |>
+      match_legend_colors(raster_cols) |>
+      dplyr::arrange(.data$value)
+    attr(out, "legend") <- legend
   }
 
-  return(out)
+  return(terra::flip(out))
 }
 

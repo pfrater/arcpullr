@@ -55,13 +55,10 @@
 #' @import sf
 NULL
 
-
 #' @import purrr
 NULL
 
 #' @import terra
-
-#' @importFrom dplyr %>%
 NULL
 
 #' @importFrom rlang .data
@@ -71,5 +68,11 @@ NULL
 NULL
 
 #' @importFrom utils download.file
+NULL
+
+#' @importFrom grDevices col2rgb
+NULL
+
+#' @importFrom stats setNames
 NULL
 

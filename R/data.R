@@ -60,18 +60,18 @@
 "trout_hab_project_pts"
 
 
-#' Various example raster objects
-#'
-#' These are raster objects that are used for examples throughout the package
-#'
-#' @name sf_example_raster
-#'
-#' @source \href{https://dnrmaps.wi.gov/arcgis_image/rest/services}{Wisconsin DNR ArcGIS Image Server}
-"wi_landcover"
+# Various example raster objects
+#
+# These are raster objects that are used for examples throughout the package
+#
+# @name sf_example_raster
+#
+# @source \href{https://dnrmaps.wi.gov/arcgis_image/rest/services}{Wisconsin DNR ArcGIS Image Server}
+# "wi_landcover"
 
 
-#' @rdname sf_example_raster
-"wi_aerial_imagery"
+# @rdname sf_example_raster
+# "wi_aerial_imagery"
 
 
 #' Various URLs used in examples

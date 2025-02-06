@@ -36,11 +36,11 @@ plot_layer <- function(x, ...) {
 #' @rdname plot_layer
 #' @export
 plot_layer.sf <- function(x,
-                         outline_poly = NULL,
-                         outline_size = 1.2,
-                         outline_color = "gray30",
-                         plot_pkg = "ggplot",
-                         ...) {
+                          outline_poly = NULL,
+                          outline_size = 1.2,
+                          outline_color = "gray30",
+                          plot_pkg = "ggplot",
+                          ...) {
   if (plot_pkg == "base") {
     if (is.null(outline_poly)) {
       graphics::plot(x$geom, ...)
@@ -53,7 +53,7 @@ plot_layer.sf <- function(x,
         ...)
       graphics::plot(
         x$geom, add = TRUE,
-        ...) %>% suppressWarnings()
+        ...) |> suppressWarnings()
     }
   } else if (plot_pkg %in% c("ggplot", "ggplot2")) {
     g <- ggplot2::ggplot(data = NULL)
@@ -73,6 +73,124 @@ plot_layer.sf <- function(x,
   }
 }
 
+#' Plot a SpatRaster object
+#'
+#' @inheritParams plot_layer
+#'
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' wi_aerial <- get_map_layer(wi_leaf_off_url, wis_poly)
+#' plot_layer(wi_aerial, outline_poly = wis_poly)
+#' }
+setMethod("plot_layer", "SpatRaster", function(x,
+                                               outline_poly = NULL,
+                                               outline_size = 1.2,
+                                               outline_color = "gray30",
+                                               plot_pkg = "ggplot",
+                                               ...) {
+  if (plot_pkg == "base") {
+    if (is.null(outline_poly)) {
+      terra::plotRGB(x, colNA = NA, ...)
+    } else {
+      terra::plotRGB(x, ...)
+      graphics::plot(
+        outline_poly,
+        add = TRUE,
+        col = "transparent",
+        lwd = outline_size,
+        border = outline_color,
+        ...
+      ) |> suppressWarnings()
+    }
+  } else if (plot_pkg %in% c("ggplot", "ggplot2")) {
+    plot_data <- terra::as.data.frame(x, xy = TRUE)
+    if (ncol(plot_data) == 3) {
+      plot_data <- setNames(plot_data, c("x", "y", "value"))
+    } else {
+      plot_data <-
+        plot_data |>
+        setNames(c("x", "y", "red", "green", "blue")) |>
+        dplyr::filter(!dplyr::if_any(
+          c(.data$red, .data$green, .data$blue),
+          is.na
+        )) |>
+        dplyr::mutate(
+          color = grDevices::rgb(
+            .data$red, .data$green, .data$blue,
+            maxColorValue = 255
+          )
+        )
+    }
+    if (!is.null(attr(x, "legend"))) {
+      plot_data <-
+        plot_data |>
+        dplyr::left_join(attr(x, "legend"), by = "value")
+      legend <- attr(x, "legend")
+      legend_vals <- legend$color
+      names(legend_vals) <- legend$name
+      plot_data <- dplyr::filter(plot_data, .data$color != "#000000")
+    }
+    if (!is.null(attr(x, "legend"))) {
+      g <-
+        ggplot2::ggplot(data = NULL) +
+        ggplot2::geom_raster(
+          data = plot_data,
+          ggplot2::aes(x = .data$x, y = .data$y, fill = factor(.data$name))
+        ) +
+        ggplot2::scale_fill_manual(
+          name = "Legend",
+          values = legend_vals
+        )
+    } else if ("color" %in% names(plot_data)) {
+      g <-
+        ggplot2::ggplot(data = NULL) +
+        ggplot2::geom_raster(
+          data = plot_data,
+          ggplot2::aes(x = .data$x, y = .data$y, fill = .data$color),
+          show.legend = FALSE
+        ) +
+        ggplot2::scale_fill_identity()
+    } else {
+      g <-
+        ggplot2::ggplot(data = NULL) +
+        ggplot2::geom_raster(
+          data = plot_data,
+          ggplot2::aes(x = .data$x, y = .data$y)
+        )
+    }
+    if (!is.null(outline_poly)) {
+      g <-
+        g +
+        ggplot2::geom_sf(
+          data = outline_poly,
+          fill = ggplot2::alpha(0.01),
+          size = outline_size,
+          color = outline_color
+        )
+    }
+    x_crs <- terra::crs(x)
+    g <- g + ggplot2::coord_sf(crs = x_crs)
+    if (requireNamespace("cowplot", quietly = TRUE)) {
+      g <- g + cowplot::theme_map()
+    } else {
+      g <- g + ggplot2::theme_minimal()
+    }
+    if (!is.null(attr(x, "legend"))) {
+      g <-
+        g +
+        ggplot2::theme(
+          legend.text = ggplot2::element_text(size = 10),
+          legend.title = ggplot2::element_text(size = 14)
+        )
+    }
+    return(g)
+  } else {
+    stop("This function only set up to work with base plotting or ggplot")
+  }
+})
+
 #' Plot a RasterLayer object
 #'
 #' @inheritParams plot_layer
@@ -87,12 +205,12 @@ plot_layer.sf <- function(x,
 #' plot_layer(wi_landcover, outline_poly = wis_poly)
 #' }
 setMethod("plot_layer", "RasterLayer", function(x,
-                                               outline_poly = NULL,
-                                               outline_size = 1.2,
-                                               outline_color = "gray30",
-                                               legend = TRUE,
-                                               plot_pkg = "ggplot",
-                                               ...) {
+                                                outline_poly = NULL,
+                                                outline_size = 1.2,
+                                                outline_color = "gray30",
+                                                legend = TRUE,
+                                                plot_pkg = "ggplot",
+                                                ...) {
   if (plot_pkg == "base") {
     if (is.null(outline_poly)) {
       raster::plot(x, ...)
@@ -105,12 +223,12 @@ setMethod("plot_layer", "RasterLayer", function(x,
         lwd = outline_size,
         border = outline_color,
         ...
-      ) %>% suppressWarnings()
+      ) |> suppressWarnings()
     }
   } else if (plot_pkg %in% c("ggplot", "ggplot2")) {
     plot_data <- raster_colors(x)
     plot_data <-
-      plot_data %>%
+      plot_data |>
       dplyr::filter(.data$color != "#000000", !is.na(.data$color))
     g <-
       ggplot2::ggplot(data = NULL) +
@@ -162,11 +280,11 @@ setMethod("plot_layer", "RasterLayer", function(x,
 #' plot_layer(wi_aerial, outline_poly = wis_poly)
 #' }
 setMethod("plot_layer", "RasterStack", function(x,
-                                               outline_poly = NULL,
-                                               outline_size = 1.2,
-                                               outline_color = "gray30",
-                                               plot_pkg = "ggplot",
-                                               ...) {
+                                                outline_poly = NULL,
+                                                outline_size = 1.2,
+                                                outline_color = "gray30",
+                                                plot_pkg = "ggplot",
+                                                ...) {
   if (plot_pkg == "base") {
     if (is.null(outline_poly)) {
       raster::plotRGB(x, colNA = NA, ...)
@@ -179,7 +297,7 @@ setMethod("plot_layer", "RasterStack", function(x,
         lwd = outline_size,
         border = outline_color,
         ...
-      ) %>% suppressWarnings()
+      ) |> suppressWarnings()
     }
   } else if (plot_pkg %in% c("ggplot", "ggplot2")) {
     plot_data <- raster_colors(x)
@@ -240,7 +358,7 @@ setMethod("plot_layer", "RasterBrick", function(x,
         lwd = outline_size,
         border = outline_color,
         ...
-      ) %>% suppressWarnings()
+      ) |> suppressWarnings()
     }
   } else if (plot_pkg %in% c("ggplot", "ggplot2")) {
     plot_data <- raster_colors(x)

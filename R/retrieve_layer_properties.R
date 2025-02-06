@@ -24,31 +24,31 @@ get_layer_legend <- function(url) {
   }
   legend_url <- paste0(url, "/legend")
   legend_html <-
-    legend_url %>%
-    xml2::read_html() %>%
-    rvest::html_nodes("table") %>%
+    legend_url |>
+    xml2::read_html() |>
+    rvest::html_nodes("table") |>
     rvest::html_nodes("tr")
   legend_src <-
-    legend_html %>%
-    rvest::html_nodes("img") %>%
+    legend_html |>
+    rvest::html_nodes("img") |>
     rvest::html_attr("src")
   legend_colors <- lapply(legend_src, function(x) {
     out <-
-      stringr::str_replace(x, "^data.*base64,", "") %>%
-      jsonlite::base64_dec() %>%
-      magick::image_read() %>%
-      magick::image_data(channels = "rgb") %>%
-      as.integer() %>%
-      terra::rast() %>%
-      raster_colors() %>%
-      dplyr::count(.data$color) %>%
-      dplyr::arrange(dplyr::desc(.data$n)) %>%
+      stringr::str_replace(x, "^data.*base64,", "") |>
+      jsonlite::base64_dec() |>
+      magick::image_read() |>
+      magick::image_data(channels = "rgb") |>
+      as.integer() |>
+      terra::rast() |>
+      raster_colors() |>
+      dplyr::count(.data$color) |>
+      dplyr::arrange(dplyr::desc(.data$n)) |>
       dplyr::slice(1)
     return(out$color)
-  }) %>% unlist()
+  }) |> unlist()
   legend_values <-
-    legend_html %>%
-    rvest::html_nodes("img") %>%
+    legend_html |>
+    rvest::html_nodes("img") |>
     rvest::html_attr("alt")
   out <- data.frame(color = legend_colors, value = legend_values)
   return(structure(out, class = c("raster_legend", "data.frame")))

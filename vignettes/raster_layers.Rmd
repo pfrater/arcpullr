@@ -25,6 +25,15 @@ knitr::opts_chunk$set(
 options(rmarkdown.html_vignette.check_title = FALSE)
 library(arcpullr)
 library(sf)
+wi_landcover <- terra::rast(system.file("wi_landcover.png", package = "arcpullr"))
+raster_cols <- terra::coltab(wi_landcover)[[1]]
+wi_landcover_legend <- 
+  wi_landcover_url |>
+  get_layer_legend() |>
+  match_legend_colors(raster_cols) |>
+  dplyr::arrange(.data$value)
+attr(wi_landcover, "legend") <- wi_landcover_legend
+wi_aerial_imagery <- terra::rast(system.file("wi_aerial_imagery.png", package = "arcpullr"))
 ```
 
 ```{r, echo = FALSE}
@@ -38,7 +47,7 @@ also raster layers (both Map and Image service types). The syntax for these is
 generally the same as for the `get_layer_by_*` family of functions. Map and
 Image layers require a bounding box as part of the query, so both 
 `get_map_layer` and `get_image_layer` have required arguments of a URL and an 
-`sf` object. These functions pull the raster layers provided by the URL and return the layer as a RasterLayer object from the `raster` package.
+`sf` object. These functions pull the raster layers provided by the URL and return the layer as a SpatRaster object from the `terra` package.
 
 ## URL's for examples 
 <a class="btn btn-primary" data-bs-toggle="collapse"href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
@@ -55,7 +64,7 @@ landcover_path <- "DW_Land_Cover/EN_Land_Cover2_Lev2/MapServer"
 landcover_url <- paste0(image_server, landcover_path)
 
 # WI Leaf-off Aerial Imagery URL
-wi_leaf_off_path <- "DW_Image/EN_Image_Basemap_Leaf_Off/ImageServer"
+wi_leaf_off_path <- "DW_Imagery/EN_Image_Basemap_Latest_Leaf_Off/ImageServer"
 wi_aerial_imagery_url <- paste0(image_server, wi_leaf_off_path)
 
 # the wis_poly polygon is available as an exported object in arcpullr
@@ -100,9 +109,6 @@ Wisconsin Department of Natural Resources.
 
 ```{r, image_layer, eval = FALSE, echo = FALSE}
 wi_aerial_imagery <- get_image_layer(wi_aerial_imagery_url, wis_poly)
-```
-
-```{r show_map_plotting, ref.label=c("image_layer", "plot_image_layer"), eval = FALSE}
 ```
 
 ```{r, plot_image_layer, fig.height = 5, fig.width = 5, echo = FALSE}

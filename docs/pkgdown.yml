@@ -1,9 +1,8 @@
-pandoc: '2.18'
-pkgdown: 2.0.6
+pandoc: 3.1.1
+pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   intro_to_arcpullr: intro_to_arcpullr.html
   raster_layers: raster_layers.html
   spatial_queries: spatial_queries.html
-last_built: 2022-08-29T19:21Z
-
+last_built: 2025-02-06T17:33Z
