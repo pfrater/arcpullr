@@ -269,20 +269,22 @@ sql_where <- function(..., rel_op = "=") {
   }
   out_list <- lapply(1:length(args), function(x) {
     if (length(args[[x]]) > 1) {
+      if (rel_op[x] == "=") {
+        rel_op <- "IN"
+      }
       if (is.character(args[[x]])) {
         x_vals <- paste0("( '", paste(args[[x]], collapse = "' , '"), "' )")
       } else {
         x_vals <- paste0("(", paste(args[[x]], collapse = ", "), ")")
       }
-      return(paste(names(args)[x], "IN", x_vals))
     } else {
       if (is.character(args[[x]])) {
         x_vals <- paste0("'", args[[x]], "'")
       } else {
         x_vals <- args[[x]]
       }
-      return(paste(names(args)[x], rel_op[x], x_vals))
     }
+    return(paste(names(args)[x], rel_op[x], x_vals))
   })
   if (length(out_list) > 1) {
     out <- paste(out_list, collapse = " AND ")
