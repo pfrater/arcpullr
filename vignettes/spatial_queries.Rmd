@@ -2,9 +2,7 @@
 title: "Spatial Queries"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
-  html_document:
-    theme:
-      version: 5
+  rmarkdown::html_vignette
 vignette: > 
   %\VignetteIndexEntry{Spatial Queries}
   %\VignetteEncoding{UTF-8}
@@ -82,11 +80,18 @@ spatial queries:
 </u >
 
 ## URL's for examples 
-<a class="btn btn-primary" data-bs-toggle="collapse"href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-Example Source Data
-</a>
-<div class="collapse" id="collapseExample">
-  <div class="card card-body"> 
+<details>
+<summary
+  style="
+    display: inline-block;
+    padding: 0.5em 1em;
+    background-color: #0d6efd;
+    color: white;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    font-weight: bold;
+    list-style: none;">
+<strong>Example Source Data</strong></summary>
 ```{r url_setup, eval = FALSE}
 
 #WDNR Server
@@ -128,9 +133,9 @@ cook_creek_ws <- get_spatial_layer(
   where = "HUC12_NAME = 'Cook Creek'"
 )
 ```
-</div>
-</div>
-<br>
+</details>
+
+\
 
 ## get_layer_by_line
 The `get_layer_by_line` function uses A LINSESTRING or MULTILINESTRING sf object 

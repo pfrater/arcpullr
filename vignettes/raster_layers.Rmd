@@ -6,9 +6,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 output:
-  html_document:
-    theme:
-      version: 5
+  rmarkdown::html_vignette
 editor_options: 
   markdown: 
     wrap: 72
@@ -50,11 +48,18 @@ Image layers require a bounding box as part of the query, so both
 `sf` object. These functions pull the raster layers provided by the URL and return the layer as a SpatRaster object from the `terra` package.
 
 ## URL's for examples 
-<a class="btn btn-primary" data-bs-toggle="collapse"href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-Example Source Data
-</a>
-<div class="collapse" id="collapseExample">
-  <div class="card card-body"> 
+<details>
+<summary
+  style="
+    display: inline-block;
+    padding: 0.5em 1em;
+    background-color: #0d6efd;
+    color: white;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    font-weight: bold;
+    list-style: none;">
+<strong>Example Source Data</strong></summary>
 ```{r}
 # WDNR Server
 image_server <- "https://dnrmaps.wi.gov/arcgis_image/rest/services/"
@@ -69,9 +74,9 @@ wi_aerial_imagery_url <- paste0(image_server, wi_leaf_off_path)
 
 # the wis_poly polygon is available as an exported object in arcpullr
 ```
-</div>
-</div>
-<br>
+</details>
+
+\
 
 ## Map Layers
 

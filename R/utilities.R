@@ -269,14 +269,18 @@ sql_where <- function(..., rel_op = "=") {
   }
   out_list <- lapply(1:length(args), function(x) {
     if (grepl("like", rel_op[x], ignore.case = TRUE)) {
-      args[[x]] <- paste0("%", args[[x]], "%")
+      x_vals <- paste0(
+        paste0(names(args)[x], " LIKE '%", args[[x]], "%'"),
+        collapse = " OR "
+      )
+      return(paste("(", x_vals, ")"))
     }
     if (length(args[[x]]) > 1) {
       if (rel_op[x] == "=") {
         rel_op[x] <- "IN"
       }
       if (is.character(args[[x]])) {
-        x_vals <- paste0("( '", paste(args[[x]], collapse = "' , '"), "' )")
+        x_vals <- paste0("( '", paste(args[[x]], collapse = "', '"), "' )")
       } else {
         x_vals <- paste0("(", paste(args[[x]], collapse = ", "), ")")
       }

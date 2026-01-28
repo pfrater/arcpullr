@@ -10,6 +10,7 @@
 ^other_tests$
 ^_pkgdown\.yml$
 ^docs$
+^docs/
 ^pkgdown$
 ^README\.Rmd$
 ^vignettes/articles$

@@ -151,6 +151,8 @@ setMethod("raster_colors", "RasterBrick", function(x) {
 #' @return A data.frame with 3 columns and \code{length(raster_object)} rows
 #' @export
 #'
+#' @importFrom methods setMethod
+#'
 #' @examples
 #' \dontrun{
 #' wi_leaf_off_layer <- get_image_layer(wi_leaf_off_url, wis_poly)

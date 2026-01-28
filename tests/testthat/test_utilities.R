@@ -22,11 +22,23 @@ test_that("sql_where returns correct SQL WHERE clauses", {
   )
   expect_equal(
     sql_where(foo = c("bar", "baz"), rel_op = "IN"),
-    "foo IN ( 'bar' , 'baz' )"
+    "foo IN ( 'bar', 'baz' )"
   )
   expect_equal(
     sql_where(foo = c("bar", "baz"), a = "b", rel_op = "IN"),
-    "foo IN ( 'bar' , 'baz' ) AND a IN 'b'"
+    "foo IN ( 'bar', 'baz' ) AND a IN 'b'"
+  )
+  expect_equal(
+    sql_where(foo = c("bar", "baz"), rel_op = "LIKE"),
+    "( foo LIKE '%bar%' OR foo LIKE '%baz%' )"
+  )
+  expect_equal(
+    sql_where(foo = c("bar", "baz"), test = "tea", rel_op = c("LIKE", "=")),
+    "( foo LIKE '%bar%' OR foo LIKE '%baz%' ) AND test = 'tea'"
+  )
+  expect_equal(
+    sql_where(foo = c("bar", "baz"), test = c("tea", "coffee"), rel_op = c("LIKE", "=")),
+    "( foo LIKE '%bar%' OR foo LIKE '%baz%' ) AND test IN ( 'tea', 'coffee' )"
   )
 })
 

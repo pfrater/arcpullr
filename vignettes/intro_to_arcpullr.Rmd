@@ -6,9 +6,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 output: 
-  html_document:
-    theme:
-      version: 5
+  rmarkdown::html_vignette
 editor_options: 
   markdown: 
     wrap: 72
@@ -29,15 +27,22 @@ library(arcpullr)
 
 
 ## URL's for examples 
-<a class="btn btn-primary" data-bs-toggle="collapse"href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-Example Source Data
-</a>
-<div class="collapse" id="collapseExample">
-  <div class="card card-body"> 
+<details>
+<summary
+  style="
+    display: inline-block;
+    padding: 0.5em 1em;
+    background-color: #0d6efd;
+    color: white;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    font-weight: bold;
+    list-style: none;">
+<strong>Example Source Data</strong></summary>
 ```{r}
 wdnr_base_url <- "https://dnrmaps.wi.gov/arcgis/rest/services"
-streams_layer_url <- "WT_SWDV/WT_Inland_Water_Resources_WTM_Ext_v2/MapServer/2"
-streams_url <- paste(wdnr_base_url, streams_layer_url, sep = "/")
+hydro_layer_url <- "WT_SWDV/WY_INLAND_WATER_RESOURCES/MapServer/2"
+hydro_url <- paste(wdnr_base_url, hydro_layer_url, sep = "/")
 
 # the mke_county polygon is available as an exported object in arcpullr
 open_water_layer_url <- "WT_SWDV/WT_Inland_Water_Resources_WTM_Ext_v2/MapServer/3"
@@ -45,9 +50,9 @@ hydro_url <- paste(wdnr_base_url, open_water_layer_url, sep = "/")
 
 wis_county_layer_url <- "https://datcpgis.wi.gov/arcgis/rest/services/Base/PolygonsExternal/MapServer/0"
 ```
-</div>
-</div>
-<br>
+</details>
+
+\
 
 
 # Feature (i.e. vector) Layers
@@ -62,8 +67,8 @@ layer <- get_spatial_layer(url)
 ```
 
 The URL should be a specific layer from an ArcGIS REST API, such as the
-[Wisconsin Dep't. of Natural Resources Musky Streams
-layer](https://dnrmaps.wi.gov/arcgis/rest/services/WT_SWDV/WT_Designated_Waters_WTM_Ext/MapServer/19),
+[Wisconsin Dep't. of Natural Resources 24K Hydrography
+layer](https://dnrmaps.wi.gov/arcgis/rest/services/WT_SWDV/WY_INLAND_WATER_RESOURCES/MapServer/2),
 for example.
 
 The `get_spatial_layer()` function will retrieve data from this layer,
