@@ -62,11 +62,18 @@ get_spatial_layer <- function(url,
     sf_type <- layer_info$geometryType
   }
   query_url <- paste(url, "query", sep="/")
-  args <- list(query_url, out_fields, where, token, head, ...)
+  dots <- list(...)
+  if ("outSR" %in% names(dots)) {
+    args <- list(query_url, out_fields, where, token, head, ...)
+    out_sr <- dots[["outSR"]]
+  } else {
+    args <- list(query_url, out_fields, where, token, head, outSR = "4326", ...)
+    out_sr <- 4326
+  }
   if(!"idsplits" %in% names(args))
     args <- c(args, list(idsplits = layer_info$maxRecordCount))
   esri_features <- do.call(get_esri_features, args)
-  simple_features <- esri2sfGeom(esri_features, sf_type)
+  simple_features <- esri2sfGeom(esri_features, sf_type, out_sr)
   return(simple_features)
 }
 
@@ -198,13 +205,12 @@ get_object_ids <- function(query_url, where, token='', ...){
   return(response$objectIds)
 }
 
-get_esri_features_by_id <- function(ids, query_url, fields, token='', ...){
+get_esri_features_by_id <- function(ids, query_url, fields, token='', ...) {
   # create Simple Features from ArcGIS servers json response
   query <- list(
     objectIds=paste(ids, collapse=","),
     outFields=paste(fields, collapse=","),
     token=token,
-    outSR='4326',
     f="json",
     ...
   )
@@ -225,7 +231,7 @@ get_esri_features_by_id <- function(ids, query_url, fields, token='', ...){
   return(esri_json_features)
 }
 
-esri2sfGeom <- function(jsonFeats, sf_type) {
+esri2sfGeom <- function(jsonFeats, sf_type, out_sr) {
   # convert esri json to simple feature
   if (sf_type == 'esriGeometryPolygon') {
     geoms <- esri2sfPolygon(jsonFeats)
@@ -253,7 +259,8 @@ esri2sfGeom <- function(jsonFeats, sf_type) {
     )
   )
   # geometry + attributes
-  df <- sf::st_sf(geoms, af, crs="+init=epsg:4326")
+  df <- sf::st_sf(geoms, af, crs=out_sr)
+  # df <- sf::st_sf(geoms, af, crs="+init=epsg:4326")
   return(df)
 }
 
@@ -439,16 +446,16 @@ get_image_layer <- function(url,
 #'
 #' @return An object of type \code{SpatRaster}
 get_raster_layer <- function(url,
-                                 sf_object = NULL,
-                                 bbox = NULL,
-                                 bbox_crs = NULL,
-                                 token = "",
-                                 clip_raster = TRUE,
-                                 format = "png",
-                                 transparent = TRUE,
-                                 export_type = "map",
-                                 add_legend = FALSE,
-                                 ...) {
+                             sf_object = NULL,
+                             bbox = NULL,
+                             bbox_crs = NULL,
+                             token = "",
+                             clip_raster = TRUE,
+                             format = "png",
+                             transparent = TRUE,
+                             export_type = "map",
+                             add_legend = FALSE,
+                             ...) {
   if (is.null(sf_object) && is.null(bbox)) {
     stop(
       "You must specify either an sf_object to spatially query by ",
